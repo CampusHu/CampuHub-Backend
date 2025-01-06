@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,4 +32,10 @@ public class NWeek {
 
 	@Enumerated(EnumType.STRING)
 	private Week week;
+
+	@Builder
+	public NWeek(Course course, Week week) {
+		this.course = course;
+		this.week = week;
+	}
 }
