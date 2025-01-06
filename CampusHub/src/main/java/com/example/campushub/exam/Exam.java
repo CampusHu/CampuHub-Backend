@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,5 +31,13 @@ public class Exam {
 	private int midScore;
 	private int finalScore;
 	private int totalScore;
+
+	@Builder
+	public Exam(UserCourse userCourse, int midScore, int finalScore, int totalScore) {
+		this.userCourse = userCourse;
+		this.midScore = midScore;
+		this.finalScore = finalScore;
+		this.totalScore = totalScore;
+	}
 
 }
