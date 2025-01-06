@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,15 @@ public class Scholarship {
 
 	private String scholarshipName;
 	@Enumerated(EnumType.STRING)
-	private EnumType type;
+	private PaymentType type;
 	private int amount;
+
+	@Builder
+	public Scholarship(String scholarshipName, int amount, PaymentType type) {
+		this.scholarshipName = scholarshipName;
+		this.amount = amount;
+		this.type = type;
+	}
+
+
 }
