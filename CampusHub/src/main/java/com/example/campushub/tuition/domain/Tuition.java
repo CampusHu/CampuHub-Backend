@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,10 @@ public class Tuition {
 	private Dept dept;
 
 	private int tuitionFee;
+
+	@Builder
+	public Tuition(Dept dept, int tuitionFee) {
+		this.dept = dept;
+		this.tuitionFee = tuitionFee;
+	}
 }
