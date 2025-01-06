@@ -34,4 +34,5 @@ public class StudentScore {
 	private int credit;
 	//백분율
 	private int percentage;
+
 }
