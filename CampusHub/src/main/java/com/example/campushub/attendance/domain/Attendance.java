@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,11 @@ public class Attendance {
 
 	@Enumerated(EnumType.STRING)
 	private AttendanceStatus status;
+
+	@Builder
+	public Attendance(UserCourse userCourse, NWeek nWeek, AttendanceStatus status) {
+		this.userCourse = userCourse;
+		this.nWeek = nWeek;
+		this.status = status;
+	}
 }

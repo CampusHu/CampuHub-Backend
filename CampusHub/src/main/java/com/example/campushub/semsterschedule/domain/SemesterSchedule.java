@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,14 @@ public class SemesterSchedule {
 	private Date endDate;
 	private boolean dateCheck;
 	private String eventName;
+
+	@Builder
+	public SemesterSchedule(SchoolYear schoolYear, Schedule schedule, Date startDate, Date endDate, boolean dateCheck, String eventName) {
+		this.schoolYear = schoolYear;
+		this.schedule = schedule;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.dateCheck = dateCheck;
+		this.eventName = eventName;
+	}
 }

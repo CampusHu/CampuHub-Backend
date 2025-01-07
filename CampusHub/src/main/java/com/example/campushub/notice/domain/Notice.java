@@ -35,8 +35,7 @@ public class Notice {
 	private Date createdAt;
 
 	@Builder
-	public Notice(Long id, User user, String title, String content, Date createdAt) {
-		this.id = id;
+	public Notice(User user, String title, String content, Date createdAt) {
 		this.user = user;
 		this.title = title;
 		this.content = content;

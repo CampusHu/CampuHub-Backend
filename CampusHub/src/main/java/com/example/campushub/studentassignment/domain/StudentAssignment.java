@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,4 +36,14 @@ public class StudentAssignment {
 	private String courseContent;
 	private int courseGrade;
 	//첨부파일
+
+	@Builder
+	public StudentAssignment(Assignment assignment, UserCourse userCourse, String courseTitle, String courseContent, int courseGrade) {
+		this.assignment = assignment;
+		this.userCourse = userCourse;
+		this.courseTitle = courseTitle;
+		this.courseContent = courseContent;
+		this.courseGrade = courseGrade;
+
+	}
 }

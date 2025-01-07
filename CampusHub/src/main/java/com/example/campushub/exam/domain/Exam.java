@@ -1,4 +1,4 @@
-package com.example.campushub.exam;
+package com.example.campushub.exam.domain;
 
 import static jakarta.persistence.FetchType.*;
 

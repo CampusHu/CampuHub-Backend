@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,4 +33,11 @@ public class LectureTime {
 
 	private Date lectureDay;
 	private Time lectureTime;
+
+	@Builder
+	public LectureTime(Course course, Date lectureDay, Time lectureTime) {
+		this.course = course;
+		this.lectureDay = lectureDay;
+		this.lectureTime = lectureTime;
+	}
 }
