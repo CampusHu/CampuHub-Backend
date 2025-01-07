@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,4 +35,12 @@ public class StudentScore {
 	private int credit;
 	//백분율
 	private int percentage;
+
+	@Builder
+	public StudentScore(UserCourse userCourse, int totalScore, String grade, int credit) {
+		this.userCourse = userCourse;
+		this.totalScore = totalScore;
+		this.grade = grade;
+		this.credit = credit;
+	}
 }
