@@ -36,7 +36,7 @@ public class SemesterSchedule {
 	private String eventName;
 
 	@Builder
-	public SemesterSchedule(SchoolYear schoolYear, Schedule schedule, Date startDate, Date endDate, boolean dateCheck, String eventName) {
+	public SemesterSchedule(SchoolYear schoolYear, Schedule schedule, LocalDateTime startDate, LocalDateTime endDate, boolean dateCheck, String eventName) {
 		this.schoolYear = schoolYear;
 		this.schedule = schedule;
 		this.startDate = startDate;
