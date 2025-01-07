@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,5 +34,12 @@ public class Notice {
 	private String content;
 	private Date createdAt;
 
-
+	@Builder
+	public Notice(Long id, User user, String title, String content, Date createdAt) {
+		this.id = id;
+		this.user = user;
+		this.title = title;
+		this.content = content;
+		this.createdAt = createdAt;
+	}
 }
