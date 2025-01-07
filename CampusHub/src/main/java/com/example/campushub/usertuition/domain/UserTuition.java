@@ -8,13 +8,7 @@ import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.tuition.domain.Tuition;
 import com.example.campushub.user.domain.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +19,7 @@ import lombok.NoArgsConstructor;
 public class UserTuition {
 
 	@Id
+	@Column(name = "user_tuition_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

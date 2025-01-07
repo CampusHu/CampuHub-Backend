@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
@@ -20,7 +19,7 @@ public class User {
     @Column(name = "user_id")
     private Long id;
     private String password;
-    private String userName;
+    private String nickName;
     private String birthday;
 
     //학과 매핑
@@ -58,9 +57,9 @@ public class User {
     private Status status;
 
     @Builder
-    public User(String password, String userName, String birthday, String email, String phone, String address, Grade grade, Role role, Type type, Status status) {
+    public User(String password, String nickName, String birthday, String email, String phone, String address, Grade grade, Role role, Type type, Status status) {
         this.password = password;
-        this.userName = userName;
+        this.nickName = nickName;
         this.birthday = birthday;
         this.email = email;
         this.phone = phone;
