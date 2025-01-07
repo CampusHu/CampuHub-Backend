@@ -58,7 +58,7 @@ public class User {
     private Status status;
 
     @Builder
-    public User(String password, String userName, String birthday, String email, String phone, String address, Grade grade, Role role, Type type, Status status) {
+    public User(String password, String userName, String birthday, String email, String phone, String address, Grade grade, Role role, Type type, Status status, Dept dept) {
         this.password = password;
         this.userName = userName;
         this.birthday = birthday;
@@ -69,6 +69,7 @@ public class User {
         this.role = role;
         this.type = type;
         this.status = status;
+        this.dept = dept;
     }
 
 }
