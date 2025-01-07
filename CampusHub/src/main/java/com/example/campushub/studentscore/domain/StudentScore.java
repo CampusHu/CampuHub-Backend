@@ -42,5 +42,6 @@ public class StudentScore {
 		this.totalScore = totalScore;
 		this.grade = grade;
 		this.credit = credit;
+		this.percentage = credit / totalScore;
 	}
 }
