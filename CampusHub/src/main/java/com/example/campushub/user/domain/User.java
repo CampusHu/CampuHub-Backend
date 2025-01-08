@@ -60,19 +60,18 @@ public class User {
     private String asdf;
 
     @Builder
-    public User(String password, String userName, String birthday, String email, String phone, String address,
-        Dept dept, Grade grade, Role role, Type type, Status status) {
+    public User(String password, String userName, String birthday, String email, String phone, String address, Grade grade, Role role, Type type, Status status, Dept dept) {
         this.password = password;
         this.userName = userName;
         this.birthday = birthday;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.dept = dept;
         this.grade = grade;
         this.role = role;
         this.type = type;
         this.status = status;
+        this.dept = dept;
     }
 
 }
