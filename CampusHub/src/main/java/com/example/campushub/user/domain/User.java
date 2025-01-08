@@ -56,6 +56,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+     //삭제
+    private String asdf;
 
     @Builder
     public User(String password, String userName, String birthday, String email, String phone, String address,
