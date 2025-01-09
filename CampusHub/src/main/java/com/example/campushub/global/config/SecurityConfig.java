@@ -44,16 +44,13 @@ public class SecurityConfig {
 			.httpBasic(basic -> basic.disable()) // HTTP Basic 인증 비활성화
 			.csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
 			.headers(headers -> headers
-				.defaultsDisabled() // 기본 헤더 설정 비활성화
-				.frameOptions(frameOptions -> frameOptions.disable()) // X-Frame-Options 비활성화
-			)
+				.frameOptions(frame -> frame.disable())) // X-Frame-Options 비활성화
 			.sessionManagement(session ->
 				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless 세션 정책
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers(toH2Console()).permitAll() // H2 콘솔 접근 허용
 				.requestMatchers(ApiUrls.PERMIT_API_URLS).permitAll() // 특정 URL 허용
-				.anyRequest().authenticated() // 나머지 요청은 인증 필요
-			)
+				.anyRequest().authenticated()) // 나머지 요청은 인증 필요
 			.exceptionHandling(exceptions ->
 				exceptions
 					.authenticationEntryPoint(entryPoint) // 인증 실패 처리

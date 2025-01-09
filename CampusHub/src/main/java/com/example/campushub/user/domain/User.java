@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.FetchType.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -23,7 +25,7 @@ public class User {
     private String userNum;
     private String password;
     private String userName;
-    private String birthday;
+    private LocalDateTime birthday;
 
     //학과 매핑
     @ManyToOne(fetch = LAZY)
@@ -44,7 +46,7 @@ public class User {
     private String refreshToken;
 
     @Builder
-    public User(String userNum,String password, String userName, String birthday, String email, String phone, String address,
+    public User(String userNum,String password, String userName, LocalDateTime birthday, String email, String phone, String address,
         Dept dept, Grade grade, Role role, Type type, Status status, String refreshToken) {
         this.userNum = userNum;
         this.password = password;

@@ -60,6 +60,7 @@ public class AuthService {
 	// 	userRepository.save(joinRequestDto.toEntity());
 	// }
 
+	//토큰 재발급
 	@Transactional
 	public Token reissue(RefreshToken refreshToken) {
 		String refreshTokenValue = refreshToken.getData();
