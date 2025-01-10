@@ -12,6 +12,7 @@ import com.example.campushub.global.security.JwtProvider;
 import com.example.campushub.global.security.RefreshToken;
 import com.example.campushub.global.security.Token;
 import com.example.campushub.user.domain.User;
+import com.example.campushub.user.dto.JoinRequestDto;
 import com.example.campushub.user.dto.LoginRequestDto;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
@@ -59,7 +60,7 @@ public class AuthService {
 	//
 	// 	userRepository.save(joinRequestDto.toEntity());
 	// }
-
+	//
 	//토큰 재발급
 	@Transactional
 	public Token reissue(RefreshToken refreshToken) {

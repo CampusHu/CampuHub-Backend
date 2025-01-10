@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.user.domain.Status;
-import com.example.campushub.user.dto.UsersResponseDto;
+import com.example.campushub.user.dto.StatusUserDto;
+import com.example.campushub.user.dto.UserSearchCondition;
 import com.example.campushub.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,8 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	//조건조회
-	public List<UsersResponseDto> getUsers(String username, String deptName, String userNum, Status status){
-		return userRepository.getUsers(username, deptName, userNum, status);
+	public List<StatusUserDto> getUserByCondition(UserSearchCondition condition) {
+		return userRepository.getUserByCondition(condition);
 	}
 
 }

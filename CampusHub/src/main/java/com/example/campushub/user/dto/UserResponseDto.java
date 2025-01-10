@@ -25,6 +25,7 @@ public class UserResponseDto {
 	private String phone;
 	private String address;
 
+
 	@Builder
 	@QueryProjection
 	public UserResponseDto (String userNum, String userName, LocalDateTime birthday, String deptName, Grade grade, String email, String phone, String address) {

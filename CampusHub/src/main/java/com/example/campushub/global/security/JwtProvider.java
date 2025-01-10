@@ -37,10 +37,10 @@ public class JwtProvider {
 		this.refreshHeader = refreshHeader;
 	}
 
-	public Token createToken(String email) {
+	public Token createToken(String userNum) {
 		AccessToken accessToken = AccessToken.builder()
 			.header(accessHeader)
-			.data(createAccessToken(email))
+			.data(createAccessToken(userNum))
 			.build();
 		RefreshToken refreshToken = RefreshToken.builder()
 			.header(refreshHeader)

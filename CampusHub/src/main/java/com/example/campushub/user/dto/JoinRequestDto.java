@@ -64,7 +64,7 @@ public class JoinRequestDto {
 			.role(Role.USER)
 			.type(Type.STUDENT)
 			.grade(Grade.FIRST_GRADE)
-			.status(Status.B)
+			.status(Status.ENROLLED)
 			.build();
 	}
 }

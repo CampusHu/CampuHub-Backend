@@ -8,12 +8,15 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.example.campushub.user.domain.Status;
+import com.example.campushub.user.dto.QStatusUserDto;
+import com.example.campushub.user.dto.StatusUserDto;
 import com.example.campushub.user.dto.QUserResponseDto;
-import com.example.campushub.user.dto.QUsersResponseDto;
 import com.example.campushub.user.dto.UserResponseDto;
-import com.example.campushub.user.dto.UsersResponseDto;
+import com.example.campushub.user.dto.UserSearchCondition;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -25,10 +28,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
-	//학생 조건 조회
+	//사용자 컨디션 조회 및 전체 조회
 	@Override
-	public List<UsersResponseDto> getUsers(String username,String deptName, String userNum, Status status) {
-		return queryFactory.select(new QUsersResponseDto(
+	public List<StatusUserDto> getUserByCondition(UserSearchCondition searchCondition) {
+		return queryFactory.select(new QStatusUserDto(
 			user.id,
 			user.userName,
 			user.userNum,
@@ -38,13 +41,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		))
 			.from(user)
 			.join(dept).on(dept.id.eq(user.dept.id))
-			.where(user.userName.eq(username))
-			.where(user.userNum.eq(userNum))
-			.where(user.status.eq(status))
-			.where(user.dept.deptName.eq(deptName))
+			.where(statusEq(searchCondition.getStatus()),
+				userNumEq(searchCondition.getUserNum()),
+				deptNameEq(searchCondition.getDeptName()))
 			.fetch();
 	}
-
 	// 단건조회
 	@Override
 	public Optional<UserResponseDto> getUserByUserNum(String userNum) {
@@ -63,6 +64,16 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 			.where(user.userNum.eq(userNum))
 			.fetchOne();
 		return Optional.ofNullable(fetchOne);
+	}
+
+	private BooleanExpression statusEq(Status status) {
+		return !StringUtils.hasText(status.name()) ? null : (user.status.eq(status));
+	}
+	private BooleanExpression userNumEq(String userNum) {
+		return !StringUtils.hasText(userNum) ? null : (user.userNum.eq(userNum));
+	}
+	private BooleanExpression deptNameEq(String deptName) {
+		return !StringUtils.hasText(deptName) ? null : (user.dept.deptName.eq(deptName));
 	}
 
 }

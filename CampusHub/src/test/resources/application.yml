@@ -14,7 +14,7 @@ spring:
       path: /h2-console
 
   datasource:
-    url: jdbc:h2:mem:studysquad
+    url: jdbc:h2:mem:campushub
     username: sa
     password:
     driver-class-name: org.h2.Driver
