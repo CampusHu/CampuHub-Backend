@@ -25,6 +25,7 @@ public class Course {
     private String courseName;
     private String room;
     private String division;
+    @Column(name = "course_day")
     private String day;
 
 
@@ -45,7 +46,9 @@ public class Course {
     //강의 시간 매핑
 
 
+    @Column(name = "course_start")
     private int start;
+    @Column(name = "course_end")
     private int end;
     private int credits;
     private int attScore;

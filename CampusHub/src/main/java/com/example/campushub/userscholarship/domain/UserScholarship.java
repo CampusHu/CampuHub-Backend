@@ -2,6 +2,7 @@ package com.example.campushub.userscholarship.domain;
 
 import static jakarta.persistence.FetchType.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.example.campushub.scholarship.domain.Scholarship;
@@ -36,10 +37,10 @@ public class UserScholarship {
 	@JoinColumn(name = "school_year_id")
 	private SchoolYear schoolYear;
 
-	private Date confDate;
+	private LocalDate confDate;
 
 	@Builder
-	public UserScholarship(User user, Scholarship scholarship, SchoolYear schoolYear, Date confDate) {
+	public UserScholarship(User user, Scholarship scholarship, SchoolYear schoolYear, LocalDate confDate) {
 		this.user = user;
 		this.scholarship = scholarship;
 		this.schoolYear = schoolYear;
