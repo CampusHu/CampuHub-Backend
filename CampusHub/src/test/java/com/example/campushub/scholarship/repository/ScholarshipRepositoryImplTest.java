@@ -146,7 +146,7 @@ public class ScholarshipRepositoryImplTest {
                 .phone(userNum)
                 .role(Role.USER)
                 .grade(Grade.FIRST_GRADE)
-                .status(Status.A)
+                .status(Status.BREAK)
                 .build();
     }
 
