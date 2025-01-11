@@ -71,4 +71,17 @@ public class User {
         this.refreshToken = null;
     }
 
+    public Boolean isSuccessStatus() {
+        if (this.status == Status.BREAK_PENDING || this.status == Status.RETURN_PENDING)
+            return true;
+        return false;
+    }
+
+    public void updateStatus() {
+        if (this.status == Status.BREAK_PENDING)
+            this.status = Status.BREAK;
+        if (this.status == Status.RETURN_PENDING)
+            this.status = Status.ENROLLED;
+    }
+
 }

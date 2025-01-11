@@ -8,13 +8,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.example.campushub.user.domain.Status;
-import com.example.campushub.user.dto.QStatusUserDto;
-import com.example.campushub.user.dto.StatusUserDto;
-import com.example.campushub.user.dto.QUserResponseDto;
-import com.example.campushub.user.dto.UserResponseDto;
+import com.example.campushub.user.domain.Type;
+import com.example.campushub.user.dto.QUserFindAllDto;
+import com.example.campushub.user.dto.QUserFindOneDto;
+import com.example.campushub.user.dto.UserFindAllDto;
+import com.example.campushub.user.dto.UserFindOneDto;
 import com.example.campushub.user.dto.UserSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -28,28 +28,47 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
-	//사용자 컨디션 조회 및 전체 조회
+	//학생 컨디션 조회 및 전체 조회
 	@Override
-	public List<StatusUserDto> getUserByCondition(UserSearchCondition searchCondition) {
-		return queryFactory.select(new QStatusUserDto(
+	public List<UserFindAllDto> findAllStudentByCondition(UserSearchCondition condition) {
+		return queryFactory.select(new QUserFindAllDto(
 			user.id,
 			user.userName,
 			user.userNum,
-			user.dept.deptName,
+			dept.deptName,
 			user.type,
 			user.status
 		))
 			.from(user)
-			.join(dept).on(dept.id.eq(user.dept.id))
-			.where(statusEq(searchCondition.getStatus()),
-				userNumEq(searchCondition.getUserNum()),
-				deptNameEq(searchCondition.getDeptName()))
+			.join(dept).on(user.dept.eq(dept))
+			.where(statusEq(condition.getStatus()),
+				userNumEq(condition.getUserNum()),
+				deptNameEq(condition.getDeptName()),
+				user.type.eq(Type.STUDENT))
+			.fetch();
+	}
+	//교수 컨디션 조회 및 전체 조회
+	@Override
+	public List<UserFindAllDto> findAllProfessorByCondition(UserSearchCondition condition) {
+		return queryFactory.select(new QUserFindAllDto(
+			user.id,
+			user.userName,
+			user.userNum,
+			dept.deptName,
+			user.type,
+			user.status
+		))
+			.from(user)
+			.join(dept).on(user.dept.eq(dept))
+			.where(userNumEq(condition.getUserNum()),
+				deptNameEq(condition.getDeptName()),
+				user.type.eq(Type.PROFESSOR))
 			.fetch();
 	}
 	// 단건조회
 	@Override
-	public Optional<UserResponseDto> getUserByUserNum(String userNum) {
-		UserResponseDto fetchOne = queryFactory.select(new QUserResponseDto(
+	public Optional<UserFindOneDto> getUserByUserNum(String userNum) {
+		UserFindOneDto fetchOne = queryFactory.select(new QUserFindOneDto(
 			user.userNum,
 			user.userName,
 			user.birthday,
@@ -67,13 +86,13 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	}
 
 	private BooleanExpression statusEq(Status status) {
-		return !StringUtils.hasText(status.name()) ? null : (user.status.eq(status));
+		return status == null ? null : user.status.eq(status);
 	}
 	private BooleanExpression userNumEq(String userNum) {
-		return !StringUtils.hasText(userNum) ? null : (user.userNum.eq(userNum));
+		return userNum == null ? null : user.userNum.eq(userNum);
 	}
 	private BooleanExpression deptNameEq(String deptName) {
-		return !StringUtils.hasText(deptName) ? null : (user.dept.deptName.eq(deptName));
+		return deptName == null ? null : dept.deptName.eq(deptName);
 	}
 
 }

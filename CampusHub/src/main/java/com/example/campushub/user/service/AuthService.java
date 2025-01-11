@@ -4,7 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.campushub.global.error.exception.DuplicateEmailException;
+import com.example.campushub.global.error.exception.DuplicateUserNumException;
 import com.example.campushub.global.error.exception.InvalidSigningInformation;
 import com.example.campushub.global.error.exception.InvalidTokenException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
@@ -47,20 +47,17 @@ public class AuthService {
 
 		return token;
 	}
-	//회원가입??
-	// @Transactional
-	// public void join(JoinRequestDto joinRequestDto) {
-	// 	if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
-	// 		throw new DuplicateEmailException();
-	// 	}
-	// 	if (userRepository.existsByNickname(joinRequestDto.getNickname())) {
-	// 		throw new DuplicateNicknameException();
-	// 	}
-	// 	joinRequestDto.passwordEncryption(passwordEncoder);
-	//
-	// 	userRepository.save(joinRequestDto.toEntity());
-	// }
-	//
+	//회원등록
+	@Transactional
+	public void join(JoinRequestDto joinRequestDto) {
+		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
+			throw new DuplicateUserNumException();
+		}
+		joinRequestDto.passwordEncryption(passwordEncoder);
+
+		userRepository.save(joinRequestDto.toStudentEntity());
+	}
+
 	//토큰 재발급
 	@Transactional
 	public Token reissue(RefreshToken refreshToken) {
@@ -72,7 +69,7 @@ public class AuthService {
 
 		User user = userRepository.findByRefreshToken(refreshTokenValue)
 			.orElseThrow(UserNotFoundException::new);
-		Token token = jwtProvider.createToken(user.getEmail());
+		Token token = jwtProvider.createToken(user.getUserNum());
 
 		user.updateRefreshToken(token.getRefreshToken().getData());
 

@@ -32,11 +32,13 @@ public class JoinRequestDto {
 	private String address;
 	@NotBlank(message = "학번을 입력해주세요")
 	private String userNum;
+	@NotBlank(message = "직책을 입력해주세요")
+	private Type type;
 	@NotBlank(message = "비밀번호를 입력해주세요")
 	private String password;
 
 	@Builder
-	public JoinRequestDto(String userName, LocalDateTime birthday, Dept dept, String email, String phone, String address, String userNum, String password) {
+	public JoinRequestDto(String userName, LocalDateTime birthday, Dept dept, String email, String phone, String address, String userNum, Type type) {
 		this.userName = userName;
 		this.birthday = birthday;
 		this.dept = dept;
@@ -44,6 +46,7 @@ public class JoinRequestDto {
 		this.phone = phone;
 		this.address = address;
 		this.userNum = userNum;
+		this.type = type;
 		this.password = "1234"; //this.password = password;
 	}
 
@@ -51,7 +54,7 @@ public class JoinRequestDto {
 		this.password = passwordEncoder.encode(this.password);
 	}
 
-	public User toEntity() {
+	public User toStudentEntity() {
 		return User.builder()
 			.userName(userName)
 			.birthday(birthday)
@@ -62,9 +65,26 @@ public class JoinRequestDto {
 			.userNum(userNum)
 			.password(password)
 			.role(Role.USER)
-			.type(Type.STUDENT)
+			.type(type)
 			.grade(Grade.FIRST_GRADE)
 			.status(Status.ENROLLED)
 			.build();
 	}
+
+	public User toProfessorEntity() {
+		return User.builder()
+			.userName(userName)
+			.birthday(birthday)
+			.dept(dept)
+			.email(email)
+			.phone(phone)
+			.address(address)
+			.userNum(userNum)
+			.password(password)
+			.role(Role.USER)
+			.type(type)
+			.status(Status.EMPLOYED)
+			.build();
+	}
+
 }
