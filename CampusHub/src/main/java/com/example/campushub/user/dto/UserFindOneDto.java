@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.example.campushub.user.domain.Grade;
 import com.querydsl.core.annotations.QueryProjection;
 
+import jakarta.annotation.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class UserFindOneDto {
 		@DateTimeFormat(pattern = "yyyy-MM-dd")
 		private LocalDateTime birthday;
 		private String deptName;
+		@Nullable
 		private Grade grade;
 		private String email;
 		private String phone;

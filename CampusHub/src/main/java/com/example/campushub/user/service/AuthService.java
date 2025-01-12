@@ -4,7 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.campushub.dept.domain.Dept;
+import com.example.campushub.dept.repository.DeptRepository;
 import com.example.campushub.global.error.exception.DuplicateUserNumException;
+import com.example.campushub.global.error.exception.InvalidDeptException;
 import com.example.campushub.global.error.exception.InvalidSigningInformation;
 import com.example.campushub.global.error.exception.InvalidTokenException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
@@ -27,6 +30,7 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 	private final PasswordEncoder passwordEncoder;
+	private final DeptRepository deptRepository;
 
 	//로그인
 	@Transactional
@@ -47,15 +51,34 @@ public class AuthService {
 
 		return token;
 	}
-	//회원등록
+	//학생 등록
 	@Transactional
-	public void join(JoinRequestDto joinRequestDto) {
+	public void joinStudent(JoinRequestDto joinRequestDto) {
 		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
 			throw new DuplicateUserNumException();
 		}
+
+		Dept dept = deptRepository.findByDeptName(joinRequestDto.getDeptName())
+				.orElseThrow(InvalidDeptException::new);
+
 		joinRequestDto.passwordEncryption(passwordEncoder);
 
-		userRepository.save(joinRequestDto.toStudentEntity());
+		userRepository.save(joinRequestDto.toStudentEntity(dept));
+	}
+
+	//교수 등록
+	@Transactional
+	public void joinProfessor(JoinRequestDto joinRequestDto) {
+		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
+			throw new DuplicateUserNumException();
+		}
+
+		Dept dept = deptRepository.findByDeptName(joinRequestDto.getDeptName())
+			.orElseThrow(InvalidDeptException::new);
+
+		joinRequestDto.passwordEncryption(passwordEncoder);
+
+		userRepository.save(joinRequestDto.toProfessorEntity(dept));
 	}
 
 	//토큰 재발급

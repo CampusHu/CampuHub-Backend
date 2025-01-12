@@ -1,6 +1,8 @@
 package com.example.campushub.user.domain;
 
 import com.example.campushub.dept.domain.Dept;
+
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,6 +42,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Type type;
     @Enumerated(EnumType.STRING)
+    @Nullable
     private Grade grade;
     @Enumerated(EnumType.STRING)
     private Status status;

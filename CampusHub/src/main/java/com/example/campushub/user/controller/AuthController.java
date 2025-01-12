@@ -43,6 +43,8 @@ public class AuthController {
 			.message("로그인 성공")
 			.build();
 	}
+	//교수 등록
+	//학생 등록
 	//토큰 재발급
 	@PostMapping("/api/reissue")
 	@ResponseStatus(HttpStatus.OK)

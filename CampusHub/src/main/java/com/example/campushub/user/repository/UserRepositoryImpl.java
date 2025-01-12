@@ -65,14 +65,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 				user.type.eq(Type.PROFESSOR))
 			.fetch();
 	}
-	// 단건조회
+	//학생 단건조회
 	@Override
-	public Optional<UserFindOneDto> getUserByUserNum(String userNum) {
+	public Optional<UserFindOneDto> getStudentByUserNum(String userNum) {
 		UserFindOneDto fetchOne = queryFactory.select(new QUserFindOneDto(
 			user.userNum,
 			user.userName,
 			user.birthday,
-			user.dept.deptName,
+			dept.deptName,
 			user.grade,
 			user.email,
 			user.phone,
@@ -80,7 +80,29 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		))
 			.from(user)
 			.join(dept).on(dept.id.eq(user.dept.id))
-			.where(user.userNum.eq(userNum))
+			.where(user.userNum.eq(userNum),
+				user.type.eq(Type.STUDENT))
+			.fetchOne();
+		return Optional.ofNullable(fetchOne);
+	}
+
+	//교수 단건 조회
+	@Override
+	public Optional<UserFindOneDto> getProfessorByUserNum(String userNum) {
+		UserFindOneDto fetchOne = queryFactory.select(new QUserFindOneDto(
+			user.userNum,
+			user.userName,
+			user.birthday,
+			dept.deptName,
+			user.grade,
+			user.email,
+			user.phone,
+			user.address
+		))
+			.from(user)
+			.join(dept).on(dept.id.eq(user.dept.id))
+			.where(user.userNum.eq(userNum),
+				user.type.eq(Type.PROFESSOR))
 			.fetchOne();
 		return Optional.ofNullable(fetchOne);
 	}

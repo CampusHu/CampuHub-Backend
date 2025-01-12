@@ -12,7 +12,9 @@ public interface UserRepositoryCustom {
 	List<UserFindAllDto> findAllStudentByCondition(UserSearchCondition searchCondition);
 	//교수 컨디션, 전체 조회
 	List<UserFindAllDto> findAllProfessorByCondition(UserSearchCondition searchCondition);
-	//단건조회
-	Optional<UserFindOneDto> getUserByUserNum(String userNum);
+	//학생단건조회
+	Optional<UserFindOneDto> getStudentByUserNum(String userNum);
+	//교수단건조회
+	Optional<UserFindOneDto> getProfessorByUserNum(String userNum);
 
 }
