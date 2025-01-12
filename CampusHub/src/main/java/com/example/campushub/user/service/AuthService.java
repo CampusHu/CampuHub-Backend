@@ -4,7 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.campushub.global.error.exception.DuplicateEmailException;
+import com.example.campushub.dept.domain.Dept;
+import com.example.campushub.dept.repository.DeptRepository;
+import com.example.campushub.global.error.exception.DuplicateUserNumException;
+import com.example.campushub.global.error.exception.InvalidDeptException;
 import com.example.campushub.global.error.exception.InvalidSigningInformation;
 import com.example.campushub.global.error.exception.InvalidTokenException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
@@ -12,6 +15,7 @@ import com.example.campushub.global.security.JwtProvider;
 import com.example.campushub.global.security.RefreshToken;
 import com.example.campushub.global.security.Token;
 import com.example.campushub.user.domain.User;
+import com.example.campushub.user.dto.JoinRequestDto;
 import com.example.campushub.user.dto.LoginRequestDto;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
@@ -26,6 +30,7 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final JwtProvider jwtProvider;
 	private final PasswordEncoder passwordEncoder;
+	private final DeptRepository deptRepository;
 
 	//로그인
 	@Transactional
@@ -46,19 +51,35 @@ public class AuthService {
 
 		return token;
 	}
-	//회원가입??
-	// @Transactional
-	// public void join(JoinRequestDto joinRequestDto) {
-	// 	if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
-	// 		throw new DuplicateEmailException();
-	// 	}
-	// 	if (userRepository.existsByNickname(joinRequestDto.getNickname())) {
-	// 		throw new DuplicateNicknameException();
-	// 	}
-	// 	joinRequestDto.passwordEncryption(passwordEncoder);
-	//
-	// 	userRepository.save(joinRequestDto.toEntity());
-	// }
+	//학생 등록
+	@Transactional
+	public void joinStudent(JoinRequestDto joinRequestDto) {
+		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
+			throw new DuplicateUserNumException();
+		}
+
+		Dept dept = deptRepository.findByDeptName(joinRequestDto.getDeptName())
+				.orElseThrow(InvalidDeptException::new);
+
+		joinRequestDto.passwordEncryption(passwordEncoder);
+
+		userRepository.save(joinRequestDto.toStudentEntity(dept));
+	}
+
+	//교수 등록
+	@Transactional
+	public void joinProfessor(JoinRequestDto joinRequestDto) {
+		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
+			throw new DuplicateUserNumException();
+		}
+
+		Dept dept = deptRepository.findByDeptName(joinRequestDto.getDeptName())
+			.orElseThrow(InvalidDeptException::new);
+
+		joinRequestDto.passwordEncryption(passwordEncoder);
+
+		userRepository.save(joinRequestDto.toProfessorEntity(dept));
+	}
 
 	//토큰 재발급
 	@Transactional
@@ -71,7 +92,7 @@ public class AuthService {
 
 		User user = userRepository.findByRefreshToken(refreshTokenValue)
 			.orElseThrow(UserNotFoundException::new);
-		Token token = jwtProvider.createToken(user.getEmail());
+		Token token = jwtProvider.createToken(user.getUserNum());
 
 		user.updateRefreshToken(token.getRefreshToken().getData());
 

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UsersResponseDto {
+public class UserFindAllDto {
 
 	private Long userId;
 	private String userNum;
@@ -21,7 +21,7 @@ public class UsersResponseDto {
 
 	@Builder
 	@QueryProjection
-	public UsersResponseDto(Long userId, String userNum, String username, String deptName, Type type, Status status) {
+	public UserFindAllDto(Long userId, String userNum, String username, String deptName, Type type, Status status) {
 		this.userId = userId;
 		this.userNum = userNum;
 		this.username = username;
