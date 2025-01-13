@@ -6,16 +6,14 @@ import static com.example.campushub.user.domain.QUser.*;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.campushub.user.domain.QUser;
+import com.example.campushub.user.domain.User;
+import com.example.campushub.user.dto.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.user.domain.Status;
 import com.example.campushub.user.domain.Type;
-import com.example.campushub.user.dto.QUserFindAllDto;
-import com.example.campushub.user.dto.QUserFindOneDto;
-import com.example.campushub.user.dto.UserFindAllDto;
-import com.example.campushub.user.dto.UserFindOneDto;
-import com.example.campushub.user.dto.UserSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

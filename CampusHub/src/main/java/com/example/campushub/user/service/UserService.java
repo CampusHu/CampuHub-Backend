@@ -3,6 +3,7 @@ package com.example.campushub.user.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.campushub.user.domain.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository userRepository;
-	private final DeptRepository deptRepository;
+
 
 	//학생 단건 조회
 	public UserFindOneDto getStudentByUserNum(LoginUser loginUser, String userNum) {
@@ -63,7 +64,7 @@ public class UserService {
 	}
 
 
-	//학색 상태 변경
+	//학적 상태 변경(관리자 -> 학생)
 	@Transactional
 	public void updateUserStatus(LoginUser loginUser, List<String> userNums) {
 		//관리자 확인
@@ -78,8 +79,36 @@ public class UserService {
 			if (!user.isSuccessStatus()){
 				throw new IllegalArgumentException("ERROR");
 			}
-			user.updateStatus();
+			user.updatePendingStatus();
 		}
+	}
+	// 학적 상태 변경 신청 (학생 -> 신청 -> 관리자)
+	@Transactional
+	public void updateUserStatusApply(LoginUser loginUser, String userNum) {
+
+		//학생 확인
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
+				.orElseThrow(UserNotFoundException::new);
+
+		Optional<User> users = userRepository.findByUserNum(userNum);
+
+		User user = users.get();
+
+		if (!user.isApplyStatus()) {
+			throw new IllegalArgumentException("ERROR");
+		}
+		user.updateStatus();
+
+
+
+//		for (User user : users) {
+//			if(!User user.isApplyStatus()){
+//				throw new IllegalArgumentException("ERROR");
+//			}
+//			user.updateStatus();
+//		}
+
+
 	}
 
 }

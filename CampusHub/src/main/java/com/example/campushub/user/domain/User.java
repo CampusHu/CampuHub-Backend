@@ -80,11 +80,25 @@ public class User {
         return false;
     }
 
-    public void updateStatus() {
+    public Boolean isApplyStatus() {
+        if(this.status == Status.ENROLLED || this.status == Status.BREAK)
+            return true;
+        return false;
+    }
+
+    public void updatePendingStatus() {
         if (this.status == Status.BREAK_PENDING)
             this.status = Status.BREAK;
         if (this.status == Status.RETURN_PENDING)
             this.status = Status.ENROLLED;
+    }
+
+
+    public void updateStatus() {
+        if(this.status == Status.ENROLLED)
+            this.status = Status.BREAK_PENDING;
+        if(this.status == Status.BREAK)
+            this.status = Status.RETURN_PENDING;
     }
 
 }

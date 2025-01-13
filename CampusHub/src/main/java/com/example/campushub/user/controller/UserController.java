@@ -66,4 +66,13 @@ public class UserController {
 		userService.updateUserStatus(loginUser, userNums);
 		return "redirect:/user/students";
 	}
+
+	//학생 휴학,복학 신청
+//	@PostMapping
+//	@ResponseStatus(HttpStatus.OK)
+
+	public String applyStudentStatus(@Login LoginUser loginUser){
+		userService.updateUserStatusApply(loginUser, loginUser.getUserNum());
+		return "null";
+	}
 }
