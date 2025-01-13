@@ -11,4 +11,6 @@ public interface ScholarshipRepositoryCustom {
     List<ScholarshipResponseDto> findAllByCondition(ScholarshipSearchCondition cond);
 
 
+
+
 }
