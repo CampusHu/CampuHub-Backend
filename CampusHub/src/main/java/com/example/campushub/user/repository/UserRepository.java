@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom{
@@ -15,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
 	boolean existsByUserNum(String userNum);
 
-	Optional<User> findByUserNumAndType(String userNum, String type);
+	Optional<User> findByUserNumAndType(String userNum, Type type);
 
 	@Query("select u from User u where u.userNum in :userNums")
 	List<User> findAllByUserNums(List<String> userNums);
