@@ -1,16 +1,15 @@
 package com.example.campushub.user.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.example.campushub.global.error.exception.IsNotPendingStatusException;
 import com.example.campushub.user.domain.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.campushub.dept.domain.Dept;
-import com.example.campushub.dept.repository.DeptRepository;
 import com.example.campushub.global.error.exception.UserNotFoundException;
-import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.dto.UserFindAllDto;
@@ -55,6 +54,7 @@ public class UserService {
 	}
 
 
+
 	//교수 전체, 컨디션 조회
 	public List<UserFindAllDto> getProfessorByCondition(LoginUser loginUser, UserSearchCondition condition) {
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
@@ -74,10 +74,9 @@ public class UserService {
 		List<User> users = userRepository.findAllByUserNums(userNums);
 
 
-
 		for (User user : users) {
-			if (!user.isSuccessStatus()){
-				throw new IllegalArgumentException("ERROR");
+			if (!user.isPendingStatus()){
+				throw new IsNotPendingStatusException();
 			}
 			user.updatePendingStatus();
 		}
@@ -97,7 +96,7 @@ public class UserService {
 		if (!user.isApplyStatus()) {
 			throw new IllegalArgumentException("ERROR");
 		}
-		user.updateStatus();
+		user.updateBreakPendingStatus();
 
 
 
