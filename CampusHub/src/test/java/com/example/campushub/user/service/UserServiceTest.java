@@ -106,9 +106,9 @@ public class UserServiceTest {
 		assertThat(result3.get(2).getUsername()).isEqualTo(student3.getUserName());
 		assertThat(result4.size()).isEqualTo(1);
 		assertThat(result4.get(0).getUserNum()).isEqualTo(student1.getUserNum());
-		assertThat(result5.size()).isEqualTo(3);
-		assertThat(result5.get(0).getUserNum()).isEqualTo(student1.getUserNum());
-		assertThat(result5.get(1).getUserNum()).isEqualTo(student2.getUserNum()		);
+		assertThat(result5.size()).isEqualTo(1);
+		assertThat(result5.get(0).getUserNum()).isEqualTo(student3.getUserNum());
+
 	}
 
 	@Test

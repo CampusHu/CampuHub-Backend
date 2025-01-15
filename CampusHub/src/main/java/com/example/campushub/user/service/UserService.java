@@ -27,6 +27,16 @@ public class UserService {
 	private final UserRepository userRepository;
 
 
+	//로그인 학생의 단건 조회
+	public UserFindOneDto getUserByUserNum(LoginUser loginUser) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
+			.orElseThrow(UserNotFoundException::new);
+
+		return userRepository.getStudentByUserNum(user.getUserNum())
+			.orElseThrow(UserNotFoundException::new);
+	}
+
+
 	//학생 단건 조회
 	public UserFindOneDto getStudentByUserNum(LoginUser loginUser, String userNum) {
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
@@ -97,16 +107,6 @@ public class UserService {
 			throw new IllegalArgumentException("ERROR");
 		}
 		user.updateBreakPendingStatus();
-
-
-
-//		for (User user : users) {
-//			if(!User user.isApplyStatus()){
-//				throw new IllegalArgumentException("ERROR");
-//			}
-//			user.updateStatus();
-//		}
-
 
 	}
 
