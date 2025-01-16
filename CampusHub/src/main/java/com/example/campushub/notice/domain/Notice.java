@@ -7,13 +7,11 @@ import java.util.Date;
 import com.example.campushub.user.domain.User;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Notice {
 
@@ -36,5 +34,10 @@ public class Notice {
 		this.title = title;
 		this.content = content;
 		this.createdAt = createdAt;
+	}
+
+	public void update(String title, String content) {
+		this.title = title;
+		this.content = content;
 	}
 }

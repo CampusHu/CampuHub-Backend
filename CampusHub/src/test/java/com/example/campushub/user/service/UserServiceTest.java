@@ -1,4 +1,4 @@
-package com.example.campushub.user.service;
+package com.example.campushub.User.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.campushub.user.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
