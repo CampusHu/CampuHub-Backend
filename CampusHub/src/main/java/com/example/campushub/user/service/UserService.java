@@ -1,8 +1,10 @@
 package com.example.campushub.user.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import com.example.campushub.global.error.exception.IsNotPendingStatusException;
 import com.example.campushub.user.domain.Type;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,21 +26,16 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
-	//학생 전체, 컨디션 조회
-	public List<UserFindAllDto> getStudentByCondition(LoginUser loginUser, UserSearchCondition condition) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+
+	//로그인 학생의 단건 조회
+	public UserFindOneDto getUserByUserNum(LoginUser loginUser) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
 			.orElseThrow(UserNotFoundException::new);
 
-		return userRepository.findAllStudentByCondition(condition);
-	}
-
-	//교수 전체, 컨디션 조회
-	public List<UserFindAllDto> getProfessorByCondition(LoginUser loginUser, UserSearchCondition condition) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+		return userRepository.getStudentByUserNum(user.getUserNum())
 			.orElseThrow(UserNotFoundException::new);
-
-		return userRepository.findAllProfessorByCondition(condition);
 	}
+
 
 	//학생 단건 조회
 	public UserFindOneDto getStudentByUserNum(LoginUser loginUser, String userNum) {
@@ -48,6 +45,15 @@ public class UserService {
 		return userRepository.getStudentByUserNum(userNum)
 			.orElseThrow(UserNotFoundException::new);
 	}
+
+	//학생 전체, 컨디션 조회
+	public List<UserFindAllDto> getStudentByCondition(LoginUser loginUser, UserSearchCondition condition) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+			.orElseThrow(UserNotFoundException::new);
+
+		return userRepository.findAllStudentByCondition(condition);
+	}
+
 	//교수 단건 조회
 	public UserFindOneDto getProfessorByUserNum(LoginUser loginUser, String userNum) {
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
@@ -56,6 +62,17 @@ public class UserService {
 		return userRepository.getProfessorByUserNum(userNum)
 			.orElseThrow(UserNotFoundException::new);
 	}
+
+
+
+	//교수 전체, 컨디션 조회
+	public List<UserFindAllDto> getProfessorByCondition(LoginUser loginUser, UserSearchCondition condition) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+			.orElseThrow(UserNotFoundException::new);
+
+		return userRepository.findAllProfessorByCondition(condition);
+	}
+
 
 	//학적 상태 변경(관리자 -> 학생)
 	@Transactional
@@ -66,9 +83,10 @@ public class UserService {
 
 		List<User> users = userRepository.findAllByUserNums(userNums);
 
+
 		for (User user : users) {
-			if (!user.isSuccessStatus()){
-				throw new IllegalArgumentException("ERROR");
+			if (!user.isPendingStatus()){
+				throw new IsNotPendingStatusException();
 			}
 			user.updatePendingStatus();
 		}
@@ -88,17 +106,7 @@ public class UserService {
 		if (!user.isApplyStatus()) {
 			throw new IllegalArgumentException("ERROR");
 		}
-		user.updateStatus();
-
-
-
-//		for (User user : users) {
-//			if(!User user.isApplyStatus()){
-//				throw new IllegalArgumentException("ERROR");
-//			}
-//			user.updateStatus();
-//		}
-
+		user.updateBreakPendingStatus();
 
 	}
 

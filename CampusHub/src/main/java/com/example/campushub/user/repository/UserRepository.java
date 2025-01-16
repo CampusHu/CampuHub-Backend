@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 	boolean existsByUserNum(String userNum);
 
 	Optional<User> findByUserNumAndType(String userNum, Type type);
+
 	@Query("select u from User u where u.userNum in :userNums")
 	List<User> findAllByUserNums(List<String> userNums);
 }

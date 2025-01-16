@@ -38,6 +38,7 @@ public class UserCourse {
 	private Course course;
 
 	@Builder
+
 	public UserCourse(User user, Course course) {
 		this.user = user;
 		this.course = course;

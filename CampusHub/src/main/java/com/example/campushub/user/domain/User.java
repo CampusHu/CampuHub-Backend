@@ -1,6 +1,7 @@
 package com.example.campushub.user.domain;
 
 import com.example.campushub.dept.domain.Dept;
+import com.example.campushub.global.error.exception.IsNotPendingStatusException;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -74,7 +75,7 @@ public class User {
         this.refreshToken = null;
     }
 
-    public Boolean isSuccessStatus() {
+    public Boolean isPendingStatus() {
         if (this.status == Status.BREAK_PENDING || this.status == Status.RETURN_PENDING)
             return true;
         return false;
@@ -87,10 +88,15 @@ public class User {
     }
 
     public void updatePendingStatus() {
-        if (this.status == Status.BREAK_PENDING)
+        if (this.status == Status.BREAK_PENDING) {
             this.status = Status.BREAK;
-        if (this.status == Status.RETURN_PENDING)
+        }
+        else if (this.status == Status.RETURN_PENDING) {
             this.status = Status.ENROLLED;
+        }
+    }
+    public void updateBreakPendingStatus() {
+         this.status = Status.BREAK;
     }
 
 

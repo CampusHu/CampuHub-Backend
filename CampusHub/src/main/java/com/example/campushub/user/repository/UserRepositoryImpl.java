@@ -31,8 +31,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	public List<UserFindAllDto> findAllStudentByCondition(UserSearchCondition condition) {
 		return queryFactory.select(new QUserFindAllDto(
 			user.id,
-			user.userName,
 			user.userNum,
+			user.userName,
 			dept.deptName,
 			user.type,
 			user.status
@@ -50,8 +50,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 	public List<UserFindAllDto> findAllProfessorByCondition(UserSearchCondition condition) {
 		return queryFactory.select(new QUserFindAllDto(
 			user.id,
-			user.userName,
 			user.userNum,
+			user.userName,
 			dept.deptName,
 			user.type,
 			user.status
