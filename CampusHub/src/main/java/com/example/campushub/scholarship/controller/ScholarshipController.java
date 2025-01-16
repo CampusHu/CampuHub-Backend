@@ -1,22 +1,19 @@
 package com.example.campushub.scholarship.controller;
 
 import com.example.campushub.global.security.Login;
+import com.example.campushub.scholarship.dto.GetMyScholarshipDto;
 import com.example.campushub.scholarship.dto.ScholarshipCreateDto;
 import com.example.campushub.scholarship.dto.ScholarshipResponseDto;
 import com.example.campushub.scholarship.dto.ScholarshipSearchCondition;
 import com.example.campushub.scholarship.service.ScholarshipService;
+import com.example.campushub.schoolyear.domain.Semester;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.dto.UserFindOneSimpleDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,17 +34,16 @@ public class ScholarshipController {
     // 장학금 등록을 위한 POST 메서드
 //    @PostMapping("/create")
 //    @ResponseStatus(HttpStatus.CREATED)  // 요청이 성공적으로 처리되면 201 CREATED 상태 코드 반환
-    public String createScholarship(@RequestParam String semester,
-                                    @RequestBody @Valid ScholarshipCreateDto scholarshipCreateDto,
+    public String createScholarship(@RequestBody @Valid ScholarshipCreateDto scholarshipCreateDto,
                                     @Login LoginUser loginUser,
                                     @RequestParam String userNum) {
 
-        UserFindOneSimpleDto userInfo = scholarshipService.getUserInfo(userNum);
+        UserFindOneSimpleDto userInfo = scholarshipService.getUserSimpleInfo(userNum);
 
 
 
         // 장학금 등록 서비스 호출
-        scholarshipService.createScholarship(semester, scholarshipCreateDto, loginUser);
+        scholarshipService.createScholarship(scholarshipCreateDto, loginUser, userInfo);
         System.out.println("장학금 등록 완료");
 
         return "scholarship";  // 장학금 등록 완료 메시지
@@ -63,4 +59,14 @@ public class ScholarshipController {
 //        return "redirect:/scholarships";
 //
 //    }
+
+    //로그인한 사용자 장학금 조회
+//    @GetMapping("")
+        public String findMyScholarships(@Login LoginUser loginUser, Model model) {
+            List<GetMyScholarshipDto> scholarships = scholarshipService.findMyScholarships(loginUser);
+            model.addAttribute("scholarships", scholarships);
+
+            return null;
+        }
+
 }

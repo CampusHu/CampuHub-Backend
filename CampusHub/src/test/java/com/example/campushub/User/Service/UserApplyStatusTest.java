@@ -1,4 +1,4 @@
-package com.example.campushub.User.repository;
+package com.example.campushub.User.Service;
 
 
 import com.example.campushub.dept.domain.Dept;
@@ -8,13 +8,10 @@ import com.example.campushub.user.domain.*;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
 import com.example.campushub.user.service.UserService;
-import org.aspectj.lang.annotation.After;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
@@ -37,19 +34,6 @@ public class UserApplyStatusTest {
         userRepository.deleteAllInBatch();
         deptRepository.deleteAllInBatch();
     }
-
-    @Test
-    @DisplayName("tprtmd")
-    public void joinscholarship(){
-        //given
-
-        //when
-
-        //then
-//        assertThat()
-    }
-
-
 
     @Test
     @DisplayName("휴-복학 신청")

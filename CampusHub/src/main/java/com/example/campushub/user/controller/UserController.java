@@ -70,9 +70,10 @@ public class UserController {
 	//학생 휴학,복학 신청
 //	@PostMapping
 //	@ResponseStatus(HttpStatus.OK)
-
 	public String applyStudentStatus(@Login LoginUser loginUser){
 		userService.updateUserStatusApply(loginUser, loginUser.getUserNum());
 		return "null";
 	}
+
+
 }
