@@ -34,7 +34,8 @@ public class CourseService {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
-		//중복 조건
+		//강의 중복 조건
+
 
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();

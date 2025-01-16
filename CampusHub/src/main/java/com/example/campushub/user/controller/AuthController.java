@@ -12,6 +12,7 @@ import com.example.campushub.global.security.AccessToken;
 import com.example.campushub.global.security.Login;
 import com.example.campushub.global.security.RefreshToken;
 import com.example.campushub.global.security.Token;
+import com.example.campushub.user.dto.JoinRequestDto;
 import com.example.campushub.user.dto.LoginRequestDto;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.service.AuthService;
@@ -43,8 +44,28 @@ public class AuthController {
 			.message("로그인 성공")
 			.build();
 	}
-	//교수 등록
 	//학생 등록
+	@PostMapping("/api/join/student")
+	@ResponseStatus(HttpStatus.OK)
+	public SuccessResponse<Void> signUpStudent(@Login LoginUser loginUser, @RequestBody @Valid JoinRequestDto requestDto, HttpServletResponse response) {
+		authService.joinStudent(loginUser, requestDto);
+
+		return SuccessResponse.<Void>builder()
+			.status(200)
+			.message("학생 등록 성공")
+			.build();
+	}
+	//교수 등록
+	@PostMapping("/api/join/professor")
+	@ResponseStatus(HttpStatus.OK)
+	public SuccessResponse<Void> signUpProfessor(@Login LoginUser loginUser, @RequestBody @Valid JoinRequestDto requestDto, HttpServletResponse response) {
+		authService.joinProfessor(loginUser, requestDto);
+
+		return SuccessResponse.<Void>builder()
+			.status(200)
+			.message("교수 등록 성공")
+			.build();
+	}
 	//토큰 재발급
 	@PostMapping("/api/reissue")
 	@ResponseStatus(HttpStatus.OK)

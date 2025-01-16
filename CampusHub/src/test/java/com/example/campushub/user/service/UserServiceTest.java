@@ -29,10 +29,8 @@ import com.example.campushub.user.dto.UserFindOneDto;
 import com.example.campushub.user.dto.UserSearchCondition;
 import com.example.campushub.user.repository.UserRepository;
 
-// @DataJpaTest
-// @Import({QueryDslConfig.class,UserService.class})
+
 @SpringBootTest
-// @RunWith(SpringRunner.class)
 public class UserServiceTest {
 
 	@Autowired
