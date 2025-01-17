@@ -8,9 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static jakarta.persistence.FetchType.*;
 
 @Entity
@@ -40,9 +37,9 @@ public class Course {
     private SchoolYear schoolYear;
 
     @Column(name = "course_start")
-    private int start;
+    private int startPeriod;
     @Column(name = "course_end")
-    private int end;
+    private int endPeriod;
     private int credits;
     private int attScore;
     private int assignScore;
@@ -50,15 +47,15 @@ public class Course {
     private int finalExam;
 
     @Builder
-    public Course(String courseName, String room, String division, CourseDay courseDay, User user, SchoolYear schoolYear, int start, int end, int credits,int attScore, int assignScore, int midExam, int finalExam){
+    public Course(String courseName, String room, String division, CourseDay courseDay, User user, SchoolYear schoolYear, int startPeriod, int endPeriod, int credits,int attScore, int assignScore, int midExam, int finalExam){
         this.courseName = courseName;
         this.room = room;
         this.division = division;
         this.courseDay = courseDay;
         this.user = user;
         this.schoolYear = schoolYear;
-        this.start = start;
-        this.end = end;
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
         this.credits = credits;
         this.attScore = attScore;
         this.assignScore = assignScore;

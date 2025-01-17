@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.dto.CourseCreateDto;
 import com.example.campushub.course.repository.CourseRepository;
+import com.example.campushub.global.error.exception.DuplicateCourseException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
@@ -35,7 +36,9 @@ public class CourseService {
 			.orElseThrow(UserNotFoundException::new);
 
 		//강의 중복 조건
-
+		if (courseRepository.isCourseOverlapping(createDto)){
+			throw new DuplicateCourseException();
+		}
 
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();
@@ -53,8 +56,8 @@ public class CourseService {
 			.courseDay(createDto.getDay())
 			.user(user)
 			.schoolYear(schoolYear)
-			.start(createDto.getStartTime())
-			.end(createDto.getEndTime())
+			.startPeriod(createDto.getStartPeriod())
+			.endPeriod(createDto.getEndPeriod())
 			.credits(createDto.getCredits())
 			.attScore(createDto.getAttScore())
 			.assignScore(createDto.getAssignScore())

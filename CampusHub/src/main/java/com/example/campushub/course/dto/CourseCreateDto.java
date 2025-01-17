@@ -1,8 +1,6 @@
 package com.example.campushub.course.dto;
 
 import com.example.campushub.course.domain.CourseDay;
-import com.example.campushub.schoolyear.domain.SchoolYear;
-import com.example.campushub.user.domain.User;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -22,9 +20,9 @@ public class CourseCreateDto {
 	@NotBlank
 	private CourseDay day;
 	@NotBlank(message = "시작 시간을 입력해주세요")
-	private int startTime;
+	private int startPeriod;
 	@NotBlank(message = "종료시간을 입력해주세요")
-	private int endTime;
+	private int endPeriod;
 	@NotBlank(message = "학점을 입력해주세요")
 	private int credits;
 	@NotBlank(message = "출석 기준 점수를 입력해주세요")
@@ -37,14 +35,14 @@ public class CourseCreateDto {
 	private int finalScore;
 
 	@Builder
-	public CourseCreateDto(String courseName, String room, String division, CourseDay day, int startTime, int endTime,
+	public CourseCreateDto(String courseName, String room, String division, CourseDay day, int startPeriod, int endPeriod,
 		int credits, int attScore, int assignScore, int midScore, int finalScore) {
 		this.courseName = courseName;
 		this.room = room;
 		this.division = division;
 		this.day = day;
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.startPeriod = startPeriod;
+		this.endPeriod = endPeriod;
 		this.credits = credits;
 		this.attScore = attScore;
 		this.assignScore = assignScore;
