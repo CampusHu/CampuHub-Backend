@@ -1,10 +1,14 @@
 package com.example.campushub.course.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.dto.CourseCreateDto;
+import com.example.campushub.course.dto.CourseResponseDto;
+import com.example.campushub.course.dto.ProfCourseSearchCondition;
 import com.example.campushub.course.repository.CourseRepository;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
@@ -29,8 +33,8 @@ public class CourseService {
 	private final SchoolYearRepository schoolYearRepository;
 	private final UserCourseRepository userCourseRepository;
 
-
 	//강의 생성
+	@Transactional
 	public void createCourse(LoginUser loginUser, CourseCreateDto createDto) {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
@@ -53,12 +57,13 @@ public class CourseService {
 			.courseName(createDto.getCourseName())
 			.room(createDto.getRoom())
 			.division(createDto.getDivision())
-			.courseDay(createDto.getDay())
+			.courseDay(createDto.getCourseDay())
+			.courseGrade(createDto.getCourseGrade())
 			.user(user)
 			.schoolYear(schoolYear)
 			.startPeriod(createDto.getStartPeriod())
 			.endPeriod(createDto.getEndPeriod())
-			.credits(createDto.getCredits())
+			.creditScore(createDto.getCredits())
 			.attScore(createDto.getAttScore())
 			.assignScore(createDto.getAssignScore())
 			.midExam(createDto.getMidScore())
@@ -73,4 +78,18 @@ public class CourseService {
 		courseRepository.save(course);
 		userCourseRepository.save(userCourse);
 	}
+
+	//전체+컨디션 강의 조회
+	public List<CourseResponseDto> findAllByCondition(LoginUser loginUser, ProfCourseSearchCondition cond) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findAllByCondition(cond);
+	}
+
+
+
+	//본인 강의 조회
+
+
 }
