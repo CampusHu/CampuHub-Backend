@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CourseResponseDto {
+	private Long id;
 	private CourseGrade courseGrade;
 	private String courseName;
 	private CourseDivision courseDivision;
@@ -24,8 +25,9 @@ public class CourseResponseDto {
 
 	@Builder
 	@QueryProjection
-	public CourseResponseDto(CourseGrade courseGrade, String courseName, CourseDivision courseDivision, int creditScore,
+	public CourseResponseDto(Long id, CourseGrade courseGrade, String courseName, CourseDivision courseDivision, int creditScore,
 		String professorName, String courseRoom, CourseDay courseDay, int startPeriod, int endPeriod) {
+		this.id = id;
 		this.courseGrade = courseGrade;
 		this.courseName = courseName;
 		this.courseDivision = courseDivision;

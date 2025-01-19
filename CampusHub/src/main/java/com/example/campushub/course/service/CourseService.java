@@ -9,7 +9,9 @@ import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.dto.CourseCreateDto;
 import com.example.campushub.course.dto.CourseResponseDto;
 import com.example.campushub.course.dto.ProfCourseSearchCondition;
+import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.example.campushub.course.repository.CourseRepository;
+import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.schoolyear.domain.SchoolYear;
@@ -32,6 +34,55 @@ public class CourseService {
 	private final UserRepository userRepository;
 	private final SchoolYearRepository schoolYearRepository;
 	private final UserCourseRepository userCourseRepository;
+
+	//교수 전체+컨디션 강의 조회
+	public List<CourseResponseDto> findAllByProfCondition(LoginUser loginUser, ProfCourseSearchCondition cond) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findAllByProfCondition(cond);
+	}
+
+	//학생 전체 + 컨디션 강의 조회
+	public List<CourseResponseDto> findAllByStudCondition(LoginUser loginUser, StudCourseSearchCondition cond) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findAllByStudCondition(cond);
+	}
+
+	//교수 본인 강의 조회
+	public List<CourseResponseDto> findAllByProf(LoginUser loginUser) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findAllByProf(user.getUserNum());
+	}
+	//학생 본인 강의 조회
+	// public List<CourseResponseDto> findAllBySutd(LoginUser loginUser) {
+	// 	User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+	// 		.orElseThrow(UserNotFoundException::new);
+	// }
+	//
+	//학생 수강 신청
+	@Transactional
+	public void createUserCourse(LoginUser loginUser, List<Long> courseIds) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		for (Long courseId : courseIds) {
+			Course course = courseRepository.findById(courseId)
+				.orElseThrow(CourseNotFoundException::new);
+
+			UserCourse userCourse = UserCourse.builder()
+				.course(course)
+				.user(user)
+				.build();
+
+			userCourseRepository.save(userCourse);
+		}
+
+	}
 
 	//강의 생성
 	@Transactional
@@ -79,17 +130,20 @@ public class CourseService {
 		userCourseRepository.save(userCourse);
 	}
 
-	//전체+컨디션 강의 조회
-	public List<CourseResponseDto> findAllByCondition(LoginUser loginUser, ProfCourseSearchCondition cond) {
+	//강의 삭제
+	@Transactional
+	public void deleteCourse(LoginUser loginUser, Long courseId) {
+
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
-		return courseRepository.findAllByCondition(cond);
+		courseRepository.findById(courseId)
+				.orElseThrow(CourseNotFoundException::new);
+
+		courseRepository.deleteById(courseId);
 	}
 
+	//강의 수정
 
-
-	//본인 강의 조회
-
-
+	//
 }

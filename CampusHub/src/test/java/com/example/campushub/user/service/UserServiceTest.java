@@ -1,4 +1,4 @@
-package com.example.campushub.User.service;
+package com.example.campushub.user.service;
 
 import static org.assertj.core.api.Assertions.*;
 

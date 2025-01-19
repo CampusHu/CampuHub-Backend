@@ -1,6 +1,7 @@
 package com.example.campushub.course.repository;
 
 import static com.example.campushub.course.domain.QCourse.*;
+import static com.example.campushub.dept.domain.QDept.*;
 import static com.example.campushub.user.domain.QUser.*;
 
 import java.util.List;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.CourseDay;
+import com.example.campushub.course.domain.CourseDivision;
 import com.example.campushub.course.dto.CourseCreateDto;
 import com.example.campushub.course.dto.CourseResponseDto;
 import com.example.campushub.course.dto.ProfCourseSearchCondition;
 import com.example.campushub.course.dto.QCourseResponseDto;
+import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -26,10 +29,11 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 	private final JPAQueryFactory queryFactory;
 
 
-	//강의 전체+ 컨디션 조회
+	//교수 강의 전체+ 컨디션 조회
 	@Override
-	public List<CourseResponseDto> findAllByCondition(ProfCourseSearchCondition condition) {
+	public List<CourseResponseDto> findAllByProfCondition(ProfCourseSearchCondition condition) {
 		return queryFactory.select(new QCourseResponseDto(
+			course.id,
 			course.courseGrade,
 			course.courseName,
 			course.division,
@@ -46,7 +50,52 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 				courseRoomEq(condition.getRoom()))
 			.fetch();
 	}
-	//본인 강의 조회
+
+	//학생 강의 전체 + 컨디션 조회
+	@Override
+	public List<CourseResponseDto> findAllByStudCondition(StudCourseSearchCondition cond) {
+		return queryFactory.select(new QCourseResponseDto(
+			course.id,
+			course.courseGrade,
+			course.courseName,
+			course.division,
+			course.creditScore,
+			user.userName,
+			course.room,
+			course.courseDay,
+			course.startPeriod,
+			course.endPeriod
+		))
+			.from(course)
+			.join(user).on(course.user.eq(user))
+			.join(dept).on(user.dept.eq(dept))
+			.where(divisionEq(cond.getDivision()),
+				deptNameEq(cond.getDeptName()),
+				courseNameEq(cond.getCourseName()))
+			.fetch();
+	}
+
+	//교수 본인 강의 조회
+	@Override
+	public List<CourseResponseDto> findAllByProf(String profNum) {
+		return queryFactory.select(new QCourseResponseDto(
+			course.id,
+			course.courseGrade,
+			course.courseName,
+			course.division,
+			course.creditScore,
+			user.userName,
+			course.room,
+			course.courseDay,
+			course.startPeriod,
+			course.endPeriod
+		))
+			.from(course)
+			.join(user).on(course.user.eq(user))
+			.on(course.user.eq(user))
+			.where(course.user.userNum.eq(profNum))
+			.fetch();
+	}
 
 
 	//강의 중복 조건
@@ -86,6 +135,15 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 	}
 	private BooleanExpression courseRoomEq(String room) {
 		return room == null ? null : course.room.eq(room);
+	}
+	private BooleanExpression divisionEq(CourseDivision division) {
+		return division == null ? null : course.division.eq(division);
+	}
+	private BooleanExpression deptNameEq(String deptName) {
+		return deptName == null ? null : course.user.dept.deptName.eq(deptName);
+	}
+	private BooleanExpression courseNameEq(String courseName) {
+		return courseName == null ? null : course.courseName.eq(courseName);
 	}
 
 }
