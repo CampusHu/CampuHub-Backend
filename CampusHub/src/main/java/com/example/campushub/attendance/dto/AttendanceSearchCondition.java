@@ -1,6 +1,7 @@
 package com.example.campushub.attendance.dto;
 
 
+import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import lombok.AccessLevel;
 import lombok.Builder;

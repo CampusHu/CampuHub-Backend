@@ -34,7 +34,7 @@ public class UserController {
 
 		return "/user/stdent";
 	}
-	//학생 전체 조히
+	//학생 전체 조회
 	@GetMapping("/api/students/condition")
 	@ResponseStatus(HttpStatus.OK)
 	public String getStudentCondition(@Login LoginUser loginUser, UserSearchCondition condition, Model model){

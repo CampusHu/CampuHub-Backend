@@ -32,7 +32,6 @@ public class ScholarshipService {
     private final UserRepository userRepository;
     private final ScholarshipRepository scholarshipRepository;
     private final UserScholarshipRepository userScholarshipRepository;
-    private final SchoolYearRepository schoolYearRepository;
 
     public List<ScholarshipResponseDto> findScholarships(ScholarshipSearchCondition cond, LoginUser loginUser) {
         // 1. 요청한 사용자가 ADMIN인지 확인
@@ -122,7 +121,6 @@ public class ScholarshipService {
 //    }
 
     //사용자 본인 장학금 조회
-    @Transactional
     public List<GetMyScholarshipDto> findMyScholarships(LoginUser loginUser) {
         User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
                 .orElseThrow(UserNotFoundException::new);

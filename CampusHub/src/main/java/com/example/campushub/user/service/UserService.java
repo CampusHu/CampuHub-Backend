@@ -106,7 +106,7 @@ public class UserService {
 		if (!user.isApplyStatus()) {
 			throw new IllegalArgumentException("ERROR");
 		}
-		user.updateBreakPendingStatus();
+		user.updateStatus();
 
 	}
 

@@ -1,10 +1,6 @@
 package com.example.campushub.attendance.repository;
 
-import com.example.campushub.attendance.domain.QAttendance;
-import com.example.campushub.attendance.dto.AttendanceResponseDto;
-import com.example.campushub.attendance.dto.AttendanceSearchCondition;
-import com.example.campushub.attendance.dto.QAttendanceResponseDto;
-import com.example.campushub.nweek.domain.Week;
+import com.example.campushub.attendance.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -32,19 +28,50 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 user.userNum,
                 attendance.status
         )).from(attendance)
+                .leftJoin(attendance.userCourse, userCourse)
                 .join(userCourse.user,user)
                 .join(userCourse.course,course)
-                .join(attendance.userCourse,userCourse)
                 .join(attendance.nWeek,nWeek)
-                .where(eqCourseName(atten.getCourseName()), eqNweek(atten.getWeek()))
+                .where(userCourse.course.courseName.eq(atten.getCourseName()),
+                        attendance.nWeek.week.eq(atten.getWeek()))
                 .fetch();
     }
+
+    @Override
+    public List<AllAttendanceResponseDto> findCourseByCondition(AttendanceSearchCourseCondition cond) {
+        return queryFactory.select(new QAllAttendanceResponseDto(
+                user.userName,
+                user.userNum,
+                attendance.status,
+                attendance.nWeek.week
+        )).from(attendance)
+                .leftJoin(attendance.userCourse,userCourse)
+                .join(userCourse.user,user)
+                .join(userCourse.course,course)
+                .join(attendance.nWeek,nWeek)
+                .where(eqCourseName(cond.getCourseName()))
+                .fetch();
+    }
+
+    @Override
+    public List<AttendanceUserDto> findUserAttendance(AttendanceSearchCondition atten, String userNum) {
+        return queryFactory.select(new QAttendanceUserDto(
+                nWeek.week,
+                attendance.status
+        )).from(attendance)
+                .leftJoin(attendance.userCourse,userCourse)
+                .join(userCourse.user,user)
+                .join(userCourse.course,course)
+                .join(attendance.nWeek,nWeek)
+                .where(userCourse.course.courseName.eq(atten.getCourseName()),
+                        userCourse.user.userNum.eq(userNum))
+                .orderBy(nWeek.week.desc())
+                .fetch();
+    }
+
 
     private BooleanExpression eqCourseName(String courseName) {
         return courseName == null ? null : course.courseName.eq(courseName);
     }
 
-    private BooleanExpression eqNweek(Week week) {
-        return week == null ? null : nWeek.week.eq(week);
-    }
 }

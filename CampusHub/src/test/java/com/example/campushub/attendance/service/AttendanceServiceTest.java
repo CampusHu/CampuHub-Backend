@@ -1,11 +1,14 @@
-//package com.example.campushub.attendance;
+//package com.example.campushub.attendance.service;
 //
 //
 //import com.example.campushub.attendance.domain.Attendance;
 //import com.example.campushub.attendance.repository.AttendanceRepository;
 //import com.example.campushub.course.domain.Course;
+//import com.example.campushub.course.repository.CourseRepository;
 //import com.example.campushub.global.config.QueryDslConfig;
 //import com.example.campushub.nweek.domain.NWeek;
+//import com.example.campushub.nweek.domain.Week;
+//import com.example.campushub.nweek.repository.NweekRepository;
 //import com.example.campushub.user.domain.*;
 //import com.example.campushub.user.dto.LoginUser;
 //import com.example.campushub.user.repository.UserRepository;
@@ -18,6 +21,8 @@
 //import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 //import org.springframework.context.annotation.Import;
 //
+//import java.util.List;
+//
 //@DataJpaTest
 //@Import({QueryDslConfig.class, AttendanceServiceTest.class})
 //public class AttendanceServiceTest {
@@ -28,16 +33,51 @@
 //    @Autowired
 //    private UserCourseRepository userCourseRepository;
 //    @Autowired
-//    private
+//    private CourseRepository courseRepository;
+//    @Autowired
+//    private AttendanceService attendanceService;
+//    @Autowired
+//    private NweekRepository nweekRepository;
+//
 //
 //
 //    @AfterEach
 //    public void tearDown(){
 //        attendanceRepository.deleteAllInBatch();
+//        userRepository.deleteAllInBatch();
+//        courseRepository.deleteAllInBatch();
+//        userCourseRepository.deleteAllInBatch();
+//        nweekRepository.deleteAllInBatch();
+//    }
+//    @Test
+//    @DisplayName("장학금 조회 - 강의")
+//    public void findStudentsByCourseName() {
+//
+//        // Given: 데이터 준비
+//        User professor = userRepository.save(createProfessor("12412"));
+//        LoginUser loginUser = createLoginUser(professor);
+//
+//        User userA = userRepository.save(createUser("학생1", "1906078"));
+//        User userB = userRepository.save(createUser("학생2", "1906088"));
+//        User userC = userRepository.save(createUser("학생3", "1906098"));
+//
+//        Course courseA = courseRepository.save(createCourse("시디과"));
+//        Course courseB = courseRepository.save(createCourse("컴소과"));
+//
+//        userCourseRepository.save(createUserCourse(userA, courseA));
+//        userCourseRepository.save(createUserCourse(userB, courseA));
+//        userCourseRepository.save(createUserCourse(userC, courseA));  // "시디과"에 3명의 학생을 등록
+//
+//        // When: "시디과" 강의에 대한 UserCourse 조회
+//        List<UserCourse> result = userCourseRepository.findAllByCourse(courseA);  // findAllByCourse(courseA) 메서드는 필요하다면 추가해야 함
+//
+//        // Then: "시디과" 강의에 등록된 학생이 2명이 아니고 3명인지 확인
+//        assert
 //    }
 //
+//
 //    @Test
-//    @DisplayName("출석 입력 전 학생 조회")
+//    @DisplayName("장학금 조회 -학과")
 //    public void findByCond() {
 //
 //        //given
@@ -47,9 +87,17 @@
 //        User userA = userRepository.save(createUser("학생1","1906078"));
 //        User userB = userRepository.save(createUser("학생2","1906088"));
 //
-//        Course courseA =
+//        Course courseA = courseRepository.save(createCourse("시디과"));
+//        Course courseB = courseRepository.save(createCourse("컴소과"));
 //
-//        UserCourse userCourse = userCourseRepository.save()
+//
+//        UserCourse userCourse = userCourseRepository.save(createUserCourse(userA, courseA));
+//        UserCourse userCourse2 = userCourseRepository.save(createUserCourse(userB, courseA));
+//
+//        NWeek week1 = nweekRepository.save(createNWeek());
+//
+//
+//
 //
 //
 //
@@ -57,6 +105,7 @@
 //
 //
 //        //then
+//
 //    }
 //
 //
@@ -110,10 +159,16 @@
 //
 //    }
 //
-//    private Attendance createAttendance(NWeek nWeek ,UserCourse userCourse){
+//    private Attendance createAttendance(UserCourse userCourse, NWeek week){
 //        return Attendance.builder()
 //                .userCourse(userCourse)
 //                .nWeek(nWeek)
+//                .build();
+//    }
+//
+//    private NWeek createNWeek(){
+//        return NWeek.builder()
+//                .week(Week.FIRST)
 //                .build();
 //    }
 //
