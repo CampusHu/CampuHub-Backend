@@ -102,4 +102,6 @@ public class UserController {
 			.message("학생 상태변경 신청 수락")
 			.build();
 	}
+
+
 }

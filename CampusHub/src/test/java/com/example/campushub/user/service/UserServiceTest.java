@@ -192,6 +192,24 @@ public class UserServiceTest {
 		assertThat(student1.getStatus()).isEqualTo(Status.BREAK);
 
 	}
+
+	@Test
+	@DisplayName("휴-복학 신청")
+	@Transactional
+	public void updateUserStatusApply(){
+		//given
+		Dept dept = deptRepository.save(createDept("컴소과"));
+		User user = userRepository.save(createStudent("전영욱", "1906078",  dept,Status.BREAK));
+
+		LoginUser loginUser = createLoginUser(user);
+
+		//when
+		userService.updateUserStatusApply(loginUser, user.getUserNum());
+		//then
+		assertThat(user.getStatus()).isEqualTo(Status.RETURN_PENDING);
+
+	}
+
 	private UserSearchCondition createCondition(String userNum, String deptName, Status status) {
 		return UserSearchCondition.builder()
 			.userNum(userNum)
