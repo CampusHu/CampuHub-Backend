@@ -6,11 +6,15 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import com.example.campushub.user.service.UserService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+// import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+// import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.dept.domain.Dept;
@@ -26,8 +30,7 @@ import com.example.campushub.user.dto.UserFindOneDto;
 import com.example.campushub.user.dto.UserSearchCondition;
 import com.example.campushub.user.repository.UserRepository;
 
-// @DataJpaTest
-// @Import({QueryDslConfig.class,UserService.class})
+
 @SpringBootTest
 public class UserServiceTest {
 

@@ -33,11 +33,6 @@ public class SecurityConfig {
 	private final ApiAccessDeniedHandler deniedHandler;
 
 	@Bean
-	public BCryptPasswordEncoder encodePwd() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.formLogin(form -> form.disable()) // 폼 로그인 비활성화

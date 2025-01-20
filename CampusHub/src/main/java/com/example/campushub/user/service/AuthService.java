@@ -53,7 +53,10 @@ public class AuthService {
 	}
 	//학생 등록
 	@Transactional
-	public void joinStudent(JoinRequestDto joinRequestDto) {
+	public void joinStudent(LoginUser loginUser, JoinRequestDto joinRequestDto) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
 		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
 			throw new DuplicateUserNumException();
 		}
@@ -68,7 +71,10 @@ public class AuthService {
 
 	//교수 등록
 	@Transactional
-	public void joinProfessor(JoinRequestDto joinRequestDto) {
+	public void joinProfessor(LoginUser loginUser, JoinRequestDto joinRequestDto) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
 		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
 			throw new DuplicateUserNumException();
 		}
