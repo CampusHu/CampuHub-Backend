@@ -1,4 +1,4 @@
-package com.example.campushub.lecturetime.domain;
+package com.example.campushub.coursetime.domain;
 
 import static jakarta.persistence.FetchType.*;
 
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LectureTime {
+public class CourseTime {
 
 	@Id
 	@Column(name = "lecture_time_id")
@@ -31,7 +31,7 @@ public class LectureTime {
 	private Time lectureTime;
 
 	@Builder
-	public LectureTime(Course course, Date lectureDay, Time lectureTime) {
+	public CourseTime(Course course, Date lectureDay, Time lectureTime) {
 		this.course = course;
 		this.lectureDay = lectureDay;
 		this.lectureTime = lectureTime;

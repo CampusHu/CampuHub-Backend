@@ -7,12 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.dto.CourseCreateDto;
+import com.example.campushub.course.dto.CourseEditDto;
 import com.example.campushub.course.dto.CourseResponseDto;
 import com.example.campushub.course.dto.ProfCourseSearchCondition;
 import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.example.campushub.course.repository.CourseRepository;
 import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
+import com.example.campushub.global.error.exception.DuplicateRoomTimeException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
@@ -59,14 +61,16 @@ public class CourseService {
 		return courseRepository.findAllByProf(user.getUserNum());
 	}
 	//학생 본인 강의 조회
-	// public List<CourseResponseDto> findAllBySutd(LoginUser loginUser) {
-	// 	User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
-	// 		.orElseThrow(UserNotFoundException::new);
-	// }
-	//
+	public List<CourseResponseDto> findAllByStud(LoginUser loginUser) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+		return courseRepository.findAllByStud(user.getUserNum());
+
+	}
+
 	//학생 수강 신청
 	@Transactional
-	public void createUserCourse(LoginUser loginUser, List<Long> courseIds) {
+	public void joinCourse(LoginUser loginUser, List<Long> courseIds) {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
@@ -91,9 +95,15 @@ public class CourseService {
 			.orElseThrow(UserNotFoundException::new);
 
 		//강의 중복 조건
-		if (courseRepository.isCourseOverlapping(createDto)){
+		if (courseRepository.existsByCourseName(createDto.getCourseName())) {
 			throw new DuplicateCourseException();
 		}
+
+		//강의실 중복 조건
+		if (courseRepository.existsByRoomAndTime(createDto)) {
+			throw new DuplicateRoomTimeException();
+		}
+
 
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();
@@ -144,6 +154,17 @@ public class CourseService {
 	}
 
 	//강의 수정
+	@Transactional
+	public void editCourse(LoginUser loginUser, Long courseId, CourseEditDto editDto) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		Course course = courseRepository.findById(courseId)
+			.orElseThrow(CourseNotFoundException::new);
+
+		course.edit(editDto.getCourseName(), editDto.getRoom(), editDto.getDivision(), editDto.getCourseDay(), editDto.getCourseGrade(), editDto.getStartPeriod(),
+			editDto.getEndPeriod(), editDto.getCredits(), editDto.getAttScore(), editDto.getAssignScore(), editDto.getMidScore(), editDto.getFinalScore());
+	}
 
 	//
 }

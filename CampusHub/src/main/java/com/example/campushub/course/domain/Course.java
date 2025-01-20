@@ -49,7 +49,8 @@ public class Course {
     private int finalExam;
 
     @Builder
-    public Course(String courseName, String room, CourseDivision division, CourseDay courseDay,CourseGrade courseGrade, User user, SchoolYear schoolYear, int startPeriod, int endPeriod, int creditScore,int attScore, int assignScore, int midExam, int finalExam){
+    public Course(String courseName, String room, CourseDivision division, CourseDay courseDay,CourseGrade courseGrade, User user, SchoolYear schoolYear,
+        int startPeriod, int endPeriod, int creditScore,int attScore, int assignScore, int midExam, int finalExam){
         this.courseName = courseName;
         this.room = room;
         this.division = division;
@@ -64,7 +65,22 @@ public class Course {
         this.assignScore = assignScore;
         this.midExam = midExam;
         this.finalExam = finalExam;
+    }
 
+    public void edit(String courseName, String room, CourseDivision division, CourseDay courseDay,CourseGrade courseGrade,
+        int startPeriod, int endPeriod, int creditScore,int attScore, int assignScore, int midExam, int finalExam) {
+        this.courseName = courseName;
+        this.room = room;
+        this.division = division;
+        this.courseDay = courseDay;
+        this.courseGrade = courseGrade;
+        this.startPeriod = startPeriod;
+        this.endPeriod = endPeriod;
+        this.creditScore = creditScore;
+        this.attScore = attScore;
+        this.assignScore = assignScore;
+        this.midExam = midExam;
+        this.finalExam = finalExam;
     }
 
 

@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CourseCreateDto {
+public class CourseEditDto {
+
 	@NotBlank(message = "강의명을 입력해주세요")
 	private String courseName;
 	@NotBlank(message = "강의실을 입력해주세요")
@@ -39,8 +40,10 @@ public class CourseCreateDto {
 	private int finalScore;
 
 	@Builder
-	public CourseCreateDto(String courseName, String room, CourseDivision division, CourseDay courseDay,CourseGrade courseGrade, int startPeriod, int endPeriod,
-		int credits, int attScore, int assignScore, int midScore, int finalScore) {
+	public CourseEditDto(String courseName, String room, CourseDivision division, CourseDay courseDay,
+		CourseGrade courseGrade, int startPeriod, int endPeriod, int credits, int attScore, int assignScore,
+		int midScore,
+		int finalScore) {
 		this.courseName = courseName;
 		this.room = room;
 		this.division = division;

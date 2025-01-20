@@ -36,7 +36,6 @@ public class UserService {
 			.orElseThrow(UserNotFoundException::new);
 	}
 
-
 	//학생 단건 조회
 	public UserFindOneDto getStudentByUserNum(LoginUser loginUser, String userNum) {
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)

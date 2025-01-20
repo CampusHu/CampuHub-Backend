@@ -9,10 +9,11 @@ import com.example.campushub.course.dto.StudCourseSearchCondition;
 
 public interface CourseRepositoryCustom {
 
-	boolean isCourseOverlapping(CourseCreateDto createDto);
+	boolean existsByRoomAndTime(CourseCreateDto createDto);
 
 	List<CourseResponseDto> findAllByProfCondition(ProfCourseSearchCondition condition);
 	List<CourseResponseDto> findAllByStudCondition(StudCourseSearchCondition cond);
 	List<CourseResponseDto>findAllByProf(String profNum);
+	List<CourseResponseDto>findAllByStud(String studNum);
 
 }
