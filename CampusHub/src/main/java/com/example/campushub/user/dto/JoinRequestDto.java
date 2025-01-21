@@ -70,7 +70,7 @@ public class JoinRequestDto {
 			.userNum(userNum)
 			.password(password)
 			.role(Role.USER)
-			.type(type)
+			.type(Type.STUDENT)
 			.grade(Grade.FIRST_GRADE)
 			.status(Status.ENROLLED)
 			.build();
@@ -87,7 +87,7 @@ public class JoinRequestDto {
 			.userNum(userNum)
 			.password(password)
 			.role(Role.USER)
-			.type(type)
+			.type(Type.PROFESSOR)
 			.status(Status.EMPLOYED)
 			.build();
 	}

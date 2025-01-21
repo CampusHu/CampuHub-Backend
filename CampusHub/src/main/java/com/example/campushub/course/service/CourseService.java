@@ -19,6 +19,7 @@ import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
+import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
@@ -39,7 +40,7 @@ public class CourseService {
 
 	//교수 전체+컨디션 강의 조회
 	public List<CourseResponseDto> findAllByProfCondition(LoginUser loginUser, ProfCourseSearchCondition cond) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
 			.orElseThrow(UserNotFoundException::new);
 
 		return courseRepository.findAllByProfCondition(cond);
@@ -47,7 +48,7 @@ public class CourseService {
 
 	//학생 전체 + 컨디션 강의 조회
 	public List<CourseResponseDto> findAllByStudCondition(LoginUser loginUser, StudCourseSearchCondition cond) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
 			.orElseThrow(UserNotFoundException::new);
 
 		return courseRepository.findAllByStudCondition(cond);
@@ -55,14 +56,14 @@ public class CourseService {
 
 	//교수 본인 강의 조회
 	public List<CourseResponseDto> findAllByProf(LoginUser loginUser) {
-		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
 			.orElseThrow(UserNotFoundException::new);
 
 		return courseRepository.findAllByProf(user.getUserNum());
 	}
 	//학생 본인 강의 조회
 	public List<CourseResponseDto> findAllByStud(LoginUser loginUser) {
-		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
 			.orElseThrow(UserNotFoundException::new);
 		return courseRepository.findAllByStud(user.getUserNum());
 
@@ -71,7 +72,7 @@ public class CourseService {
 	//학생 수강 신청
 	@Transactional
 	public void joinCourse(LoginUser loginUser, List<Long> courseIds) {
-		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
 			.orElseThrow(UserNotFoundException::new);
 
 		for (Long courseId : courseIds) {
@@ -91,7 +92,7 @@ public class CourseService {
 	//강의 생성
 	@Transactional
 	public void createCourse(LoginUser loginUser, CourseCreateDto createDto) {
-		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
 			.orElseThrow(UserNotFoundException::new);
 
 		//강의 중복 조건
@@ -144,7 +145,7 @@ public class CourseService {
 	@Transactional
 	public void deleteCourse(LoginUser loginUser, Long courseId) {
 
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
 			.orElseThrow(UserNotFoundException::new);
 
 		courseRepository.findById(courseId)
@@ -156,7 +157,7 @@ public class CourseService {
 	//강의 수정
 	@Transactional
 	public void editCourse(LoginUser loginUser, Long courseId, CourseEditDto editDto) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
 			.orElseThrow(UserNotFoundException::new);
 
 		Course course = courseRepository.findById(courseId)

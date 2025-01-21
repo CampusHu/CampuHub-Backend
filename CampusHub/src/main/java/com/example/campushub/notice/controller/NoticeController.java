@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class NoticeController {
 
     private final NoticeService noticeService;
-
     public NoticeController(NoticeService noticeService) {
         this.noticeService = noticeService;
     }
 
     // 공지사항 리스트 조회
-    @GetMapping("/notice")
+    @GetMapping("/api/notice")
     public ResponseEntity<Page<NoticeListAll>> getNotices(
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int size,
@@ -89,7 +88,7 @@ public class NoticeController {
     }
 
     // 공지사항 수정
-    @PutMapping("/notice/{id}")
+    @PutMapping(" /notice/{id}")
     public ResponseEntity<Void> updateNotice(
             @PathVariable Long id,
             @RequestBody NoticeCreateRequestDto requestDto,

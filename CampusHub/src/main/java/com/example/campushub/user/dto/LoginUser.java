@@ -11,12 +11,10 @@ import lombok.Getter;
 public class LoginUser {
 	private String userNum;
 	private Role role;
-	private Type type;
 
 	@Builder
-	public LoginUser(String userNum, Role role, Type type) {
+	public LoginUser(String userNum, Role role) {
 		this.userNum = userNum;
 		this.role = role;
-		this.type = type;
 	}
 }

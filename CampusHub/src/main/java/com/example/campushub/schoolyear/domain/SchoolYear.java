@@ -3,6 +3,8 @@ package com.example.campushub.schoolyear.domain;
 import java.time.LocalDate;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -19,6 +21,7 @@ public class SchoolYear {
     private Long id;
 
     @Column(name = "school_year_year")
+    @DateTimeFormat(pattern = "yyyy")
     private LocalDate year;
     @Enumerated(EnumType.STRING)
     private Semester semester;

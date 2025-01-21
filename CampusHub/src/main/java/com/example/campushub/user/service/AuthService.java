@@ -14,6 +14,7 @@ import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.global.security.JwtProvider;
 import com.example.campushub.global.security.RefreshToken;
 import com.example.campushub.global.security.Token;
+import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.JoinRequestDto;
 import com.example.campushub.user.dto.LoginRequestDto;
@@ -54,7 +55,7 @@ public class AuthService {
 	//학생 등록
 	@Transactional
 	public void joinStudent(LoginUser loginUser, JoinRequestDto joinRequestDto) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
 			.orElseThrow(UserNotFoundException::new);
 
 		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {
@@ -72,7 +73,7 @@ public class AuthService {
 	//교수 등록
 	@Transactional
 	public void joinProfessor(LoginUser loginUser, JoinRequestDto joinRequestDto) {
-		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
 			.orElseThrow(UserNotFoundException::new);
 
 		if (userRepository.existsByUserNum(joinRequestDto.getUserNum())) {

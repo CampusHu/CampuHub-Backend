@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.example.campushub.user.domain.Type;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
@@ -81,9 +83,9 @@ public class JwtProvider {
 		}
 	}
 
-	private String createAccessToken(String email) {
+	private String createAccessToken(String userNum) { //Type type
 		return Jwts.builder()
-			.setSubject(email)
+			.setSubject(userNum)
 			.setExpiration(expireTime(accessTokenExpirationPeriod))
 			.signWith(secretKey)
 			.compact();
