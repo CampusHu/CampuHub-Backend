@@ -3,12 +3,19 @@ package com.example.campushub.global.security;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.example.campushub.global.filter.CustomUserDetails;
+import com.example.campushub.user.domain.Role;
 import com.example.campushub.user.domain.Type;
 
 import io.jsonwebtoken.Jwts;
@@ -39,10 +46,10 @@ public class JwtProvider {
 		this.refreshHeader = refreshHeader;
 	}
 
-	public Token createToken(String userNum) {
+	public Token createToken(String userNum, Type type, Role role) {
 		AccessToken accessToken = AccessToken.builder()
 			.header(accessHeader)
-			.data(createAccessToken(userNum))
+			.data(createAccessToken(userNum, type, role))
 			.build();
 		RefreshToken refreshToken = RefreshToken.builder()
 			.header(refreshHeader)
@@ -55,7 +62,7 @@ public class JwtProvider {
 			.build();
 	}
 
-	public Optional<String> extractToken(HttpServletRequest request) {
+	public Optional<String> extractBearerToken(HttpServletRequest request) {
 		return Optional.ofNullable(request.getHeader(accessHeader))
 			.filter(token -> token.startsWith(BEARER))
 			.map(token -> token.replace(BEARER, ""));
@@ -83,8 +90,27 @@ public class JwtProvider {
 		}
 	}
 
-	private String createAccessToken(String userNum) { //Type type
+	public Authentication getAuthentication(String token) {
+		UserDetails userDetails = CustomUserDetails.of(extractToken(token));
+
+		return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+	}
+
+	public Claims extractToken(String token) {
+		try {
+			return Jwts.parserBuilder()
+				.setSigningKey(secretKey)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private String createAccessToken(String userNum, Type type, Role role) { //Type type
 		return Jwts.builder()
+			.setClaims(Map.of("type", type, "role", role))
 			.setSubject(userNum)
 			.setExpiration(expireTime(accessTokenExpirationPeriod))
 			.signWith(secretKey)

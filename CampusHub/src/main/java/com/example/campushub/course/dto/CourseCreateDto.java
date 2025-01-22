@@ -1,8 +1,11 @@
 package com.example.campushub.course.dto;
 
+import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.domain.CourseDay;
 import com.example.campushub.course.domain.CourseDivision;
 import com.example.campushub.course.domain.CourseGrade;
+import com.example.campushub.schoolyear.domain.SchoolYear;
+import com.example.campushub.user.domain.User;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -54,4 +57,24 @@ public class CourseCreateDto {
 		this.midScore = midScore;
 		this.finalScore = finalScore;
 	}
+
+	public Course toEntity(User user, SchoolYear schoolYear) {
+		return Course.builder()
+			.courseName(courseName)
+			.room(room)
+			.division(division)
+			.courseDay(courseDay)
+			.courseGrade(courseGrade)
+			.user(user)
+			.schoolYear(schoolYear)
+			.startPeriod(startPeriod)
+			.endPeriod(endPeriod)
+			.creditScore(credits)
+			.attScore(attScore)
+			.assignScore(assignScore)
+			.midExam(midScore)
+			.finalExam(finalScore)
+			.build();
+	}
+
 }

@@ -44,13 +44,13 @@ public class ScholarshipService {
 
 // 장학금 등록 서비스
     @Transactional
-    public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser, UserFindOneSimpleDto autofinddto ) {//+userfindonesimpledto simdto
+    public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {//+userfindonesimpledto simdto
 
         //관리자인지 검증
         User admin = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
                 .orElseThrow(UserNotFoundException::new);
 
-        User student = userRepository.findByUserNum(autofinddto.getUserNum())//simdtp.getUserNum()
+        User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
                 .orElseThrow(UserNotFoundException::new);
 
         SchoolYear schoolYear = SchoolYear.builder()

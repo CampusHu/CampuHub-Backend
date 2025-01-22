@@ -105,4 +105,12 @@ public class User {
             this.status = Status.RETURN_PENDING;
     }
 
+    public boolean isSameType(Type type) {
+        return this.type == type;
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 }

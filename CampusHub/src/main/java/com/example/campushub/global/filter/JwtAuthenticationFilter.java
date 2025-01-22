@@ -3,6 +3,7 @@ package com.example.campushub.global.filter;
 import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,30 +28,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
+		String bearerToken = request.getHeader("Authorization");
 
-		String token = jwtProvider.extractToken(request)
-			.filter(jwtProvider::isTokenValid)
-			.orElse(null);
-
-		if (token != null) {
-			String username = jwtProvider.getUsernameFromToken(token);
-
-			try {
-				UserDetails userDetails = apiUserDetailsService.loadUserByUsername(username);
-
-				if (userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-					UsernamePasswordAuthenticationToken authenticationToken =
-						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-					authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-				}
-			} catch (AuthenticationException e) {
-				filterChain.doFilter(request, response);
-				return;
-			}
-
+		if (bearerToken == null || !jwtProvider.isTokenValid(bearerToken.replace("Bearer ", ""))) {
+			filterChain.doFilter(request, response);
+			return;
 		}
+
+		Authentication authentication = jwtProvider.getAuthentication(bearerToken.replace("Bearer ", ""));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+
 		filterChain.doFilter(request, response);
 	}
 }

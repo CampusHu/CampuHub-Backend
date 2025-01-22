@@ -19,6 +19,7 @@ import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.JoinRequestDto;
 import com.example.campushub.user.dto.LoginRequestDto;
 import com.example.campushub.user.dto.LoginUser;
+import com.example.campushub.user.dto.PasswordChangeRequest;
 import com.example.campushub.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class AuthService {
 	public Token login(LoginRequestDto loginRequestDto) {
 		String userNum = loginRequestDto.getUserNum();
 		String password = loginRequestDto.getPassword();
+		Type type = loginRequestDto.getType();
 
 		User user = userRepository.findByUserNum(userNum)
 			.orElseThrow(InvalidSigningInformation::new);
@@ -46,12 +48,17 @@ public class AuthService {
 			throw new InvalidSigningInformation();
 		}
 
-		Token token = jwtProvider.createToken(userNum);
+		if (!user.isSameType(type)) {
+			throw new InvalidSigningInformation();
+		}
+
+		Token token = jwtProvider.createToken(user.getUserNum(), user.getType(), user.getRole());
 
 		user.updateRefreshToken(token.getRefreshToken().getData());
 
 		return token;
 	}
+
 	//학생 등록
 	@Transactional
 	public void joinStudent(LoginUser loginUser, JoinRequestDto joinRequestDto) {
@@ -99,7 +106,7 @@ public class AuthService {
 
 		User user = userRepository.findByRefreshToken(refreshTokenValue)
 			.orElseThrow(UserNotFoundException::new);
-		Token token = jwtProvider.createToken(user.getUserNum());
+		Token token = jwtProvider.createToken(user.getUserNum(), user.getType(), user.getRole());
 
 		user.updateRefreshToken(token.getRefreshToken().getData());
 
@@ -113,5 +120,18 @@ public class AuthService {
 			.orElseThrow(UserNotFoundException::new);
 
 		user.invalidateRefreshToken();
+	}
+
+	//비밀번호 변경
+	@Transactional
+	public void changePassword(LoginUser loginUser, PasswordChangeRequest request) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+			throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+		}
+
+		user.changePassword(passwordEncoder.encode(request.getNewPassword()));
 	}
 }

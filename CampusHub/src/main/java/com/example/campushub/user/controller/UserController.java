@@ -96,7 +96,7 @@ public class UserController {
 	@PostMapping("/api/student/applystatus")
 	@ResponseStatus(HttpStatus.OK)
 	public SuccessResponse<Void> applyStudentStatus(@Login LoginUser loginUser){
-		userService.updateUserStatusApply(loginUser, loginUser.getUserNum());
+		userService.updateUserStatusApply(loginUser);
 		return SuccessResponse.<Void>builder()
 			.status(200)
 			.message("학생 상태변경 신청 수락")
