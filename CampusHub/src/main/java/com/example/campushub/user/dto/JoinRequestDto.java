@@ -13,11 +13,14 @@ import com.example.campushub.user.domain.Status;
 import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class JoinRequestDto {
 
@@ -70,7 +73,7 @@ public class JoinRequestDto {
 			.userNum(userNum)
 			.password(password)
 			.role(Role.USER)
-			.type(type)
+			.type(Type.STUDENT)
 			.grade(Grade.FIRST_GRADE)
 			.status(Status.ENROLLED)
 			.build();
@@ -87,7 +90,7 @@ public class JoinRequestDto {
 			.userNum(userNum)
 			.password(password)
 			.role(Role.USER)
-			.type(type)
+			.type(Type.PROFESSOR)
 			.status(Status.EMPLOYED)
 			.build();
 	}

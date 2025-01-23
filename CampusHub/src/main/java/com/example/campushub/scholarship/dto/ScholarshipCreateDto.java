@@ -12,12 +12,11 @@ import lombok.Getter;
 @Getter
 public class  ScholarshipCreateDto {
 
-
-    private User user;
     private String userNum;
     private String userName;
     private String deptName;
     private SchoolYear schoolYear;
+    //private
     @NotBlank(message = "장학금 명을 입력하세요")
     private String scholarshipName;
     @NotBlank(message = "지급 구분을 입력하세요")

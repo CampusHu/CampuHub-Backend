@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final AuthService authService;
-	private final RestClient.Builder builder;
 
 	//로그인
 	@PostMapping("/api/login")

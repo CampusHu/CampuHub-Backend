@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig {
+public class LocalSecurityConfig {
 
 	private final JwtProvider jwtProvider;
 	private final ApiUserDetailsService userDetailsService;
@@ -57,6 +57,9 @@ public class SecurityConfig {
 
 		return http.build();
 	}
+
+
+
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

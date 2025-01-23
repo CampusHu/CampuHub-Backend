@@ -1,11 +1,8 @@
 package com.example.campushub.course.dto;
 
-import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.domain.CourseDay;
 import com.example.campushub.course.domain.CourseDivision;
 import com.example.campushub.course.domain.CourseGrade;
-import com.example.campushub.schoolyear.domain.SchoolYear;
-import com.example.campushub.user.domain.User;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -15,7 +12,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CourseCreateDto {
+public class CourseEditDto {
+
 	@NotBlank(message = "강의명을 입력해주세요")
 	private String courseName;
 	@NotBlank(message = "강의실을 입력해주세요")
@@ -42,8 +40,10 @@ public class CourseCreateDto {
 	private int finalScore;
 
 	@Builder
-	public CourseCreateDto(String courseName, String room, CourseDivision division, CourseDay courseDay,CourseGrade courseGrade, int startPeriod, int endPeriod,
-		int credits, int attScore, int assignScore, int midScore, int finalScore) {
+	public CourseEditDto(String courseName, String room, CourseDivision division, CourseDay courseDay,
+		CourseGrade courseGrade, int startPeriod, int endPeriod, int credits, int attScore, int assignScore,
+		int midScore,
+		int finalScore) {
 		this.courseName = courseName;
 		this.room = room;
 		this.division = division;
@@ -57,24 +57,4 @@ public class CourseCreateDto {
 		this.midScore = midScore;
 		this.finalScore = finalScore;
 	}
-
-	public Course toEntity(User user, SchoolYear schoolYear) {
-		return Course.builder()
-			.courseName(courseName)
-			.room(room)
-			.division(division)
-			.courseDay(courseDay)
-			.courseGrade(courseGrade)
-			.user(user)
-			.schoolYear(schoolYear)
-			.startPeriod(startPeriod)
-			.endPeriod(endPeriod)
-			.creditScore(credits)
-			.attScore(attScore)
-			.assignScore(assignScore)
-			.midExam(midScore)
-			.finalExam(finalScore)
-			.build();
-	}
-
 }

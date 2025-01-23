@@ -9,8 +9,10 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.example.campushub.global.error.exception.InvalidLoginUserException;
+import com.example.campushub.global.filter.CustomUserDetails;
 import com.example.campushub.global.security.Login;
 import com.example.campushub.user.domain.Role;
+import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.dto.LoginUser;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -27,13 +29,20 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 		NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-		if (authentication == null) {
-			throw new InvalidLoginUserException();
-		}
+		if (authentication == null) throw new InvalidLoginUserException();
+
+		CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+
+		Role role = customUserDetails.getAuthorities().stream()
+			.map(authority -> Role.ofValue(authority.getAuthority()))
+			.findFirst()
+			.orElseThrow(InvalidLoginUserException::new);
 
 		return LoginUser.builder()
-			.userNum(authentication.getName())
-			.role(Role.USER)
+			.userNum(customUserDetails.getUsername())
+			.type(customUserDetails.getType())
+			.role(role)
 			.build();
 	}
 }

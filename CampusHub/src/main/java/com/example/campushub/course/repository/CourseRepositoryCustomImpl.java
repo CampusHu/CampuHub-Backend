@@ -3,6 +3,7 @@ package com.example.campushub.course.repository;
 import static com.example.campushub.course.domain.QCourse.*;
 import static com.example.campushub.dept.domain.QDept.*;
 import static com.example.campushub.user.domain.QUser.*;
+import static com.example.campushub.usercourse.domain.QUserCourse.*;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import io.micrometer.observation.annotation.Observed;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -92,39 +94,57 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 		))
 			.from(course)
 			.join(user).on(course.user.eq(user))
-			.on(course.user.eq(user))
-			.where(course.user.userNum.eq(profNum))
+			.where(user.userNum.eq(profNum))
 			.fetch();
+	}
+
+	//학생 본인 강의 조회
+	@Observed
+	public List<CourseResponseDto> findAllByStud(String studNum) {
+		return queryFactory.select(new QCourseResponseDto(
+			course.id,
+			course.courseGrade,
+			course.courseName,
+			course.division,
+			course.creditScore,
+			user.userName,
+			course.room,
+			course.courseDay,
+			course.startPeriod,
+			course.endPeriod
+		))
+			.from(userCourse)
+			.join(user).on(userCourse.user.eq(user))
+			.join(course).on(userCourse.course.eq(course))
+			.where(user.userNum.eq(studNum))
+			.fetch();
+
 	}
 
 
 	//강의 중복 조건
 	@Override
-	public boolean isCourseOverlapping(CourseCreateDto createDto) {
+	public boolean existsByRoomAndTime(CourseCreateDto createDto) {
 		return queryFactory
 			.selectOne()
 			.from(course)
-			.where(
-				isSameCourseCondition(createDto.getCourseName(), createDto.getCourseDay(), createDto.getStartPeriod(), createDto.getEndPeriod())
-					.or(isSameRoomCondition(createDto.getRoom(), createDto.getCourseDay(), createDto.getStartPeriod(), createDto.getEndPeriod()))
-			)
+			.where(isSameRoomCondition(createDto.getRoom(), createDto.getCourseDay(), createDto.getStartPeriod(), createDto.getEndPeriod()))
 			.fetchFirst() != null; // 데이터가 존재하면 true 반환
 	}
+
 
 	// 시간 범위가 겹치는 조건
 	private BooleanExpression isTimeOverlapping(int startPeriod, int endPeriod) {
 		return course.startPeriod.loe(endPeriod) // 새로운 시작 교시 <= 기존 끝 교시
 			.and(course.endPeriod.goe(startPeriod)); // 새로운 끝 교시 >= 기존 시작 교시
 	}
-
-	// 강의명, 요일, 시간 조건
-	private BooleanExpression isSameCourseCondition(String name, CourseDay courseDay, int startPeriod, int endPeriod) {
-		return course.courseName.eq(name)
-			.and(course.courseDay.eq(courseDay))
-			.and(isTimeOverlapping(startPeriod, endPeriod));
-	}
-
-	// 강의실, 요일, 시간 조건
+	// // 강의명이 겹치는 조건
+	// private BooleanExpression isSameCourseCondition(String name, CourseDay courseDay, int startPeriod, int endPeriod) {
+	// 	return course.courseName.eq(name)
+	// 		.and(course.courseDay.eq(courseDay))
+	// 		.and(isTimeOverlapping(startPeriod, endPeriod));
+	// }
+	// 강의실, 요일, 시간이 겹치는 조건
 	private BooleanExpression isSameRoomCondition(String room, CourseDay courseDay, int startPeriod, int endPeriod) {
 		return course.room.eq(room)
 			.and(course.courseDay.eq(courseDay))
