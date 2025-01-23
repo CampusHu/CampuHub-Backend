@@ -38,7 +38,7 @@ public class AttendanceService {
 
     //출석 조회 (강의명, 주차 설정)
     public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition atten, LoginUser loginUser) {
-            User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
+            User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                     .orElseThrow(UserNotFoundException::new);
 
             return attendanceRepository.findAllByCondition(atten);
@@ -49,7 +49,7 @@ public class AttendanceService {
     @Transactional
     public void createAttendance(LoginUser loginUser, List<AttendanceResponseDto> atten,AttendanceSearchCondition cond) {
         //교수인지 확인
-        User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.PROFESSOR)
+        User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         for(AttendanceResponseDto dto : atten){
@@ -79,7 +79,7 @@ public class AttendanceService {
       }
         //출석통계 조회
     public List<AllAttendanceResponseDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
-        User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),Type.PROFESSOR)
+        User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
             return attendanceRepository.findCourseByCondition(cond);
@@ -122,7 +122,7 @@ public class AttendanceService {
         //학생 본인 출석 조회
     public List<AttendanceUserDto> userAttendacnce(LoginUser loginUser,AttendanceSearchCondition atten){
 
-        User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),Type.STUDENT)
+        User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         return attendanceRepository.findUserAttendance(atten,student.getUserNum());

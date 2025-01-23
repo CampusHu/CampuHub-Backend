@@ -35,8 +35,8 @@ public class ScholarshipService {
 
     public List<ScholarshipResponseDto> findScholarships(ScholarshipSearchCondition cond, LoginUser loginUser) {
         // 1. 요청한 사용자가 ADMIN인지 확인
-        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+                 .orElseThrow(UserNotFoundException::new);
 
         // 2. 조회
         return scholarshipRepository.findAllByCondition(cond);
@@ -47,7 +47,7 @@ public class ScholarshipService {
     public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {//+userfindonesimpledto simdto
 
         //관리자인지 검증
-        User admin = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+        User admin = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
@@ -122,7 +122,7 @@ public class ScholarshipService {
 
     //사용자 본인 장학금 조회
     public List<GetMyScholarshipDto> findMyScholarships(LoginUser loginUser) {
-        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.STUDENT)
+        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         return scholarshipRepository.findAllMyScholarship(user);
