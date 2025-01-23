@@ -16,6 +16,9 @@ import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
 import com.example.campushub.global.error.exception.DuplicateRoomTimeException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
+import com.example.campushub.nweek.domain.NWeek;
+import com.example.campushub.nweek.domain.Week;
+import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
@@ -37,6 +40,7 @@ public class CourseService {
 	private final UserRepository userRepository;
 	private final SchoolYearRepository schoolYearRepository;
 	private final UserCourseRepository userCourseRepository;
+	private final NweekRepository nWeekRepository;
 
 	//교수 전체+컨디션 강의 조회
 	public List<CourseResponseDto> findAllByProfCondition(LoginUser loginUser, ProfCourseSearchCondition cond) {
@@ -105,7 +109,6 @@ public class CourseService {
 			throw new DuplicateRoomTimeException();
 		}
 
-
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();
 
@@ -115,15 +118,19 @@ public class CourseService {
 			.is_current(schoolYearDto.is_current())
 			.build();
 
-		Course course = courseRepository.save(createDto.toEntity(user, schoolYear));
-
-		// UserCourse userCourse = UserCourse.builder()
-		// 	.user(user)
-		// 	.course(course)
-		// 	.build();
+		Course course = createDto.toEntity(user, schoolYear);
 
 		courseRepository.save(course);
-		// userCourseRepository.save(userCourse);
+
+		for (Week week : Week.values()) {
+
+			NWeek nWeek = NWeek.builder()
+				.course(course)
+				.week(week)
+				.build();
+
+			nWeekRepository.save(nWeek);
+		}
 	}
 
 	//강의 삭제
