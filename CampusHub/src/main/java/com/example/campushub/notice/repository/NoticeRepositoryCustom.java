@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface NoticeRepositoryCustom {
 
+    // 공지사항 전체 조회(관리자)
+    List<NoticeListAll> findAllByAdmin(String title, String createdBy);
+
     // 공지사항 전체 조회
     Page<NoticeListAll> findAllByCondition(String title, String createdBy, Pageable pageable);
 

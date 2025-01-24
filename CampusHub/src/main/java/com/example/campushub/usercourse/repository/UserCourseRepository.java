@@ -14,4 +14,6 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {
 
     UserCourse findByUser(User user);
     UserCourse findByCourseAndUser(Course course, User user);
+	// 교수가 개설한 강의 목록 조회
+	List<UserCourse> findAllByUser_UserNum(String userNum);
 }

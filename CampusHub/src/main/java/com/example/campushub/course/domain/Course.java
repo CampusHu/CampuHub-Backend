@@ -3,15 +3,13 @@ package com.example.campushub.course.domain;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Course {
 
