@@ -23,6 +23,29 @@ public class NoticeRepositoryImpl implements NoticeRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    // 공지사항 전체 조회 (관리자)
+    @Override
+    public List<NoticeListAll> findAllByAdmin(String title, String createdBy) {
+        QNotice notice = QNotice.notice;
+        QUser user = QUser.user;
+
+        return queryFactory.select(new QNoticeListAll(
+                        notice.id,
+                        notice.title,
+                        notice.createdAt,
+                        user.id,
+                        user.userName
+                ))
+                .from(notice)
+                .leftJoin(notice.user, user)
+                .where(
+                        titleContains(title),
+                        createdByEq(createdBy)
+                )
+                .orderBy(notice.createdAt.desc()) // 최신순 정렬
+                .fetch();
+    }
+
     // 공지사항 전체 조회 (페이징 포함)
     @Override
     public Page<NoticeListAll> findAllByCondition(String title, String createdBy, Pageable pageable) {
