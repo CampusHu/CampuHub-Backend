@@ -113,4 +113,11 @@ public class User {
         this.password = newPassword;
     }
 
+    public void updateInfo(String email, String phone , String address) {
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+
+    }
+
 }

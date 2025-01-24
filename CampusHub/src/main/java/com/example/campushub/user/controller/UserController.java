@@ -2,6 +2,8 @@ package com.example.campushub.user.controller;
 
 import java.util.List;
 
+import com.example.campushub.user.dto.*;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.campushub.global.common.SuccessResponse;
 import com.example.campushub.global.security.Login;
-import com.example.campushub.user.dto.LoginUser;
-import com.example.campushub.user.dto.QUserFindAllDto;
-import com.example.campushub.user.dto.UserFindAllDto;
-import com.example.campushub.user.dto.UserFindOneDto;
-import com.example.campushub.user.dto.UserSearchCondition;
 import com.example.campushub.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -101,6 +98,17 @@ public class UserController {
 			.status(200)
 			.message("학생 상태변경 신청 수락")
 			.build();
+	}
+
+	//사용자 마이페이지 정보 수정
+	@PostMapping("/api/student/mypage")
+	@ResponseStatus(HttpStatus.OK)
+	public SuccessResponse<Void> updateUserInfo(@Login LoginUser loginUser, @RequestBody@Valid UpdateUserInfoDto updatedto){
+		userService.updateUserInfo(loginUser,updatedto);
+		return SuccessResponse.<Void>builder()
+				.status(200)
+				.message("사용자 정보 변겅 성공")
+				.build();
 	}
 
 

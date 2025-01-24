@@ -6,15 +6,12 @@ import java.util.Optional;
 
 import com.example.campushub.global.error.exception.IsNotPendingStatusException;
 import com.example.campushub.user.domain.Type;
+import com.example.campushub.user.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.user.domain.User;
-import com.example.campushub.user.dto.LoginUser;
-import com.example.campushub.user.dto.UserFindAllDto;
-import com.example.campushub.user.dto.UserFindOneDto;
-import com.example.campushub.user.dto.UserSearchCondition;
 import com.example.campushub.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -103,6 +100,18 @@ public class UserService {
 		}
 		user.updateStatus();
 
+	}
+
+
+	//마이페이지에서 이메일 , 연락처 , 주소 변경
+	@Transactional
+	public void updateUserInfo(LoginUser loginUser, UpdateUserInfoDto updateDto) {
+
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+				.orElseThrow(UserNotFoundException::new);
+
+
+		user.updateInfo(updateDto.getEmail(), updateDto.getPhone(), updateDto.getAddress());
 	}
 
 }
