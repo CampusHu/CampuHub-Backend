@@ -3,6 +3,7 @@ package com.example.campushub.user.domain;
 import com.example.campushub.dept.domain.Dept;
 import com.example.campushub.global.error.exception.IsNotPendingStatusException;
 
+import com.example.campushub.usercourse.domain.UserCourse;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,8 @@ import lombok.*;
 import static jakarta.persistence.FetchType.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -111,6 +114,13 @@ public class User {
 
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void updateInfo(String email, String phone , String address) {
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+
     }
 
 }

@@ -8,7 +8,9 @@ import com.example.campushub.notice.dto.NoticeListAll;
 import com.example.campushub.notice.dto.NoticeResponseDto;
 import com.example.campushub.notice.dto.NoticeSearchCondition;
 import com.example.campushub.notice.repository.NoticeRepository;
+import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
+import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,17 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
     private final UserRepository userRepository;
+
+    // 관리자가 공지사항 전체 조회
+    public List<NoticeListAll> getAllNoticesByAdmin(NoticeSearchCondition condition) {
+        if ("title".equals(condition.getFilter())) {
+            return noticeRepository.findAllByAdmin(condition.getKeyword(), null);
+        } else if ("createdBy".equals(condition.getFilter())) {
+            return noticeRepository.findAllByAdmin(null, condition.getKeyword());
+        } else {
+            throw new IllegalArgumentException("잘못된 검색 필터: " + condition.getFilter());
+        }
+    }
 
     // 공지사항 전체 조회
     public Page<NoticeListAll> getNoticesByCondition(NoticeSearchCondition condition, int page, int size) {
@@ -54,11 +68,10 @@ public class NoticeService {
 
     // 공지사항 삭제
     @Transactional
-    public void deleteNotice(Long id, String userType) {
+    public void deleteNotice(Long id, LoginUser loginUser) {
         // 관리자 권한 확인
-        if (!"ADMIN".equals(userType)) {
-            throw new AccessDeniedException("공지사항 삭제 권한이 없습니다.");
-        }
+        userRepository.findByUserNumAndType(loginUser.getUserNum(), Type.ADMIN)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         // 공지사항 존재 여부 확인
         if (!noticeRepository.existsById(id)) {
@@ -71,9 +84,9 @@ public class NoticeService {
 
     // 공지사항 작성
     @Transactional
-    public void createNotice(NoticeCreateRequestDto requestDto, Long userId) {
-        // 유저 ID를 기반으로 User 엔티티 조회
-        User user = userRepository.findById(userId)
+    public void createNotice(NoticeCreateRequestDto requestDto, LoginUser loginUser) {
+        // 유저 Num를 기반으로 User 엔티티 조회
+        User user = userRepository.findByUserNum(loginUser.getUserNum())
                 .orElseThrow(UserNotFoundException::new);
 
         // Notice 엔티티 생성
@@ -90,13 +103,13 @@ public class NoticeService {
 
     // 공지사항 수정
     @Transactional
-    public void updateNotice(Long id, NoticeCreateRequestDto requestDto, Long userId) {
+    public void updateNotice(Long id, NoticeCreateRequestDto requestDto, LoginUser loginUser) {
         // 공지사항 조회
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(NoticeNotFoundException::new);
 
         // 작성자 확인
-        if (!notice.getUser().getId().equals(userId)) {
+        if (!notice.getUser().getUserNum().equals(loginUser.getUserNum())) {
             throw new AccessDeniedException("수정 권한이 없습니다.");
         }
 

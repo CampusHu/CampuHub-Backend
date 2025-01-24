@@ -105,6 +105,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		return Optional.ofNullable(fetchOne);
 	}
 
+
+
 	private BooleanExpression statusEq(Status status) {
 		return status == null ? null : user.status.eq(status);
 	}
