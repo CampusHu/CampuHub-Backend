@@ -20,6 +20,8 @@ import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
+import com.example.campushub.usercourse.domain.UserCourse;
+import com.example.campushub.usercourse.repository.UserCourseRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ public class AssignmentService {
 	private final NweekRepository nweekRepository;
 	private final CourseRepository courseRepository;
 	private final UserRepository userRepository;
+	private final UserCourseRepository userCourseRepository;
 
 	//과제 등록
 	@Transactional
@@ -55,10 +58,17 @@ public class AssignmentService {
 	}
 
 	//과제 전체 조회(학생)
-	public List<AssignmentFindAllResponse> findAllByCondition(LoginUser loginUser, AssignmentSearchCondition cond) {
+	public List<AssignmentFindAllResponse> findAllByCondition(LoginUser loginUser) {
+
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
+		List<UserCourse> userCourses = userCourseRepository.findAllByUser(user);
+
+		for (UserCourse userCourse : userCourses) {
+			String courseName = userCourse.getCourse().getCourseName();
+			List<AssignmentFindAllResponse> assignments = assignmentRepository.findAllAssignment(courseName);
+		}
 		return null;
 	}
 }

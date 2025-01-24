@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//todo. 이름 변경
 @Getter
 @NoArgsConstructor
 public class StudentAssignmentResponseDto {
