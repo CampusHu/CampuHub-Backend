@@ -2,6 +2,7 @@ package com.example.campushub.assignment.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,17 +59,19 @@ public class AssignmentService {
 	}
 
 	//과제 전체 조회(학생)
-	public List<AssignmentFindAllResponse> findAllByCondition(LoginUser loginUser) {
+	public List<AssignmentFindAllResponse> findAllByCondition(LoginUser loginUser, AssignmentSearchCondition condition) {
 
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
 		List<UserCourse> userCourses = userCourseRepository.findAllByUser(user);
 
-		for (UserCourse userCourse : userCourses) {
-			String courseName = userCourse.getCourse().getCourseName();
-			List<AssignmentFindAllResponse> assignments = assignmentRepository.findAllAssignment(courseName);
-		}
-		return null;
+		List<String> courseNames = userCourses.stream()
+			.map(userCourse -> userCourse.getCourse().getCourseName())
+			.toList();
+
+		return assignmentRepository.findAllAssigmentByCond(condition, courseNames);
 	}
+	//과제 단건 조회
+
 }

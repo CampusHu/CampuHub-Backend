@@ -15,6 +15,8 @@ import com.example.campushub.assignment.dto.AssignmentSearchCondition;
 import com.example.campushub.assignment.dto.QAssignmentFindAllResponse;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.domain.QCourse;
+import com.example.campushub.nweek.domain.Week;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -26,24 +28,42 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 
 	private final JPAQueryFactory queryFactory;
 
-	//과제 전체 조회(학생)
+	//과제 전체 + 컨디션 조회 (학생)
 	@Override
-	public List<AssignmentFindAllResponse> findAllAssignment(String courseName) {
+	public List<AssignmentFindAllResponse> findAllAssigmentByCond(AssignmentSearchCondition condition, List<String> courseNames) {
 		return queryFactory.select(new QAssignmentFindAllResponse(
-			nWeek.week,
-			course.courseName,
-			user.userName,
-			assignment.limitDate,
-			assignment.createDate
-		))
+				nWeek.week,
+				course.courseName,
+				user.userName,
+				assignment.limitDate,
+				assignment.createDate
+			))
 			.from(assignment)
 			.join(nWeek).on(assignment.nWeek.eq(nWeek))
 			.join(course).on(nWeek.course.eq(course))
 			.join(user).on(course.user.eq(user))
-			.where(course.courseName.eq(courseName))
+			.where(dynamicWhereCondition(condition, courseNames))
 			.fetch();
 	}
 
-	//과제 컨디션 조회
+	private BooleanExpression dynamicWhereCondition(AssignmentSearchCondition condition, List<String> courseNames) {
+		BooleanExpression baseCondition = course.courseName.in(courseNames);
 
+		if (condition.getCourseName() != null) {
+			baseCondition = baseCondition.and(courseNameEq(condition.getCourseName()));
+		}
+		if (condition.getWeek() != null) {
+			baseCondition = baseCondition.and(weekEq(condition.getWeek()));
+		}
+
+		return baseCondition;
+	}
+
+	private BooleanExpression courseNameEq(String courseName) {
+		return courseName == null ? null : course.courseName.eq(courseName);
+	}
+
+	private BooleanExpression weekEq(Week week) {
+		return week == null ? null : nWeek.week.eq(week);
+	}
 }
