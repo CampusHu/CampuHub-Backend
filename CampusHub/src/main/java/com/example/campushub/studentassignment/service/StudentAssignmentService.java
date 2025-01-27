@@ -1,15 +1,21 @@
 package com.example.campushub.studentassignment.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.assignment.domain.Assignment;
 import com.example.campushub.assignment.repository.AssignmentRepository;
 import com.example.campushub.course.domain.Course;
+import com.example.campushub.global.error.exception.AlreadySubmittedException;
 import com.example.campushub.global.error.exception.AssignmentNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
-import com.example.campushub.studentassignment.dto.StudentAssignCreateDto;
+import com.example.campushub.studentassignment.domain.SubmitStatus;
+import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
+import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
+import com.example.campushub.studentassignment.dto.StudentAssignmentSubmitDto;
 import com.example.campushub.studentassignment.repository.StudentAssignmentRepository;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
@@ -29,8 +35,9 @@ public class StudentAssignmentService {
 	private final AssignmentRepository assignmentRepository;
 	private final UserCourseRepository userCourseRepository;
 
+	//과제 등록
 	@Transactional
-	public void createStudentAssignment(LoginUser loginUser, StudentAssignCreateDto createDto, Long assignmentId) {
+	public void SubmitStudentAssignment(LoginUser loginUser, StudentAssignmentSubmitDto submitDto, Long assignmentId) {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
@@ -41,15 +48,21 @@ public class StudentAssignmentService {
 
 		UserCourse userCourse = userCourseRepository.findByCourseAndUser(course, user);
 
-		//과제 생성할 때 학생 과제도 같이 생성 -> 이 때 학생 과제 생성후 학생이 과제 작석하고 제출시 학생 과제 edit
+		StudentAssignment studentAssignment = studentAssignmentRepository.findByAssignmentAndUserCourse(
+			assignment, userCourse);
 
-		//
-		// StudentAssignment studentAssignment = StudentAssignment.builder()
-		// 	.assignment(assignment)
-		// 	.userCourse(userCourse)
-		// 	.courseTitle(createDto.getTitle())
-		// 	.courseContent(createDto.getContent())
-		//
+		if (studentAssignment.getStatus() == SubmitStatus.SUBMITTED) {
+			throw new AlreadySubmittedException();
+		}
 
+		studentAssignment.submitAssignment(submitDto.getTitle(), submitDto.getContent());
+	}
+
+	//과제 등록 전체 조회
+	public List<StudentAssignmentResponse> getAllStudentAssignment(LoginUser loginUser, StudentAssigmentSearchCondition cond) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return null;
 	}
 }

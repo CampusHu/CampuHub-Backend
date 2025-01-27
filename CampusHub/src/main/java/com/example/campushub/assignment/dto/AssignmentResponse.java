@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AssignmentResponse {
+	private Long id;
 	private String courseName;
 	private String professorName;
 	private Week week;
@@ -21,8 +22,9 @@ public class AssignmentResponse {
 
 	@Builder
 	@QueryProjection
-	public AssignmentResponse(String courseName, String professorName, Week week, LocalDate createDate, String explain,
+	public AssignmentResponse(Long id, String courseName, String professorName, Week week, LocalDate createDate, String explain,
 		LocalDate limitDate) {
+		this.id = id;
 		this.courseName = courseName;
 		this.professorName = professorName;
 		this.week = week;

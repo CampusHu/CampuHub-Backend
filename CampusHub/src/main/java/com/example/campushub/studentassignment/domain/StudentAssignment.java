@@ -1,6 +1,6 @@
 package com.example.campushub.studentassignment.domain;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.example.campushub.assignment.domain.Assignment;
 import com.example.campushub.usercourse.domain.UserCourse;
@@ -31,21 +31,28 @@ public class StudentAssignment {
 
 	private String courseTitle;
 	private String courseContent;
-	private LocalDateTime submitDate;
+	private LocalDate submitDate;
 	private SubmitStatus status;
-	private int courseGrade;
+	private int assignmentGrade;
 	//첨부파일
 
 	@Builder
-
 	public StudentAssignment(Assignment assignment, UserCourse userCourse, String courseTitle, String courseContent,
-		LocalDateTime submitDate, SubmitStatus status, int courseGrade) {
+		LocalDate submitDate, SubmitStatus status, int assignmentGrade) {
 		this.assignment = assignment;
 		this.userCourse = userCourse;
 		this.courseTitle = courseTitle;
 		this.courseContent = courseContent;
 		this.submitDate = submitDate;
 		this.status = status;
-		this.courseGrade = courseGrade;
+		this.assignmentGrade = assignmentGrade;
 	}
+
+	public void submitAssignment(String title, String content) {
+		this.status = SubmitStatus.SUBMITTED;
+		this.courseTitle = title;
+		this.courseContent = content;
+		this.submitDate = LocalDate.now();
+	}
+
 }

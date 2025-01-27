@@ -21,6 +21,8 @@ import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
+import com.example.campushub.studentassignment.domain.SubmitStatus;
+import com.example.campushub.studentassignment.repository.StudentAssignmentRepository;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
@@ -39,6 +41,7 @@ public class AssignmentService {
 	private final CourseRepository courseRepository;
 	private final UserRepository userRepository;
 	private final UserCourseRepository userCourseRepository;
+	private final StudentAssignmentRepository studentAssignmentRepository;
 
 	//과제 등록
 	@Transactional
@@ -58,8 +61,21 @@ public class AssignmentService {
 			.limitDate(request.getLimitDate())
 			.build();
 
-
 		assignmentRepository.save(assignment);
+
+		// 학생 과제 생성
+		List<UserCourse> userCourses = userCourseRepository.findAllByCourse(course);
+
+		for (UserCourse userCourse : userCourses) {
+			StudentAssignment studentAssignment = StudentAssignment.builder()
+				.assignment(assignment)
+				.userCourse(userCourse)
+				.status(SubmitStatus.NOT_SUBMITTED)
+				.assignmentGrade(0)
+				.build();
+
+			studentAssignmentRepository.save(studentAssignment);
+		}
 	}
 
 	//과제 전체 조회(학생)

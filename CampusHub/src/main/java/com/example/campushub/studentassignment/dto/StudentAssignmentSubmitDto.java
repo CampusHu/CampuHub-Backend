@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class StudentAssignCreateDto {
+public class StudentAssignmentSubmitDto {
 	private String title;
 	private String content;
 
 	@Builder
-	public StudentAssignCreateDto(String title, String content) {
+	public StudentAssignmentSubmitDto(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}

@@ -35,6 +35,7 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 	@Override
 	public List<AssignmentFindAllResponse> findAllAssigmentByCond(AssignmentSearchCondition condition, List<String> courseNames) {
 		return queryFactory.select(new QAssignmentFindAllResponse(
+				assignment.id,
 				nWeek.week,
 				course.courseName,
 				user.userName,
@@ -52,6 +53,7 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 	@Override
 	public Optional<AssignmentResponse> getAssignmentById(Long id) {
 		AssignmentResponse fetchOne = queryFactory.select(new QAssignmentResponse(
+			assignment.id,
 			course.courseName,
 			user.userName,
 			nWeek.week,
