@@ -14,6 +14,7 @@ import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
+import com.example.campushub.studentassignment.dto.StudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
 import com.example.campushub.studentassignment.dto.StudentAssignmentSubmitDto;
 import com.example.campushub.studentassignment.repository.StudentAssignmentRepository;
@@ -35,7 +36,7 @@ public class StudentAssignmentService {
 	private final AssignmentRepository assignmentRepository;
 	private final UserCourseRepository userCourseRepository;
 
-	//과제 등록
+	//학생 과제 작성
 	@Transactional
 	public void SubmitStudentAssignment(LoginUser loginUser, StudentAssignmentSubmitDto submitDto, Long assignmentId) {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
@@ -58,11 +59,18 @@ public class StudentAssignmentService {
 		studentAssignment.submitAssignment(submitDto.getTitle(), submitDto.getContent());
 	}
 
-	//과제 등록 전체 조회
+	//학생 과제 전체 조회
 	public List<StudentAssignmentResponse> getAllStudentAssignment(LoginUser loginUser, StudentAssigmentSearchCondition cond) {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
-		return null;
+		return studentAssignmentRepository.getAllStudentAssignments(cond);
+	}
+	//학생 과제 단건 조회
+	public StudentAssignFindOneDto getStudentAssignment(LoginUser loginUser, Long assignmentId) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return studentAssignmentRepository.getStudentAssignment(assignmentId);
 	}
 }

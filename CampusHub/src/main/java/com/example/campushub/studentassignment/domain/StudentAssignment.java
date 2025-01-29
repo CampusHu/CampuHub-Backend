@@ -29,20 +29,20 @@ public class StudentAssignment {
 	@JoinColumn(name = "user_course_id")
 	private UserCourse userCourse;
 
-	private String courseTitle;
-	private String courseContent;
+	private String assignmentTitle;
+	private String assignmentContent;
 	private LocalDate submitDate;
 	private SubmitStatus status;
 	private int assignmentGrade;
 	//첨부파일
 
 	@Builder
-	public StudentAssignment(Assignment assignment, UserCourse userCourse, String courseTitle, String courseContent,
+	public StudentAssignment(Assignment assignment, UserCourse userCourse, String assignmentTitle, String assignmentContent,
 		LocalDate submitDate, SubmitStatus status, int assignmentGrade) {
 		this.assignment = assignment;
 		this.userCourse = userCourse;
-		this.courseTitle = courseTitle;
-		this.courseContent = courseContent;
+		this.assignmentTitle = assignmentTitle;
+		this.assignmentContent = assignmentContent;
 		this.submitDate = submitDate;
 		this.status = status;
 		this.assignmentGrade = assignmentGrade;
@@ -50,8 +50,8 @@ public class StudentAssignment {
 
 	public void submitAssignment(String title, String content) {
 		this.status = SubmitStatus.SUBMITTED;
-		this.courseTitle = title;
-		this.courseContent = content;
+		this.assignmentTitle = title;
+		this.assignmentContent = content;
 		this.submitDate = LocalDate.now();
 	}
 

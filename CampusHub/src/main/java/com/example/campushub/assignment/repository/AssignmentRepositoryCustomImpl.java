@@ -71,6 +71,8 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 		return Optional.ofNullable(fetchOne);
 	}
 
+
+
 	private BooleanExpression dynamicWhereCondition(AssignmentSearchCondition condition, List<String> courseNames) {
 		BooleanExpression baseCondition = course.courseName.in(courseNames);
 
