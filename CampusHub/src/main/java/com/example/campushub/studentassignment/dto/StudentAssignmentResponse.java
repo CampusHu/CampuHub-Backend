@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StudentAssignmentResponse {
 
+	private Long id;
 	private String userName;
 	private String userNum;
 	private String deptName;
@@ -23,8 +24,9 @@ public class StudentAssignmentResponse {
 
 	@Builder
 	@QueryProjection
-	public StudentAssignmentResponse(String userName, String userNum, String deptName, LocalDate submitDate,
+	public StudentAssignmentResponse(Long id, String userName, String userNum, String deptName, LocalDate submitDate,
 		int assignmentGrade, SubmitStatus status) {
+		this.id = id;
 		this.userName = userName;
 		this.userNum = userNum;
 		this.deptName = deptName;
