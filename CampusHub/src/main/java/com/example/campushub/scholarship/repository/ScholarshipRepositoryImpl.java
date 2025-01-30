@@ -55,10 +55,10 @@ public class ScholarshipRepositoryImpl implements ScholarshipRepositoryCustom {
                 scholarship.type,
                 scholarship.amount,
                 userScholarship.confDate
-            )).from(scholarship)
-                .join(userScholarship).on(userScholarship.scholarship.eq(scholarship))
+            )).from(userScholarship)
+                .join(userScholarship.scholarship,scholarship)
                 .join(userScholarship.schoolYear , schoolYear)
-                .where(userScholarship.user.eq(user))
+                .where(eqUserNum(user.getUserNum()))
                 .fetch();
     }
 

@@ -7,16 +7,12 @@ import static com.example.campushub.usercourse.domain.QUserCourse.*;
 
 import java.util.List;
 
+import com.example.campushub.course.dto.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.CourseDay;
 import com.example.campushub.course.domain.CourseDivision;
-import com.example.campushub.course.dto.CourseCreateDto;
-import com.example.campushub.course.dto.CourseResponseDto;
-import com.example.campushub.course.dto.ProfCourseSearchCondition;
-import com.example.campushub.course.dto.QCourseResponseDto;
-import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -119,6 +115,36 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 			.where(user.userNum.eq(studNum))
 			.fetch();
 
+	}
+		//학생 본인 시간표 조회
+	@Override
+	public List<CourseCalenderDto> findCalByStud(String userNum) {
+		return queryFactory.select(new QCourseCalenderDto(
+				course.courseName,
+				course.courseDay,
+				course.startPeriod,
+				course.endPeriod
+		))
+				.from(userCourse)
+				.join(userCourse.course,course)
+				.join(userCourse.user,user)
+				.where(user.userNum.eq(userNum))
+				.fetch();
+	}
+
+	//교수 본인 시간표 조회
+	@Override
+	public List<CourseCalenderDto> findCalByProf(String userNum) {
+		return queryFactory.select(new QCourseCalenderDto(
+				course.courseName,
+				course.courseDay,
+				course.startPeriod,
+				course.endPeriod
+		))
+				.from(course)
+				.join(course.user,user)
+				.where(user.userNum.eq(userNum))
+				.fetch();
 	}
 
 

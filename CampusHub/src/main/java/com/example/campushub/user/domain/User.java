@@ -102,10 +102,13 @@ public class User {
 
 
     public void updateStatus() {
-        if(this.status == Status.ENROLLED)
+        if(this.status == Status.ENROLLED) {
             this.status = Status.BREAK_PENDING;
+        }
         else if(this.status == Status.BREAK)
+        {
             this.status = Status.RETURN_PENDING;
+        }
     }
 
     public boolean isSameType(Type type) {

@@ -28,7 +28,7 @@ public class ScholarshipController {
 
 
     //장학금 조회 (관리자)
-    @GetMapping("/api/admin/scholarship/cond")
+    @GetMapping("/api/admin/scholarship/condition")
     @ResponseStatus(HttpStatus.OK)
     public SuccessResponse<List<ScholarshipResponseDto>> findScholarships(@Login LoginUser loginUser,ScholarshipSearchCondition condition, Model model) {
         return SuccessResponse.<List<ScholarshipResponseDto>>builder()
@@ -43,10 +43,10 @@ public class ScholarshipController {
     @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<Void> signupScholarship(@Login LoginUser loginUser,
                                                    @RequestBody @Valid ScholarshipCreateDto createDto,
-                                                   @RequestParam String userNum,
+//                                                   @RequestParam String userNum,
                                                    HttpServletRequest request) {
 
-        UserFindOneSimpleDto userInfo = scholarshipService.getUserSimpleInfo(userNum);
+//        UserFindOneSimpleDto userInfo = scholarshipService.getUserSimpleInfo(userNum);
 
         scholarshipService.createScholarship(createDto,loginUser);
 
@@ -69,6 +69,17 @@ public class ScholarshipController {
                 .status(200)
                 .message("이름 및 학과 자동 조회성공")
                 .data(userInfo)
+                .build();
+    }
+
+    //사용자 본인 장학금 조회
+    @GetMapping("/api/student/scholarship")
+    @ResponseStatus(HttpStatus.OK)
+    public SuccessResponse<List<GetMyScholarshipDto>> getMyScholarships(@Login LoginUser loginUser){
+        return SuccessResponse.<List<GetMyScholarshipDto>>builder()
+                .status(200)
+                .data(scholarshipService.findMyScholarships(loginUser))
+                .message("사용자 장학금 조회 성공")
                 .build();
     }
 

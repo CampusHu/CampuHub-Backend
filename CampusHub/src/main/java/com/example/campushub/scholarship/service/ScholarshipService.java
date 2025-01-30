@@ -32,10 +32,11 @@ public class ScholarshipService {
     private final UserRepository userRepository;
     private final ScholarshipRepository scholarshipRepository;
     private final UserScholarshipRepository userScholarshipRepository;
+    private final SchoolYearRepository schoolYearRepository;
 
     public List<ScholarshipResponseDto> findScholarships(ScholarshipSearchCondition cond, LoginUser loginUser) {
         // 1. 요청한 사용자가 ADMIN인지 확인
-        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+         userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                  .orElseThrow(UserNotFoundException::new);
 
         // 2. 조회
@@ -47,7 +48,7 @@ public class ScholarshipService {
     public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {//+userfindonesimpledto simdto
 
         //관리자인지 검증
-        User admin = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+       User admin =  userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
@@ -57,6 +58,9 @@ public class ScholarshipService {
                 .year(createDto.getSchoolYear().getYear())
                 .semester(createDto.getSchoolYear().getSemester())
                         .build();
+
+        schoolYearRepository.save(schoolYear);
+
 
         // 장학금명 , 지급구분, 장학금액
         Scholarship scholarship = createDto.toEntity();

@@ -36,4 +36,10 @@ public class Exam {
 		this.totalScore = totalScore;
 	}
 
+	public void edit(int midExamScore, int finalExamScore, int totalExamScore) {
+		this.midScore = midExamScore;
+		this.finalScore = finalExamScore;
+		this.totalScore = totalExamScore;
+	}
+
 }

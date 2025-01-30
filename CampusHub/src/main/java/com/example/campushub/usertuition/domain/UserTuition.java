@@ -2,7 +2,7 @@ package com.example.campushub.usertuition.domain;
 
 import static jakarta.persistence.FetchType.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.tuition.domain.Tuition;
@@ -10,6 +10,7 @@ import com.example.campushub.user.domain.User;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,7 +24,7 @@ public class UserTuition {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = LAZY)
+	@ManyToOne( fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -35,6 +36,34 @@ public class UserTuition {
 	@JoinColumn(name = "school_year_id")
 	private SchoolYear schoolYear;
 
-	private boolean paymentStatus;
-	private Date paymentDate;
+	@Enumerated(EnumType.STRING)
+	private PaymentStatus paymentStatus;
+
+	private LocalDate paymentDate;
+
+	@Builder
+	public UserTuition(User user, Tuition tuition, SchoolYear schoolYear,
+					   PaymentStatus paymentStatus, LocalDate paymentDate) {
+		this.user = user;
+		this.tuition = tuition;
+		this.schoolYear = schoolYear;
+		this.paymentStatus = paymentStatus;
+		this.paymentDate = paymentDate;
+	}
+
+	public void updatePaymentStatusToSuccess() {
+		this.paymentStatus = PaymentStatus.SUCCESS;
+	}
+	public void updatePaymentStatusToWait() {
+		this.paymentStatus = PaymentStatus.WAITING;
+	}
+	public boolean isWaitPaymentStatus() {
+		return this.paymentStatus == PaymentStatus.NONE;
+	}
+
+	public boolean isWaitingPaymentStatus() {
+		return this.paymentStatus == PaymentStatus.WAITING;
+	}
+
+
 }

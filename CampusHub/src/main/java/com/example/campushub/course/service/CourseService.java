@@ -2,15 +2,11 @@ package com.example.campushub.course.service;
 
 import java.util.List;
 
+import com.example.campushub.course.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.Course;
-import com.example.campushub.course.dto.CourseCreateDto;
-import com.example.campushub.course.dto.CourseEditDto;
-import com.example.campushub.course.dto.CourseResponseDto;
-import com.example.campushub.course.dto.ProfCourseSearchCondition;
-import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.example.campushub.course.repository.CourseRepository;
 import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
@@ -159,5 +155,19 @@ public class CourseService {
 			editDto.getEndPeriod(), editDto.getCredits(), editDto.getAttScore(), editDto.getAssignScore(), editDto.getMidScore(), editDto.getFinalScore());
 	}
 
-	//
+	//학생 본인 시간표 조회
+	public List<CourseCalenderDto> findCalByStudent(LoginUser loginUser) {
+		User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+				.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findCalByStud(student.getUserNum());
+	}
+
+	//교수 본인 시간표 조회
+	public List<CourseCalenderDto> findCalByProf(LoginUser loginUser) {
+		User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+				.orElseThrow(UserNotFoundException::new);
+
+		return courseRepository.findCalByProf(professor.getUserNum());
+	}
 }
