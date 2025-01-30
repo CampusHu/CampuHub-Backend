@@ -9,6 +9,7 @@ import lombok.Builder;
 
 public class AssignmentFindAllResponse {
 
+	private Long id;
 	private Week week;
 	private String courseName;
 	private String userName;
@@ -17,8 +18,9 @@ public class AssignmentFindAllResponse {
 
 	@Builder
 	@QueryProjection
-	public AssignmentFindAllResponse(Week week, String courseName, String userName, LocalDate limitDate,
+	public AssignmentFindAllResponse(Long id, Week week, String courseName, String userName, LocalDate limitDate,
 		LocalDate createDate) {
+		this.id = id;
 		this.week = week;
 		this.courseName = courseName;
 		this.userName = userName;

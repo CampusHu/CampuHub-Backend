@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class StudentAssignSearchCondition {
+public class StudentAssigmentSearchCondition {
 
-	private String CourseName;
+	private String courseName;
 	private Week week;
 	private SubmitStatus status;
 
 	@Builder
-	public StudentAssignSearchCondition(String courseName, Week week, SubmitStatus status) {
-		CourseName = courseName;
+	public StudentAssigmentSearchCondition(String courseName, Week week, SubmitStatus status) {
+		this.courseName = courseName;
 		this.week = week;
 		this.status = status;
 	}

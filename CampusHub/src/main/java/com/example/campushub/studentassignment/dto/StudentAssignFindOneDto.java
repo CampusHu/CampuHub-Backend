@@ -1,7 +1,6 @@
 package com.example.campushub.studentassignment.dto;
 
-import java.time.LocalDateTime;
-
+import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -11,23 +10,27 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class StudentAssignmentResponseDto {
-	private String userName;
+public class StudentAssignFindOneDto {
+	private String courseName;
+	private Week week;
+	private String  userName;
 	private String userNum;
 	private String deptName;
-	private LocalDateTime submitDate;
-	private int assignmentGrade;
 	private SubmitStatus status;
+	private String title;
+	private String content;
 
 	@Builder
 	@QueryProjection
-	public StudentAssignmentResponseDto(String userName, String userNum, String deptName, LocalDateTime submitDate,
-		int assignmentGrade, SubmitStatus status) {
+	public StudentAssignFindOneDto(String courseName, Week week, String userName, String userNum, String deptName,
+		SubmitStatus status, String title, String content) {
+		this.courseName = courseName;
+		this.week = week;
 		this.userName = userName;
 		this.userNum = userNum;
 		this.deptName = deptName;
-		this.submitDate = submitDate;
-		this.assignmentGrade = assignmentGrade;
 		this.status = status;
+		this.title = title;
+		this.content = content;
 	}
 }
