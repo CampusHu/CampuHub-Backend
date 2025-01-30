@@ -47,7 +47,7 @@ public class AttendanceController {
 
     }
 
-    //강의별 출설 조회(학생)
+    //강의별 출석 통계 조회(학생)
     @GetMapping("/api/professor/attendance/allcondition")
     @ResponseStatus(HttpStatus.OK)
     public SuccessResponse<List<AllAttendanceResponseDto>> findAllAttendance(@Login LoginUser loginUser, AttendanceSearchCourseCondition attendanceCond) {

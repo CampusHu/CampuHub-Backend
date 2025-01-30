@@ -2,10 +2,7 @@ package com.example.campushub.course.repository;
 
 import java.util.List;
 
-import com.example.campushub.course.dto.CourseCreateDto;
-import com.example.campushub.course.dto.CourseResponseDto;
-import com.example.campushub.course.dto.ProfCourseSearchCondition;
-import com.example.campushub.course.dto.StudCourseSearchCondition;
+import com.example.campushub.course.dto.*;
 
 public interface CourseRepositoryCustom {
 
@@ -15,5 +12,8 @@ public interface CourseRepositoryCustom {
 	List<CourseResponseDto> findAllByStudCondition(StudCourseSearchCondition cond);
 	List<CourseResponseDto>findAllByProf(String profNum);
 	List<CourseResponseDto>findAllByStud(String studNum);
+
+	List<CourseCalenderDto>findCalByStud(String userNum);
+	List<CourseCalenderDto>findCalByProf(String userNum);
 
 }

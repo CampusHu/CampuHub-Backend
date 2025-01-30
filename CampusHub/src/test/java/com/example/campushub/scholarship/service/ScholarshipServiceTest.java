@@ -68,7 +68,7 @@
 //
 //    @Test
 //    @DisplayName("본인 장학금 조회")
-//    public void findmyScholarship() {
+//    public void findMyScholarship() {
 //        //given
 //        Dept dept1 = deptRepository.save(createDept("시디과"));
 //        User student = userRepository.save(createStudent("1234", "전영욱", dept1));
@@ -88,53 +88,80 @@
 //
 //
 //
-////        userScholarshipRepository.save(createUserScholarship(userRepository.findByUserNum(userA.getUserNum()).orElseThrow(UserNotFoundException::new), scholarshipA, schoolYear));
-////        userScholarshipRepository.save(createUserScholarship(userRepository.findByUserNum(userA.getUserNum()).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없음")), scholarshipB, schoolYear));
-////        userScholarshipRepository.save(createUserScholarship(userRepository.findByUserNum(userA.getUserNum()).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없음")), scholarshipC, schoolYear));
-////
-////        userScholarshipRepository.save(createUserScholarship(userRepository.findByUserNum(userB.getUserNum()).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없음")), scholarshipA, schoolYear));
 //
 //        //when
 //        List<GetMyScholarshipDto> resultA = scholarshipService.findMyScholarships(userA);
 //
 //
 //        //then
-//        assertThat(resultA.size()).isEqualTo(3);
+//        assertThat(resultA).hasSize(3);
 //
 //    }
-//        @Test
-//        @DisplayName("장학금 등록")
-//        @Transactional
-//        public void createScholarshipTest() {
+//    @Test
+//    @DisplayName("장학금 등록")
+//    @Transactional
+//    public void createScholarshipTest() {
+//        // given
+//        Dept dept2 = deptRepository.save(createDept("컴소과"));
+//        User admin = userRepository.save(createAdmin("12345"));
+//        User student = userRepository.save(createStudent("1906078", "전영욱", dept2));
+//
+//        // 이미 생성된 schoolYear를 그대로 사용
+//        SchoolYear schoolYear = createSchoolYear();
+//
+//
+//        LoginUser admin1 = createLoginUser(admin);
+//
+//        // createDto에서 schoolYear를 바로 사용
+//        ScholarshipCreateDto createDto = ScholarshipCreateDto.builder()
+//                .userNum(student.getUserNum())
+//                .schoolYear(schoolYear)  // 이미 저장된 schoolYear 객체 사용
+//                .scholarshipName("성적장학금")
+//                .type(PaymentType.PRE_PAYMENT)
+//                .amount(100000)
+//                .build();
+//
+//        // when
+//        scholarshipService.createScholarship(createDto, admin1);
+//
+//        // then
+//        Scholarship result = scholarshipRepository.findScholarshipByScholarshipName(createDto.getScholarshipName());
+//        UserScholarship result2 = userScholarshipRepository.findUserScholarshipByScholarship(result);
+//
+//        List<Scholarship> scholarships = scholarshipRepository.findAll();
+//        List<UserScholarship> userScholarships = userScholarshipRepository.findAll();
+//        List<SchoolYear> schoolYears = schoolYearRepository.findAll();
+//
+//        assertThat(scholarships).hasSize(1);
+//        assertThat(userScholarships).hasSize(1);
+//        assertThat(schoolYears).hasSize(1);
+//
+//        UserScholarship savedUserScholarship = userScholarships.get(0);
+//        assertThat(savedUserScholarship.getUser()).isEqualTo(student);
+//        assertThat(savedUserScholarship.getScholarship().getScholarshipName()).isEqualTo("성적장학금");
+//    }
+//
+//    @Test
+//    @DisplayName("이름 학과 자동 조회 서비스")
+//    public void autoUserInfo(){
+//
 //        //given
-//            Dept dept1 = deptRepository.save(createDept("관리자"));
-//            Dept dept2 = deptRepository.save(createDept("컴소과"));
-//            User admin = userRepository.save(createAdmin("1234"));
-//            User student = userRepository.save(createStudent("1906078","전영욱",dept2));
 //
-//            LoginUser admin1 = createLoginUser(admin);
+//        Dept dept2 = deptRepository.save(createDept("컴소과"));
 //
-//            ScholarshipCreateDto createDto = createScholarships("성적장학금");
-//            UserFindOneSimpleDto findDto = userFindDto(student.getUserNum(),student.getUserName(),student.getDept().getDeptName());
+//        User student = userRepository.save(createStudent("1906078", "전영욱", dept2));
 //
-//            SchoolYear schoolYearA = schoolYearRepository.save(createSchoolYear());
+//        //when
+//        UserFindOneSimpleDto result = scholarshipService.getUserSimpleInfo(student.getUserNum());
 //
 //
+//        //then
+//        assertThat(result).isNotNull();
+//        assertThat(result.getUserName()).isEqualTo(student.getUserName());
+//        assertThat(result.getDeptName()).isEqualTo(student.getDept().getDeptName());
+//        assertThat(result.getUserNum()).isEqualTo(student.getUserNum());
 //
-//
-//       //when
-//            scholarshipService.createScholarship(createDto,admin1,findDto);
-//            Scholarship result = scholarshipRepository.findScholarshipByScholarshipName(createDto.getScholarshipName());
-//            UserScholarship result2 = userScholarshipRepository.findUserScholarshipByScholarship(result);
-//
-//            //then
-//            assertThat(result).isNotNull();
-//            assertThat(result.getScholarshipName()).isEqualTo("성적장학금");
-//            assertThat(result2.getScholarship()).isEqualTo(result);
-//            assertThat(result2.getUser()).isEqualTo(student);
-//
-//
-//        }
+//    }
 //
 //    private User createUserNum(String userNum) {
 //        return User.builder()

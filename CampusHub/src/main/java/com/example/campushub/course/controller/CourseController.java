@@ -2,6 +2,7 @@ package com.example.campushub.course.controller;
 
 import java.util.List;
 
+import com.example.campushub.course.dto.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.campushub.course.dto.CourseCreateDto;
-import com.example.campushub.course.dto.CourseEditDto;
-import com.example.campushub.course.dto.CourseResponseDto;
-import com.example.campushub.course.dto.ProfCourseSearchCondition;
-import com.example.campushub.course.dto.StudCourseSearchCondition;
 import com.example.campushub.course.service.CourseService;
 import com.example.campushub.global.common.SuccessResponse;
 import com.example.campushub.global.security.Login;
@@ -121,4 +117,25 @@ public class CourseController {
 			.build();
 	}
 
+	//교수 강의 시간표 조회
+	@GetMapping("/api/professor/course/calender")
+	@ResponseStatus(HttpStatus.OK)
+	public SuccessResponse<List<CourseCalenderDto>> getProfessorCalender(@Login LoginUser loginUser) {
+		return SuccessResponse.<List<CourseCalenderDto>>builder()
+				.status(200)
+				.data(courseService.findCalByProf(loginUser))
+				.message("교수 강의 시간표 조회 성공")
+				.build();
+	}
+
+	//학생 강의 시간표 조회
+	@GetMapping("/api/student/course/calender")
+	@ResponseStatus(HttpStatus.OK)
+	public SuccessResponse<List<CourseCalenderDto>> getStudentCalender(@Login LoginUser loginUser) {
+		return SuccessResponse.<List<CourseCalenderDto>>builder()
+				.status(200)
+				.data(courseService.findCalByStudent(loginUser))
+				.message("학생 강의시간표 조회 성공")
+				.build();
+	}
 }

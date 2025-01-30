@@ -90,7 +90,7 @@ public class UserController {
 	}
 
 	//학생 휴학,복학 신청
-	@PostMapping("/api/student/applystatus")
+	@PostMapping("/api/student/tuition/applystatus")
 	@ResponseStatus(HttpStatus.OK)
 	public SuccessResponse<Void> applyStudentStatus(@Login LoginUser loginUser){
 		userService.updateUserStatusApply(loginUser);
