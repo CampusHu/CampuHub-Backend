@@ -43,7 +43,7 @@ public class JoinRequestDto {
 	@NotBlank(message = "직책을 입력해주세요")
 	private Type type;
 	@NotBlank(message = "비밀번호를 입력해주세요")
-	private String password;
+	private String password = "1234";
 
 	@Builder
 	public JoinRequestDto(String userName, LocalDateTime birthday, String dept, String email, String phone, String address, String userNum, Type type) {

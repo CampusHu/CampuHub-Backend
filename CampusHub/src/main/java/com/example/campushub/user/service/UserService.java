@@ -114,4 +114,15 @@ public class UserService {
 		user.updateInfo(updateDto.getEmail(), updateDto.getPhone(), updateDto.getAddress());
 	}
 
+	@Transactional
+	public void deleteStudentByUserNum(LoginUser loginUser, String userNum) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		User user = userRepository.findByUserNum(userNum)
+			.orElseThrow(UserNotFoundException::new);
+
+		userRepository.deleteById(user.getId());
+	}
+
 }
