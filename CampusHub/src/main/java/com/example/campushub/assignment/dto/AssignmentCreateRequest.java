@@ -19,16 +19,16 @@ public class AssignmentCreateRequest {
 	@NotBlank(message = "주차를 선택해주세요")
 	private Week week;
 	@NotBlank(message = "과제 설명란을 입력해주세요")
-	private String explain;
+	private String assignExplain;
 	@NotBlank(message = "제출 기한을 입력해주세요")
 	private LocalDate limitDate;
 
 	@Builder
 	@QueryProjection
-	public AssignmentCreateRequest(String courseName, Week week, String explain, LocalDate limitDate) {
+	public AssignmentCreateRequest(String courseName, Week week, String assignExplain, LocalDate limitDate) {
 		this.courseName = courseName;
 		this.week = week;
-		this.explain = explain;
+		this.assignExplain = assignExplain;
 		this.limitDate = limitDate;
 	}
 }

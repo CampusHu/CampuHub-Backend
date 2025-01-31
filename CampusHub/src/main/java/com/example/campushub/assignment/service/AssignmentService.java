@@ -58,7 +58,7 @@ public class AssignmentService {
 
 		Assignment assignment = Assignment.builder()
 			.nWeek(nweek)
-			.explain(request.getExplain())
+			.assignExplain(request.getAssignExplain())
 			.createDate(LocalDate.now())
 			.limitDate(request.getLimitDate())
 			.build();

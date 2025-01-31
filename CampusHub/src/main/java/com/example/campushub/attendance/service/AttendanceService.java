@@ -38,7 +38,7 @@ public class AttendanceService {
 
     //출석 조회 (강의명, 주차 설정)
     public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition atten, LoginUser loginUser) {
-            User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+            userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                     .orElseThrow(UserNotFoundException::new);
 
             return attendanceRepository.findAllByCondition(atten);
