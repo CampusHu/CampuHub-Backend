@@ -38,7 +38,7 @@ public class AttendanceService {
 
     //출석 조회 (강의명, 주차 설정)
     public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition atten, LoginUser loginUser) {
-            User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+            userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                     .orElseThrow(UserNotFoundException::new);
 
             return attendanceRepository.findAllByCondition(atten);
@@ -47,12 +47,12 @@ public class AttendanceService {
 
     //드롭다운을 통한 출결 설정
     @Transactional
-    public void createAttendance(LoginUser loginUser, List<AttendanceResponseDto> atten,AttendanceSearchCondition cond) {
+    public void createAttendance(LoginUser loginUser, List<AttendanceRequestDto> requestDto,AttendanceSearchCondition cond) {
         //교수인지 확인
-        User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+         userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
-        for(AttendanceResponseDto dto : atten){
+        for(AttendanceRequestDto dto : requestDto){
 
             User student = userRepository.findByUserNum(dto.getUserNum())
                     .orElseThrow(UserNotFoundException::new);
@@ -79,7 +79,7 @@ public class AttendanceService {
       }
         //출석통계 조회
     public List<AllAttendanceResponseDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
-        User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+       userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
             return attendanceRepository.findCourseByCondition(cond);

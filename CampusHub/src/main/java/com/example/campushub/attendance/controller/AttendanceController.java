@@ -35,10 +35,10 @@ public class AttendanceController {
     @PostMapping("/api/professor/attendance/condition")
     @ResponseStatus(HttpStatus.CREATED)
     public SuccessResponse<Void> decideAttendance(@Login LoginUser loginUser,
-                                                  @RequestBody @Valid List<AttendanceResponseDto> attendanceDto,
+                                                  @RequestBody @Valid List<AttendanceRequestDto> requestDto,
                                                   @RequestBody @Valid AttendanceSearchCondition attendanceCond) {
 
-        attendanceService.createAttendance(loginUser,attendanceDto,attendanceCond);
+        attendanceService.createAttendance(loginUser,requestDto,attendanceCond);
 
         return SuccessResponse.<Void>builder()
                 .status(200)
