@@ -1,6 +1,7 @@
 package com.example.campushub.studentassignment.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +11,7 @@ import com.example.campushub.assignment.repository.AssignmentRepository;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.global.error.exception.AlreadySubmittedException;
 import com.example.campushub.global.error.exception.AssignmentNotFoundException;
+import com.example.campushub.global.error.exception.StudentAssignmentNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
@@ -49,8 +51,8 @@ public class StudentAssignmentService {
 
 		UserCourse userCourse = userCourseRepository.findByCourseAndUser(course, user);
 
-		StudentAssignment studentAssignment = studentAssignmentRepository.findByAssignmentAndUserCourse(
-			assignment, userCourse);
+		StudentAssignment studentAssignment = studentAssignmentRepository.findByAssignmentAndUserCourse(assignment, userCourse)
+			.orElseThrow(StudentAssignmentNotFoundException::new);
 
 		if (studentAssignment.getStatus() == SubmitStatus.SUBMITTED) {
 			throw new AlreadySubmittedException();
@@ -64,6 +66,10 @@ public class StudentAssignmentService {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
+		if (cond.getCourseName() == null || cond.getWeek() == null) {
+			throw new IllegalArgumentException("강의명과 주차는 필수 입력값입니다.");
+		}
+
 		return studentAssignmentRepository.getAllStudentAssignments(cond);
 	}
 	//학생 과제 단건 조회
@@ -71,6 +77,18 @@ public class StudentAssignmentService {
 		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
 
-		return studentAssignmentRepository.getStudentAssignment(assignmentId);
+		return studentAssignmentRepository.getStudentAssignment(assignmentId)
+			.orElseThrow(StudentAssignmentNotFoundException::new);
+	}
+	//학생 과제 점수 기입
+	@Transactional
+	public void setStudentAssignScore(LoginUser loginUser, Long studentAssignId, int score) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		 StudentAssignment studentAssignment = studentAssignmentRepository.findById(studentAssignId)
+			 .orElseThrow(StudentAssignmentNotFoundException::new);
+
+		 studentAssignment.editScore(score);
 	}
 }

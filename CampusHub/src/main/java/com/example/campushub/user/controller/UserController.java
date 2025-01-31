@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -109,6 +110,17 @@ public class UserController {
 				.status(200)
 				.message("사용자 정보 변겅 성공")
 				.build();
+	}
+
+	//학생 삭제
+	@DeleteMapping("/api/admin/user/{userNum}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public SuccessResponse<Void> deleteStudent(@Login LoginUser loginUser, @PathVariable String userNum){
+		userService.deleteStudentByUserNum(loginUser, userNum);
+		return SuccessResponse.<Void>builder()
+			.status(200)
+			.message("유저 삭제 성공")
+			.build();
 	}
 
 

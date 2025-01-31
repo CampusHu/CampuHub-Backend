@@ -58,7 +58,7 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 			user.userName,
 			nWeek.week,
 			assignment.createDate,
-			assignment.explain,
+			assignment.assignExplain,
 			assignment.limitDate
 		))
 			.from(assignment)

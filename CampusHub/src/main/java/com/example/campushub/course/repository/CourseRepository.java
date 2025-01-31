@@ -1,5 +1,6 @@
 package com.example.campushub.course.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,5 @@ public interface CourseRepository extends JpaRepository<Course, Long> , CourseRe
 	boolean existsByCourseName(String courseName);
 
 	Optional<Course> findByCourseNameAndUser(String courseName, User user);
+
 }

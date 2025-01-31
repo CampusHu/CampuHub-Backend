@@ -12,6 +12,7 @@ import static com.example.campushub.usercourse.domain.QUserCourse.*;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.campushub.assignment.dto.QAssignmentResponse;
 import com.example.campushub.studentassignment.domain.QStudentAssignment;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
+import com.example.campushub.studentassignment.domain.SubmitStatus;
 import com.example.campushub.studentassignment.dto.QStudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.QStudentAssignmentResponse;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
 import com.example.campushub.studentassignment.dto.StudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -36,33 +40,34 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 	private final JPAQueryFactory queryFactory;
 
 	//학생 과제 전체 조회
-	//.todo 수정 필요
 	@Override
 	public List<StudentAssignmentResponse> getAllStudentAssignments(StudentAssigmentSearchCondition cond) {
 		return queryFactory.select(new QStudentAssignmentResponse(
+			studentAssignment.id,
 			user.userName,
 			user.userNum,
 			dept.deptName,
 			studentAssignment.submitDate,
-			studentAssignment.assignmentGrade,
+			studentAssignment.assignmentScore,
 			studentAssignment.status
 		))
-			.from(studentAssignment)
+			.from(course)
+			.join(nWeek).on(nWeek.course.eq(course))
+			.join(assignment).on(assignment.nWeek.eq(nWeek))
+			.join(studentAssignment).on(studentAssignment.assignment.eq(assignment))
 			.join(userCourse).on(studentAssignment.userCourse.eq(userCourse))
 			.join(user).on(userCourse.user.eq(user))
 			.join(dept).on(user.dept.eq(dept))
-			.join(assignment).on(studentAssignment.assignment.eq(assignment))
-			.join(nWeek).on(assignment.nWeek.eq(nWeek))
-			.join(course).on(nWeek.course.eq(course))
-			.where(course.courseName.eq(cond.getCourseName()), (nWeek.week.eq(cond.getWeek()))
-				.or(studentAssignment.status.eq(cond.getStatus())))
+			.where(course.courseName.eq(cond.getCourseName()),
+				(nWeek.week.eq(cond.getWeek())),
+				submitStatusEq(cond.getStatus()))
 			.fetch();
 
 	}
 
 	// 학생 과제 단건 조회
 	@Override
-	public StudentAssignFindOneDto getStudentAssignment(Long StudentAssignmentId) {
+	public Optional<StudentAssignFindOneDto> getStudentAssignment(Long StudentAssignmentId) {
 		StudentAssignFindOneDto fetchOne = queryFactory.select(new QStudentAssignFindOneDto(
 			course.courseName,
 			nWeek.week,
@@ -83,7 +88,10 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 			.where(studentAssignment.id.eq(StudentAssignmentId))
 			.fetchOne();
 
-		return fetchOne;
+		return Optional.ofNullable(fetchOne);
+	}
+	private BooleanExpression submitStatusEq(SubmitStatus status) {
+		return status == null ? null : studentAssignment.status.eq(status);
 	}
 
 }

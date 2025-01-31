@@ -74,7 +74,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 			user.grade,
 			user.email,
 			user.phone,
-			user.address
+			user.address,
+			user.type,
+			user.status
 		))
 			.from(user)
 			.join(dept).on(dept.id.eq(user.dept.id))
@@ -95,7 +97,9 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 			user.grade,
 			user.email,
 			user.phone,
-			user.address
+			user.address,
+			user.type,
+			user.status
 		))
 			.from(user)
 			.join(dept).on(dept.id.eq(user.dept.id))

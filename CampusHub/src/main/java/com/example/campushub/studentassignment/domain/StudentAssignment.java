@@ -33,19 +33,19 @@ public class StudentAssignment {
 	private String assignmentContent;
 	private LocalDate submitDate;
 	private SubmitStatus status;
-	private int assignmentGrade;
+	private int assignmentScore;
 	//첨부파일
 
 	@Builder
 	public StudentAssignment(Assignment assignment, UserCourse userCourse, String assignmentTitle, String assignmentContent,
-		LocalDate submitDate, SubmitStatus status, int assignmentGrade) {
+		LocalDate submitDate, SubmitStatus status, int assignmentScore) {
 		this.assignment = assignment;
 		this.userCourse = userCourse;
 		this.assignmentTitle = assignmentTitle;
 		this.assignmentContent = assignmentContent;
 		this.submitDate = submitDate;
 		this.status = status;
-		this.assignmentGrade = assignmentGrade;
+		this.assignmentScore = assignmentScore;
 	}
 
 	public void submitAssignment(String title, String content) {
@@ -53,6 +53,10 @@ public class StudentAssignment {
 		this.assignmentTitle = title;
 		this.assignmentContent = content;
 		this.submitDate = LocalDate.now();
+	}
+
+	public void editScore(int score) {
+		this.assignmentScore = score;
 	}
 
 }

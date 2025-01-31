@@ -10,7 +10,7 @@ import com.example.campushub.usercourse.domain.UserCourse;
 import java.util.List;
 
 public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {
-    List<UserCourse> findAllByCourse(Course courseName);
+    List<UserCourse> findAllByCourse(Course course);
 
     UserCourse findByUser(User user);
     UserCourse findByCourseAndUser(Course course, User user);
@@ -18,4 +18,5 @@ public interface UserCourseRepository extends JpaRepository<UserCourse, Long> {
     List<UserCourse> findAllByUser(User user);
 	// 교수가 개설한 강의 목록 조회
 	List<UserCourse> findAllByUser_UserNum(String userNum);
+
 }

@@ -48,16 +48,16 @@ public class AttendanceController {
     }
 
     //강의별 출석 통계 조회(학생)
-    @GetMapping("/api/professor/attendance/allcondition")
-    @ResponseStatus(HttpStatus.OK)
-    public SuccessResponse<List<AllAttendanceResponseDto>> findAllAttendance(@Login LoginUser loginUser, AttendanceSearchCourseCondition attendanceCond) {
-        return SuccessResponse.<List<AllAttendanceResponseDto>>builder()
-                .status(200)
-                .message("강의별 출석 통계 조회 성공")
-                .data(attendanceService.findAllAttendance(loginUser,attendanceCond))
-                .build();
-
-    }
+    // @GetMapping("/api/professor/attendance/allcondition")
+    // @ResponseStatus(HttpStatus.OK)
+    // public SuccessResponse<List<AllAttendanceResponseDto>> findAllAttendance(@Login LoginUser loginUser, AttendanceSearchCourseCondition attendanceCond) {
+    //     return SuccessResponse.<List<AllAttendanceResponseDto>>builder()
+    //             .status(200)
+    //             .message("강의별 출석 통계 조회 성공")
+    //             .data(attendanceService.findAllAttendance(loginUser,attendanceCond))
+    //             .build();
+    //
+    // }
 
     //본인 출석조회(학생)
     @GetMapping("/api/student/attendance/condition")

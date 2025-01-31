@@ -17,19 +17,19 @@ public class AssignmentResponse {
 	private String professorName;
 	private Week week;
 	private LocalDate createDate;
-	private String explain;
+	private String assignExplain;
 	private LocalDate limitDate;
 
 	@Builder
 	@QueryProjection
-	public AssignmentResponse(Long id, String courseName, String professorName, Week week, LocalDate createDate, String explain,
+	public AssignmentResponse(Long id, String courseName, String professorName, Week week, LocalDate createDate, String assignExplain,
 		LocalDate limitDate) {
 		this.id = id;
 		this.courseName = courseName;
 		this.professorName = professorName;
 		this.week = week;
 		this.createDate = createDate;
-		this.explain = explain;
+		this.assignExplain = assignExplain;
 		this.limitDate = limitDate;
 	}
 }

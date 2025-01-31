@@ -3,6 +3,7 @@ package com.example.campushub.exam.repository;
 
 import com.example.campushub.exam.dto.ExamFindAllResponse;
 import com.example.campushub.exam.dto.ExamScoreInputRequest;
+import com.example.campushub.exam.dto.ExamSearchCondition;
 import com.example.campushub.exam.dto.QExamFindAllResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.example.campushub.course.domain.QCourse.*;
 import static com.example.campushub.dept.domain.QDept.dept;
 import static com.example.campushub.exam.domain.QExam.exam;
 import static com.example.campushub.user.domain.QUser.user;
@@ -24,20 +26,22 @@ public class ExamRepositoryCustomImpl implements ExamRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ExamFindAllResponse> findExamScoresByUserCourseId(Long userCourseId) {
+    public List<ExamFindAllResponse> findExamScoresByUserNums(List<String> userNums, ExamSearchCondition cond) {
 
         return queryFactory.select(new QExamFindAllResponse(
                         user.userName,
                         user.userNum,
                         dept.deptName,
-                        exam.userCourse.id,
+                        userCourse.id,
                         exam.midScore,
                         exam.finalScore,
                         exam.totalScore
-                )).from(exam)
-                .join(user).on(exam.userCourse.id.eq(userCourse.id)) // exam
+                )).from(userCourse)
+                .leftJoin(exam).on(exam.userCourse.eq(userCourse)) // exam
+                .join(user).on(userCourse.user.eq(user))
                 .join(dept).on(user.dept.eq(dept)) // user dept
-                .where(eqUserCourseId(userCourseId))
+                .join(course).on(userCourse.course.eq(course))
+                .where(user.userNum.in(userNums).and(course.courseName.eq(cond.getCourseName())))
                 .fetch();
     }
     @Override
