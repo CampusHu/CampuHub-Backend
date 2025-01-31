@@ -52,7 +52,7 @@ public class AttendanceService {
     }
 
 
-    //드롭다운을 통한 출결 설정
+    //드롭다운을 통한 출결 설정.
     @Transactional
     public void createAttendance(LoginUser loginUser, List<AttendanceRequestDto> requestDto,AttendanceSearchCondition cond) {
         //교수인지 확인
