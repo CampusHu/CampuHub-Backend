@@ -37,36 +37,46 @@ public class AttendanceService {
 
 
     //출석 조회 (강의명, 주차 설정)
-    public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition atten, LoginUser loginUser) {
-            userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
-                    .orElseThrow(UserNotFoundException::new);
+    //.todo exception 제작
+    public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition cond, LoginUser loginUser) {
 
-            return attendanceRepository.findAllByCondition(atten);
+        userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+            .orElseThrow(UserNotFoundException::new);
+
+        if (cond.getCourseName() == null || cond.getWeek() == null) {
+            throw new IllegalArgumentException("선택되지 않은 뭐가 있다");
+        }
+
+            return attendanceRepository.findAllByCondition(cond);
     }
 
 
     //드롭다운을 통한 출결 설정
+    //.todo 여기도 exception 만드셈 nweek에있는거
     @Transactional
-    public void createAttendance(LoginUser loginUser, List<AttendanceResponseDto> atten,AttendanceSearchCondition cond) {
+    public void createAttendance(LoginUser loginUser, List<AttendanceResponseDto> responses ,AttendanceSearchCondition cond) {
         //교수인지 확인
         User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
-        for(AttendanceResponseDto dto : atten){
+        for(AttendanceResponseDto response : responses){
 
-            User student = userRepository.findByUserNum(dto.getUserNum())
+            User student = userRepository.findByUserNum(response.getUserNum())
                     .orElseThrow(UserNotFoundException::new);
 
             Course course = courseRepository.findCourseByCourseName(cond.getCourseName());
 
             UserCourse userCourse = userCourseRepository.findByCourseAndUser(course, student);
 
-            NWeek nWeek = nweekRepository.findByWeek(cond.getWeek());
+            // NWeek nWeek = nweekRepository.findByWeek(cond.getWeek());
+
+            NWeek nWeek = nweekRepository.findByCourseAndWeek(course, cond.getWeek())
+                .orElseThrow(IllegalArgumentException::new);
 
             Attendance attendance = Attendance.builder()
                     .nWeek(nWeek)
                     .userCourse(userCourse)
-                    .status(dto.getStatus())
+                    .status(response.getStatus())
                     .build();
 
             attendanceRepository.save(attendance);
@@ -78,13 +88,15 @@ public class AttendanceService {
 
       }
         //출석통계 조회
-    public List<AllAttendanceResponseDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
-        User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
-                .orElseThrow(UserNotFoundException::new);
-
-            return attendanceRepository.findCourseByCondition(cond);
-
-      }
+    // public List<AllAttendanceResponseDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
+    //     User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+    //             .orElseThrow(UserNotFoundException::new);
+    //
+    //     //16주차에 츨석status 값이 null이면 오류
+    //
+    //         return attendanceRepository.findCourseByCondition(cond);
+    //
+    //   }
 //        // 총결석 일수 조회
 //      @Transactional
 //    public int cntAbsence(List<AllAttendanceResponseDto> attenList){
