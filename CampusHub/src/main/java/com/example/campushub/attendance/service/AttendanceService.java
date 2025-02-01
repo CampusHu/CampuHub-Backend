@@ -7,6 +7,8 @@ import com.example.campushub.attendance.dto.*;
 import com.example.campushub.attendance.repository.AttendanceRepository;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.repository.CourseRepository;
+import com.example.campushub.global.error.exception.AttendanceConditionNotSetException;
+import com.example.campushub.global.error.exception.NWeekNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
@@ -35,33 +37,32 @@ public class AttendanceService {
     private final NweekRepository nweekRepository;
     private final CourseRepository courseRepository;
 
+
     //출석 조회 (강의명, 주차 설정)
-    //.todo exception 제작
     public List<AttendanceResponseDto> findAttendance(AttendanceSearchCondition cond, LoginUser loginUser) {
 
         userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
             .orElseThrow(UserNotFoundException::new);
 
         if (cond.getCourseName() == null || cond.getWeek() == null) {
-            throw new IllegalArgumentException("선택되지 않은 뭐가 있다");
+            throw new AttendanceConditionNotSetException();
         }
 
         return attendanceRepository.findAllByCondition(cond);
     }
 
-    //드롭다운을 통한 출결 설정
-    //.todo 여기도 exception 만드셈 nweek에있는거
+
+    //드롭다운을 통한 출결 설정.
     @Transactional
-    public void createAttendance(LoginUser loginUser, List<AttendanceResponseDto> responses,
-        AttendanceSearchCondition cond) {
+    public void createAttendance(LoginUser loginUser, List<AttendanceRequestDto> requestDto,AttendanceSearchCondition cond) {
         //교수인지 확인
-        User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
-            .orElseThrow(UserNotFoundException::new);
-
-        for (AttendanceResponseDto response : responses) {
-
-            User student = userRepository.findByUserNum(response.getUserNum())
+         userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
+
+        for(AttendanceRequestDto request : requestDto){
+
+            User student = userRepository.findByUserNum(request.getUserNum())
+                    .orElseThrow(UserNotFoundException::new);
 
             Course course = courseRepository.findCourseByCourseName(cond.getCourseName());
 
@@ -70,13 +71,13 @@ public class AttendanceService {
             // NWeek nWeek = nweekRepository.findByWeek(cond.getWeek());
 
             NWeek nWeek = nweekRepository.findByCourseAndWeek(course, cond.getWeek())
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(NWeekNotFoundException::new);
 
             Attendance attendance = Attendance.builder()
-                .nWeek(nWeek)
-                .userCourse(userCourse)
-                .status(response.getStatus())
-                .build();
+                    .nWeek(nWeek)
+                    .userCourse(userCourse)
+                    .status(request.getStatus())
+                    .build();
 
             attendanceRepository.save(attendance);
 

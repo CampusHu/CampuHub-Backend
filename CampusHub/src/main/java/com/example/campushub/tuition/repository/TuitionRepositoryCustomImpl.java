@@ -98,6 +98,8 @@ public class TuitionRepositoryCustomImpl implements TuitionRepositoryCustom {
     }
 
 
+
+
     private BooleanExpression eqDeptName(String deptName) {
         return deptName == null ? null : dept.deptName.eq(deptName);
     }
