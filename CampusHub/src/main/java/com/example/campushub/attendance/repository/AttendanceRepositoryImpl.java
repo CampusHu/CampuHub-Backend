@@ -68,7 +68,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 getWeekStatus(Week.SIXTEENTH)
             ))
             .from(attendance)
-            .join(attendance.userCourse, userCourse)
+            .leftJoin(attendance.userCourse, userCourse)
             .join(userCourse.user, user)
             .join(attendance.nWeek, nWeek)
             .join(nWeek.course, course)

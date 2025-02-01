@@ -9,6 +9,7 @@ import com.example.campushub.scholarship.dto.ScholarshipResponseDto;
 import com.example.campushub.scholarship.dto.ScholarshipSearchCondition;
 import com.example.campushub.scholarship.repository.ScholarshipRepository;
 import com.example.campushub.schoolyear.domain.SchoolYear;
+import com.example.campushub.schoolyear.domain.Semester;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
 import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -54,13 +56,15 @@ public class ScholarshipService {
         User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
                 .orElseThrow(UserNotFoundException::new);
 
-        SchoolYear schoolYear = SchoolYear.builder()
-                .year(createDto.getSchoolYear().getYear())
-                .semester(createDto.getSchoolYear().getSemester())
-                        .build();
-
-        schoolYearRepository.save(schoolYear);
-
+        // SchoolYear schoolYear = SchoolYear.builder()
+        //         .year(createDto.getSchoolYear().getYear())
+        //         .semester(createDto.getSchoolYear().getSemester())
+        //                 .build();
+        //
+        SchoolYear schoolYear = schoolYearRepository.findBySemesterAndYear(
+            Semester.valueOf(createDto.getSemester()), LocalDate.parse(createDto.getYear(),
+                DateTimeFormatter.ofPattern("yyyy")))
+            .orElseThrow(IllegalArgumentException::new);
 
         // 장학금명 , 지급구분, 장학금액
         Scholarship scholarship = createDto.toEntity();
