@@ -1,6 +1,7 @@
 package com.example.campushub.scholarship.service;
 
 
+import com.example.campushub.global.error.exception.SchoolyearNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.scholarship.domain.Scholarship;
 import com.example.campushub.scholarship.dto.GetMyScholarshipDto;
@@ -64,7 +65,7 @@ public class ScholarshipService {
         SchoolYear schoolYear = schoolYearRepository.findBySemesterAndYear(
             Semester.valueOf(createDto.getSemester()), LocalDate.parse(createDto.getYear(),
                 DateTimeFormatter.ofPattern("yyyy")))
-            .orElseThrow(IllegalArgumentException::new);
+            .orElseThrow(SchoolyearNotFoundException::new);
 
         // 장학금명 , 지급구분, 장학금액
         Scholarship scholarship = createDto.toEntity();

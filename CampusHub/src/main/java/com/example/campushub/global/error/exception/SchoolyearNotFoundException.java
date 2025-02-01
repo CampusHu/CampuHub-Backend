@@ -5,7 +5,7 @@ public class SchoolyearNotFoundException extends ApiException {
     private static final String MESSAGE = "학년도와 학기를 찾을 수 없습니다";
 
 
-    public SchoolyearNotFoundException(String message) {
+    public SchoolyearNotFoundException() {
         super(MESSAGE);
     }
 
