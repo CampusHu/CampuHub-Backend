@@ -47,26 +47,20 @@ public class ScholarshipService {
 
 // 장학금 등록 서비스
     @Transactional
-    public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {//+userfindonesimpledto simdto
+    public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {
 
         //관리자인지 검증
-       User admin =  userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+       userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
-        User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
+        User student = userRepository.findByUserNum(createDto.getUserNum())
                 .orElseThrow(UserNotFoundException::new);
 
-        // SchoolYear schoolYear = SchoolYear.builder()
-        //         .year(createDto.getSchoolYear().getYear())
-        //         .semester(createDto.getSchoolYear().getSemester())
-        //                 .build();
-        //
         SchoolYear schoolYear = schoolYearRepository.findBySemesterAndYear(
             Semester.valueOf(createDto.getSemester()), LocalDate.parse(createDto.getYear(),
                 DateTimeFormatter.ofPattern("yyyy")))
             .orElseThrow(IllegalArgumentException::new);
 
-        // 장학금명 , 지급구분, 장학금액
         Scholarship scholarship = createDto.toEntity();
 
         scholarshipRepository.save(scholarship);

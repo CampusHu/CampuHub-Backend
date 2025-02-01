@@ -8,7 +8,9 @@ import com.example.campushub.attendance.repository.AttendanceRepository;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.repository.CourseRepository;
 import com.example.campushub.global.error.exception.AttendanceConditionNotSetException;
+import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.NWeekNotFoundException;
+import com.example.campushub.global.error.exception.UserCourseNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
@@ -64,11 +66,11 @@ public class AttendanceService {
             User student = userRepository.findByUserNum(request.getUserNum())
                     .orElseThrow(UserNotFoundException::new);
 
-            Course course = courseRepository.findCourseByCourseName(cond.getCourseName());
+            Course course = courseRepository.findByCourseName(cond.getCourseName())
+                .orElseThrow(CourseNotFoundException::new);
 
-            UserCourse userCourse = userCourseRepository.findByCourseAndUser(course, student);
-
-            // NWeek nWeek = nweekRepository.findByWeek(cond.getWeek());
+            UserCourse userCourse = userCourseRepository.findByUserAndCourse(student, course)
+                .orElseThrow(UserCourseNotFoundException::new);
 
             NWeek nWeek = nweekRepository.findByCourseAndWeek(course, cond.getWeek())
                 .orElseThrow(NWeekNotFoundException::new);

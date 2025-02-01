@@ -12,6 +12,7 @@ import com.example.campushub.course.domain.Course;
 import com.example.campushub.global.error.exception.AlreadySubmittedException;
 import com.example.campushub.global.error.exception.AssignmentNotFoundException;
 import com.example.campushub.global.error.exception.StudentAssignmentNotFoundException;
+import com.example.campushub.global.error.exception.UserCourseNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
@@ -49,7 +50,8 @@ public class StudentAssignmentService {
 
 		Course course = assignment.getNWeek().getCourse();
 
-		UserCourse userCourse = userCourseRepository.findByCourseAndUser(course, user);
+		UserCourse userCourse = userCourseRepository.findByUserAndCourse(user, course)
+			.orElseThrow(UserCourseNotFoundException::new);
 
 		StudentAssignment studentAssignment = studentAssignmentRepository.findByAssignmentAndUserCourse(assignment, userCourse)
 			.orElseThrow(StudentAssignmentNotFoundException::new);
