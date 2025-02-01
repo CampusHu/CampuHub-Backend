@@ -48,7 +48,7 @@ public class ScholarshipService {
     public void createScholarship(ScholarshipCreateDto createDto , LoginUser loginUser) {//+userfindonesimpledto simdto
 
         //관리자인지 검증
-       User admin =  userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+        userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
                 .orElseThrow(UserNotFoundException::new);
 
         User student = userRepository.findByUserNum(createDto.getUserNum())//simdtp.getUserNum()
