@@ -48,6 +48,7 @@ public class ScholarshipController {
 
 //        UserFindOneSimpleDto userInfo = scholarshipService.getUserSimpleInfo(userNum);
 
+
         scholarshipService.createScholarship(createDto,loginUser);
 
         return SuccessResponse.<Void>builder()
