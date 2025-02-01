@@ -11,7 +11,4 @@ public enum AttendanceStatus {
 
 	private final String koreanName;
 
-	public String getKoreanName() {
-		return koreanName;
-	}
 }

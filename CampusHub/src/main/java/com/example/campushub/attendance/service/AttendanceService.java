@@ -48,7 +48,7 @@ public class AttendanceService {
             throw new AttendanceConditionNotSetException();
         }
 
-            return attendanceRepository.findAllByCondition(cond);
+        return attendanceRepository.findAllByCondition(cond);
     }
 
 
@@ -83,61 +83,64 @@ public class AttendanceService {
 
         }
 
+    }
 
+    //출석통계 조회
+    public List<AttendanceSummaryDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
+        User professor = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+            .orElseThrow(UserNotFoundException::new);
 
+        //16주차에 츨석status 값이 null이면 오류
+        List<AttendanceSummaryDto> courseByCondition = attendanceRepository.findCourseByCondition(cond);
 
-      }
-        //출석통계 조회
-    // public List<AllAttendanceResponseDto> findAllAttendance(LoginUser loginUser, AttendanceSearchCourseCondition cond) {
-    //     User professor =  userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+        if (courseByCondition.contains(null)) {
+            throw new IllegalArgumentException("조회된 리스트에 null 값이 있습니다");
+        }
+        return courseByCondition;
+
+    }
+    //        // 총결석 일수 조회
+    //      @Transactional
+    //    public int cntAbsence(List<AllAttendanceResponseDto> attenList){
+    //        int cnt = 0;
+    //
+    //        for(AllAttendanceResponseDto dto : attenList){
+    //            if (dto.getStatus() == AttendanceStatus.ABSENCE){
+    //                cnt++;
+    //            }
+    //        }
+    //        return cnt;
+    //      }
+    //
+    //      //출석 점수 로직
+    //      @Transactional
+    //    public int attendanceScore(List<AllAttendanceResponseDto> attenList){
+    //        int totalScore = 100;
+    //
+    //        //주차 별 출결상태를 통한 출석점수 감점
+    //        for(AllAttendanceResponseDto dto : attenList){
+    //            if (dto.getStatus() == AttendanceStatus.ABSENCE){
+    //                totalScore -= 3;
+    //            } else if (dto.getStatus() == AttendanceStatus.PERCEPTION){
+    //                totalScore -= 1;
+    //            }
+    //        }
+    //            //결석횟수가 3회 이상 시, 0점 처리
+    //          int abSenceCount = cntAbsence(attenList);
+    //          if (abSenceCount >= 3){
+    //              totalScore = 0;
+    //          }
+    //            return totalScore;
+    //      }
+
+    //학생 본인 출석 조회
+    // public List<AttendanceUserDto> userAttendacnce(LoginUser loginUser,AttendanceSearchCondition atten){
+    //
+    //     User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
     //             .orElseThrow(UserNotFoundException::new);
     //
-    //     //16주차에 츨석status 값이 null이면 오류
-    //
-    //         return attendanceRepository.findCourseByCondition(cond);
+    //     return attendanceRepository.findUserAttendance(atten,student.getUserNum());
     //
     //   }
-//        // 총결석 일수 조회
-//      @Transactional
-//    public int cntAbsence(List<AllAttendanceResponseDto> attenList){
-//        int cnt = 0;
-//
-//        for(AllAttendanceResponseDto dto : attenList){
-//            if (dto.getStatus() == AttendanceStatus.ABSENCE){
-//                cnt++;
-//            }
-//        }
-//        return cnt;
-//      }
-//
-//      //출석 점수 로직
-//      @Transactional
-//    public int attendanceScore(List<AllAttendanceResponseDto> attenList){
-//        int totalScore = 100;
-//
-//        //주차 별 출결상태를 통한 출석점수 감점
-//        for(AllAttendanceResponseDto dto : attenList){
-//            if (dto.getStatus() == AttendanceStatus.ABSENCE){
-//                totalScore -= 3;
-//            } else if (dto.getStatus() == AttendanceStatus.PERCEPTION){
-//                totalScore -= 1;
-//            }
-//        }
-//            //결석횟수가 3회 이상 시, 0점 처리
-//          int abSenceCount = cntAbsence(attenList);
-//          if (abSenceCount >= 3){
-//              totalScore = 0;
-//          }
-//            return totalScore;
-//      }
 
-        //학생 본인 출석 조회
-    public List<AttendanceUserDto> userAttendacnce(LoginUser loginUser,AttendanceSearchCondition atten){
-
-        User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
-                .orElseThrow(UserNotFoundException::new);
-
-        return attendanceRepository.findUserAttendance(atten,student.getUserNum());
-
-      }
 }
