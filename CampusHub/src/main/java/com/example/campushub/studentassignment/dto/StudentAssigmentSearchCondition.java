@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class StudentAssigmentSearchCondition {
 
 	private String courseName;
-	private Week week;
-	private SubmitStatus status;
+	private String week;
+	private String status;
 
 	@Builder
-	public StudentAssigmentSearchCondition(String courseName, Week week, SubmitStatus status) {
+	public StudentAssigmentSearchCondition(String courseName, String week, String status) {
 		this.courseName = courseName;
 		this.week = week;
 		this.status = status;

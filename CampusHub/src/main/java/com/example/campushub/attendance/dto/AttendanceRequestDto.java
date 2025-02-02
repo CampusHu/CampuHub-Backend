@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 public class AttendanceRequestDto {
     private String userName;
     private String userNum;
-    private AttendanceStatus status;
+    private String status;
 
 
     @Builder
-    public AttendanceRequestDto(String userName, String userNum, AttendanceStatus status) {
+    public AttendanceRequestDto(String userName, String userNum, String status) {
         this.userName = userName;
         this.userNum = userNum;
         this.status = status;

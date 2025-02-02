@@ -15,7 +15,6 @@ import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
-import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.repository.UserRepository;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -72,13 +70,13 @@ public class AttendanceService {
             UserCourse userCourse = userCourseRepository.findByUserAndCourse(student, course)
                 .orElseThrow(UserCourseNotFoundException::new);
 
-            NWeek nWeek = nweekRepository.findByCourseAndWeek(course, cond.getWeek())
+            NWeek nWeek = nweekRepository.findByCourseAndWeek(course, Week.valueOf(cond.getWeek()))
                 .orElseThrow(NWeekNotFoundException::new);
 
             Attendance attendance = Attendance.builder()
                     .nWeek(nWeek)
                     .userCourse(userCourse)
-                    .status(request.getStatus())
+                    .status(AttendanceStatus.valueOf(request.getStatus()))
                     .build();
 
             attendanceRepository.save(attendance);
@@ -93,7 +91,7 @@ public class AttendanceService {
             .orElseThrow(UserNotFoundException::new);
 
         //16주차에 츨석status 값이 null이면 오류
-        List<AttendanceSummaryDto> courseByCondition = attendanceRepository.findCourseByCondition(cond);
+        List<AttendanceSummaryDto> courseByCondition = attendanceRepository.findAttendanceByCondition(cond);
 
         if (courseByCondition.contains(null)) {
             throw new IllegalArgumentException("조회된 리스트에 null 값이 있습니다");

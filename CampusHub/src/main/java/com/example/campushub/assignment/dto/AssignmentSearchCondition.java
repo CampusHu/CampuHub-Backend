@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 public class AssignmentSearchCondition {
 
 	private String courseName;
-	private Week week;
+	private String week;
 
 	@Builder
-	public AssignmentSearchCondition(String courseName, Week week) {
+	public AssignmentSearchCondition(String courseName, String week) {
 		this.courseName = courseName;
 		this.week = week;
 	}

@@ -39,7 +39,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 		))
 			.from(user)
 			.join(dept).on(user.dept.eq(dept))
-			.where(statusEq(condition.getStatus()),
+			.where(statusEq(Status.valueOf(condition.getStatus())),
 				userNumEq(condition.getUserNum()),
 				deptNameEq(condition.getDeptName()),
 				user.type.eq(Type.STUDENT))

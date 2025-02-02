@@ -7,13 +7,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum PaymentType {
 
-	PRE_PAYMENT("PRE_PAYMENT"), POST_PAYMENT("POST_PAYMENT");
+	PRE_PAYMENT("사전감면"), POST_PAYMENT("사후감면");
 
-	private final String key;
+	private final String name;
 
-	public static PaymentType fromKey(String key) {
+	public static PaymentType fromName(String key) {
 		for (PaymentType paymentType : PaymentType.values()) {
-			if (paymentType.key.equals(key)) {
+			if (paymentType.name.equals(key)) {
 				return paymentType;
 			}
 		}

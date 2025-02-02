@@ -23,12 +23,12 @@ public class UserFindOneDto {
 		private LocalDateTime birthday;
 		private String deptName;
 		@Nullable
-		private Grade grade;
+		private String grade;
 		private String email;
 		private String phone;
 		private String address;
-		private Type type;
-		private Status status;
+		private String type;
+		private String status;
 
 
 		@Builder
@@ -38,12 +38,12 @@ public class UserFindOneDto {
 			this.userName = userName;
 			this.birthday = birthday;
 			this.deptName = deptName;
-			this.grade = grade;
+			this.grade = grade.getMessage();
 			this.email = email;
 			this.phone = phone;
 			this.address = address;
-			this.type = type;
-			this.status = status;
+			this.type = type.getKey();
+			this.status = status.getMessage();
 		}
 
 

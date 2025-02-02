@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class AttendanceUserDto {
- private Week week;
- private AttendanceStatus status;
+ private String week;
+ private String status;
 
 
  @Builder
  @QueryProjection
     public AttendanceUserDto(Week week, AttendanceStatus status) {
-     this.week = week;
-     this.status = status;
+     this.week = week.getName();
+     this.status = status.getKoreanName();
  }
 }
 

@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AttendanceUpdateRequestDto {
     private String CourseName;
-    private Week week;
+    private String week;
     private String userNum;
-    private AttendanceStatus status;
+    private String attendanceStatus;
 
     @Builder
-    public AttendanceUpdateRequestDto(String courseName, Week week, String userNum, AttendanceStatus status) {
+    public AttendanceUpdateRequestDto(String courseName, String week, String userNum, String status) {
         this.CourseName = courseName;
         this.week = week;
         this.userNum = userNum;
-        this.status = status;
+        this.attendanceStatus = status;
     }
 }

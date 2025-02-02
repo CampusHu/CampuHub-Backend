@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.assignment.dto.QAssignmentResponse;
+import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.studentassignment.domain.QStudentAssignment;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
@@ -59,8 +60,8 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 			.join(user).on(userCourse.user.eq(user))
 			.join(dept).on(user.dept.eq(dept))
 			.where(course.courseName.eq(cond.getCourseName()),
-				(nWeek.week.eq(cond.getWeek())),
-				submitStatusEq(cond.getStatus()))
+				(nWeek.week.eq(Week.valueOf(cond.getWeek()))),
+				submitStatusEq(SubmitStatus.valueOf(cond.getStatus())))
 			.fetch();
 
 	}

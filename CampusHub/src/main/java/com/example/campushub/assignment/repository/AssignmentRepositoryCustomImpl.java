@@ -80,7 +80,7 @@ public class AssignmentRepositoryCustomImpl implements AssignmentRepositoryCusto
 			baseCondition = baseCondition.and(courseNameEq(condition.getCourseName()));
 		}
 		if (condition.getWeek() != null) {
-			baseCondition = baseCondition.and(weekEq(condition.getWeek()));
+			baseCondition = baseCondition.and(weekEq(Week.valueOf(condition.getWeek())));
 		}
 
 		return baseCondition;

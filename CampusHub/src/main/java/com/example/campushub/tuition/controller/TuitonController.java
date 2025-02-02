@@ -20,18 +20,18 @@ public class TuitonController {
 
     private final TuitionService tuitionService;
 
-    //등록금 납부 관리 조회  @ModelAttribute TuitionSearchCondition condition
-    @GetMapping("/api/admin/tuition/condition")
-    @ResponseStatus(HttpStatus.OK)
-    public SuccessResponse<List<TuitionFindAllResponse>>findStudentTuitioncond(@Login LoginUser loginUser, TuitionSearchCondition condition) {
-        return SuccessResponse.<List<TuitionFindAllResponse>>builder()
-                .status(200)
-                .data(tuitionService.findTuitions(loginUser,condition))
-                .message("등록금 조회 성공")
-                .build();
-
-
-    }
+    // //등록금 납부 관리 조회  @ModelAttribute TuitionSearchCondition condition
+    // @GetMapping("/api/admin/tuition/condition")
+    // @ResponseStatus(HttpStatus.OK)
+    // public SuccessResponse<List<TuitionFindAllResponse>>findStudentTuitioncond(@Login LoginUser loginUser, TuitionSearchCondition condition) {
+    //     return SuccessResponse.<List<TuitionFindAllResponse>>builder()
+    //             .status(200)
+    //             .data(tuitionService.findTuitions(loginUser,condition))
+    //             .message("등록금 조회 성공")
+    //             .build();
+    //
+    //
+    // }
     //등록금 납부 신청 수락
     @PostMapping("/api/admin/tuition/condition/acceptstatus")
     @ResponseStatus(HttpStatus.OK)

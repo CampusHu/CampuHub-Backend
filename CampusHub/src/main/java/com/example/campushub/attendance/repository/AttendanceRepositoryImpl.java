@@ -25,6 +25,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    //교수가 출석 조회
     @Override
     public List<AttendanceResponseDto> findAllByCondition(AttendanceSearchCondition cond) {
         return queryFactory.select(new QAttendanceResponseDto(
@@ -39,13 +40,13 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 .join(attendance.nWeek,nWeek)
                 .join(nWeek.course,course)
                 .where(userCourse.course.courseName.eq(cond.getCourseName()),
-                        nWeek.week.eq(cond.getWeek()), nWeek.course.courseName.eq(cond.getCourseName()))
+                        nWeek.week.eq(Week.valueOf(cond.getWeek())), nWeek.course.courseName.eq(cond.getCourseName()))
                 .fetch();
     }
 
     //출석통계
     @Override
-    public List<AttendanceSummaryDto> findCourseByCondition(AttendanceSearchCourseCondition cond) {
+    public List<AttendanceSummaryDto> findAttendanceByCondition(AttendanceSearchCourseCondition cond) {
         return queryFactory
             .select(Projections.constructor(AttendanceSummaryDto.class,
                 user.userName,
@@ -78,6 +79,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
             .fetch();
     }
 
+    //학생이 출석 조회
     @Override
     public List<AttendanceUserDto> findUserAttendance(AttendanceSearchCondition atten, String userNum) {
         return queryFactory.select(new QAttendanceUserDto(

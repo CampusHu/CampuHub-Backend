@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class StudCourseSearchCondition {
-	private CourseDivision division;
+	private String division;
 	private String deptName;
 	private String courseName;
 
 	@Builder
-	public StudCourseSearchCondition(CourseDivision division, String deptName, String courseName) {
+	public StudCourseSearchCondition(String division, String deptName, String courseName) {
 		this.division = division;
 		this.deptName = deptName;
 		this.courseName = courseName;
