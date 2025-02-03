@@ -103,12 +103,12 @@ public class ScholarshipService {
 
 
 
-    //사용자의 장학금 삭제
+////    사용자의 장학금 삭제
 //    @Transactional
 //    public void deleteScholarship(String userNum , LoginUser loginUser){
 //        // 요청한 사용자가 ADMIN인지?
 //        User user = userRepository.findByUserNumAndType(loginUser.getUserNum(),"ADMIN")
-//                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+//                .orElseThrow(;
 //        // 삭제 대상 사용자
 //        User deleteuser = userRepository.findByUserNum(userNum)
 //                        .orElseThrow(() -> new IllegalArgumentException("삭제할려는 사용자를 찾을 수 없습니다"));

@@ -7,11 +7,7 @@ import com.example.campushub.attendance.dto.*;
 import com.example.campushub.attendance.repository.AttendanceRepository;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.repository.CourseRepository;
-import com.example.campushub.global.error.exception.AttendanceConditionNotSetException;
-import com.example.campushub.global.error.exception.CourseNotFoundException;
-import com.example.campushub.global.error.exception.NWeekNotFoundException;
-import com.example.campushub.global.error.exception.UserCourseNotFoundException;
-import com.example.campushub.global.error.exception.UserNotFoundException;
+import com.example.campushub.global.error.exception.*;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
@@ -94,7 +90,7 @@ public class AttendanceService {
         List<AttendanceSummaryDto> courseByCondition = attendanceRepository.findAttendanceByCondition(cond);
 
         if (courseByCondition.contains(null)) {
-            throw new IllegalArgumentException("조회된 리스트에 null 값이 있습니다");
+            throw new NweekFoundNullException();
         }
         return courseByCondition;
 
