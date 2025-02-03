@@ -20,6 +20,7 @@ import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.NWeekNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
+import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
@@ -53,7 +54,7 @@ public class AssignmentService {
 		Course course = courseRepository.findByCourseNameAndUser(request.getCourseName(), user)
 			.orElseThrow(CourseNotFoundException::new);
 
-		NWeek nweek = nweekRepository.findByCourseAndWeek(course, request.getWeek())
+		NWeek nweek = nweekRepository.findByCourseAndWeek(course, Week.valueOf(request.getWeek()))
 			.orElseThrow(NWeekNotFoundException::new);
 
 		Assignment assignment = Assignment.builder()

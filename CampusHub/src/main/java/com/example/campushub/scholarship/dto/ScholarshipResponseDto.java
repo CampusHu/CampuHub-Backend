@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @Getter
 @NoArgsConstructor
@@ -19,25 +20,24 @@ public class ScholarshipResponseDto {
  private String username;
  private String userNum;
  private String deptName;
- @DateTimeFormat(pattern = "yyyy")
- private LocalDate year;
- private Semester semester;
+ private String year;
+ private String semester;
  private String scholarshipName;
- private PaymentType type;
+ private String paymentType;
  private int amount;
  @DateTimeFormat(pattern = "yyyy-MM-dd")
  private LocalDate confDate;
 
  @Builder
  @QueryProjection
- public ScholarshipResponseDto(String username, String userNum ,String deptName, LocalDate year, Semester semester, String scholarshipName, PaymentType type, int amount, LocalDate confDate ) {
+ public ScholarshipResponseDto(String username, String userNum ,String deptName, Year year, Semester semester, String scholarshipName, PaymentType type, int amount, LocalDate confDate ) {
   this.username = username;
   this.userNum = userNum;
   this.deptName = deptName;
-  this.year = year;
-  this.semester = semester;
+  this.year = year.toString();
+  this.semester = semester.getName();
   this.scholarshipName = scholarshipName;
-  this.type = type;
+  this.paymentType = type.getName();
   this.amount = amount;
   this.confDate = confDate;
  }

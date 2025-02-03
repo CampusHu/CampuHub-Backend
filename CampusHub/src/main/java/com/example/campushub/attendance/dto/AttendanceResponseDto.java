@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 public class AttendanceResponseDto {
     private String userName;
     private String userNum;
-    private AttendanceStatus status;
+    private String status;
     @Builder
     @QueryProjection
     public AttendanceResponseDto(String userName, String userNum, AttendanceStatus status) {
         this.userName = userName;
         this.userNum = userNum;
-        this.status = status;
+        this.status = status.getKoreanName();
     }
 }

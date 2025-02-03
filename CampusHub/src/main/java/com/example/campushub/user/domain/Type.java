@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Type {
-    STUDENT("STUDENT"), PROFESSOR("PROFESSOR"), ADMIN("ADMIN");
+    STUDENT("학생"), PROFESSOR("교수"), ADMIN("관리자");
     private final String key;
 
     public static Type fromKey(String key) {

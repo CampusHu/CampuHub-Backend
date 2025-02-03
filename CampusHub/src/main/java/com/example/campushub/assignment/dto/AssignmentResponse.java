@@ -15,7 +15,7 @@ public class AssignmentResponse {
 	private Long id;
 	private String courseName;
 	private String professorName;
-	private Week week;
+	private String week;
 	private LocalDate createDate;
 	private String assignExplain;
 	private LocalDate limitDate;
@@ -27,7 +27,7 @@ public class AssignmentResponse {
 		this.id = id;
 		this.courseName = courseName;
 		this.professorName = professorName;
-		this.week = week;
+		this.week = week.getName();
 		this.createDate = createDate;
 		this.assignExplain = assignExplain;
 		this.limitDate = limitDate;

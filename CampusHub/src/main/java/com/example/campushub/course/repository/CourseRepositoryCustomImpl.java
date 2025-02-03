@@ -44,7 +44,7 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 		))
 			.from(course)
 			.join(user).on(course.user.eq(user))
-			.where(courseDayEq(condition.getCourseDay()),
+			.where(courseDayEq(CourseDay.valueOf(condition.getCourseDay())),
 				courseRoomEq(condition.getRoom()))
 			.fetch();
 	}
@@ -67,7 +67,7 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 			.from(course)
 			.join(user).on(course.user.eq(user))
 			.join(dept).on(user.dept.eq(dept))
-			.where(divisionEq(cond.getDivision()),
+			.where(divisionEq(CourseDivision.valueOf(cond.getDivision())),
 				deptNameEq(cond.getDeptName()),
 				courseNameEq(cond.getCourseName()))
 			.fetch();
@@ -154,7 +154,7 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 		return queryFactory
 			.selectOne()
 			.from(course)
-			.where(isSameRoomCondition(createDto.getRoom(), createDto.getCourseDay(), createDto.getStartPeriod(), createDto.getEndPeriod()))
+			.where(isSameRoomCondition(createDto.getRoom(), CourseDay.valueOf(createDto.getCourseDay()), createDto.getStartPeriod(), createDto.getEndPeriod()))
 			.fetchFirst() != null; // 데이터가 존재하면 true 반환
 	}
 

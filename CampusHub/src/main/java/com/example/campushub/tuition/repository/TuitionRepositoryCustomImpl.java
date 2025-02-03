@@ -32,8 +32,8 @@ public class TuitionRepositoryCustomImpl implements TuitionRepositoryCustom {
         return queryFactory.select(new QTuitionFindAllResponse(user.userName,
                         user.userNum,
                         dept.deptName,
-                        user.type.stringValue().as("userType"),
-                        userTuition.paymentStatus.stringValue().as("paymentStatus"),
+                        user.type,
+                        userTuition.paymentStatus,
                         userTuition.paymentDate
                 )).from(tuition)
                 .join(userTuition).on(userTuition.tuition.eq(tuition))
@@ -41,7 +41,7 @@ public class TuitionRepositoryCustomImpl implements TuitionRepositoryCustom {
                 .join(dept).on(user.dept.eq(dept))
                 .where(eqDeptName(cond.getDeptName()),
                         eqUserNum(cond.getUserNum()),
-                        eqPaymentStatus(cond.getPaymentStatus()))
+                        eqPaymentStatus(PaymentStatus.of(cond.getPaymentStatus())))
                 .fetch();
     }
 

@@ -1,7 +1,11 @@
 package com.example.campushub.course.service;
 
+import java.time.Year;
 import java.util.List;
 
+import com.example.campushub.course.domain.CourseDay;
+import com.example.campushub.course.domain.CourseDivision;
+import com.example.campushub.course.domain.CourseGrade;
 import com.example.campushub.course.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +20,7 @@ import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.schoolyear.domain.SchoolYear;
+import com.example.campushub.schoolyear.domain.Semester;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
 import com.example.campushub.user.domain.Type;
@@ -109,8 +114,8 @@ public class CourseService {
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();
 
 		SchoolYear schoolYear = SchoolYear.builder()
-			.year(schoolYearDto.getYear())
-			.semester(schoolYearDto.getSemester())
+			.year(Year.parse(schoolYearDto.getYear()))
+			.semester(Semester.valueOf(schoolYearDto.getSemester()))
 			.is_current(schoolYearDto.is_current())
 			.build();
 
@@ -151,7 +156,8 @@ public class CourseService {
 		Course course = courseRepository.findById(courseId)
 			.orElseThrow(CourseNotFoundException::new);
 
-		course.edit(editDto.getCourseName(), editDto.getRoom(), editDto.getDivision(), editDto.getCourseDay(), editDto.getCourseGrade(), editDto.getStartPeriod(),
+		course.edit(editDto.getCourseName(), editDto.getRoom(), CourseDivision.valueOf(editDto.getDivision()),
+			CourseDay.valueOf(editDto.getCourseDay()), CourseGrade.valueOf(editDto.getCourseGrade()), editDto.getStartPeriod(),
 			editDto.getEndPeriod(), editDto.getCredits(), editDto.getAttScore(), editDto.getAssignScore(), editDto.getMidScore(), editDto.getFinalScore());
 	}
 
