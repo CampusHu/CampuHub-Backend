@@ -70,13 +70,13 @@ public class AttendanceService {
             UserCourse userCourse = userCourseRepository.findByUserAndCourse(student, course)
                 .orElseThrow(UserCourseNotFoundException::new);
 
-            NWeek nWeek = nweekRepository.findByCourseAndWeek(course, Week.valueOf(cond.getWeek()))
+            NWeek nWeek = nweekRepository.findByCourseAndWeek(course, Week.of(cond.getWeek()))
                 .orElseThrow(NWeekNotFoundException::new);
 
             Attendance attendance = Attendance.builder()
                     .nWeek(nWeek)
                     .userCourse(userCourse)
-                    .status(AttendanceStatus.valueOf(request.getStatus()))
+                    .status(AttendanceStatus.of(request.getStatus()))
                     .build();
 
             attendanceRepository.save(attendance);
@@ -134,13 +134,13 @@ public class AttendanceService {
     //      }
 
     //학생 본인 출석 조회
-    // public List<AttendanceUserDto> userAttendacnce(LoginUser loginUser,AttendanceSearchCondition atten){
-    //
-    //     User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
-    //             .orElseThrow(UserNotFoundException::new);
-    //
-    //     return attendanceRepository.findUserAttendance(atten,student.getUserNum());
-    //
-    //   }
+    public List<AttendanceUserDto> userAttendance(LoginUser loginUser,AttendanceSearchCondition cond){
+
+        User student = userRepository.findByUserNumAndType(loginUser.getUserNum(),loginUser.getType())
+                .orElseThrow(UserNotFoundException::new);
+
+        return attendanceRepository.findUserAttendance(cond,student.getUserNum());
+
+      }
 
 }

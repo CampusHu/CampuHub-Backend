@@ -1,6 +1,5 @@
 package com.example.campushub.course.service;
 
-import java.time.Year;
 import java.util.List;
 
 import com.example.campushub.course.domain.CourseDay;
@@ -15,12 +14,12 @@ import com.example.campushub.course.repository.CourseRepository;
 import com.example.campushub.global.error.exception.CourseNotFoundException;
 import com.example.campushub.global.error.exception.DuplicateCourseException;
 import com.example.campushub.global.error.exception.DuplicateRoomTimeException;
+import com.example.campushub.global.error.exception.SchoolYearNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
 import com.example.campushub.schoolyear.domain.SchoolYear;
-import com.example.campushub.schoolyear.domain.Semester;
 import com.example.campushub.schoolyear.dto.SchoolYearResponseDto;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
 import com.example.campushub.user.domain.Type;
@@ -113,11 +112,8 @@ public class CourseService {
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
 		SchoolYearResponseDto schoolYearDto = schoolYearRepository.getCurrentSchoolYear();
 
-		SchoolYear schoolYear = SchoolYear.builder()
-			.year(Year.parse(schoolYearDto.getYear()))
-			.semester(Semester.valueOf(schoolYearDto.getSemester()))
-			.is_current(schoolYearDto.is_current())
-			.build();
+		SchoolYear schoolYear = schoolYearRepository.findById(schoolYearDto.getId())
+			.orElseThrow(SchoolYearNotFoundException::new);
 
 		Course course = createDto.toEntity(user, schoolYear);
 
@@ -156,8 +152,8 @@ public class CourseService {
 		Course course = courseRepository.findById(courseId)
 			.orElseThrow(CourseNotFoundException::new);
 
-		course.edit(editDto.getCourseName(), editDto.getRoom(), CourseDivision.valueOf(editDto.getDivision()),
-			CourseDay.valueOf(editDto.getCourseDay()), CourseGrade.valueOf(editDto.getCourseGrade()), editDto.getStartPeriod(),
+		course.edit(editDto.getCourseName(), editDto.getRoom(), CourseDivision.of(editDto.getDivision()),
+			CourseDay.of(editDto.getCourseDay()), CourseGrade.of(editDto.getCourseGrade()), editDto.getStartPeriod(),
 			editDto.getEndPeriod(), editDto.getCredits(), editDto.getAttScore(), editDto.getAssignScore(), editDto.getMidScore(), editDto.getFinalScore());
 	}
 

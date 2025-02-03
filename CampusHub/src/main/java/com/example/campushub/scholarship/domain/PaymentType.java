@@ -19,5 +19,9 @@ public enum PaymentType {
 		}
 		return null;
 	}
+	public static PaymentType of(String paymentType) {
+		if (paymentType.equals("사전감면")) return PRE_PAYMENT;
+		else return POST_PAYMENT;
+	}
 
 }

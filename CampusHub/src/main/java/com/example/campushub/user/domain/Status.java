@@ -11,4 +11,16 @@ public enum Status {
 
 	private final String message;
 
+	public static Status of(String koreanName){
+		if(koreanName.equals("휴학")){
+			return BREAK;
+		} else if (koreanName.equals("재학")) {
+			return ENROLLED;
+		} else if (koreanName.equals("복학대기")) {
+			return RETURN_PENDING;
+		} else if (koreanName.equals("휴학대기")) {
+			return BREAK_PENDING;
+		}else return EMPLOYED;
+	}
+
 }

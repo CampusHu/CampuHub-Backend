@@ -40,7 +40,7 @@ public class  ScholarshipCreateDto {
     public Scholarship toEntity() {
         return Scholarship.builder()
             .scholarshipName(scholarshipName)
-            .type(PaymentType.valueOf(paymentType))
+            .type(PaymentType.of(paymentType))
             .amount(amount)
             .build();
 

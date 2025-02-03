@@ -16,13 +16,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SchoolYearResponseDto {
 
+	private Long id;
 	private String year;
 	private String semester;
 	private boolean is_current;
 
 	@Builder
 	@QueryProjection
-	public SchoolYearResponseDto(Year year, Semester semester, boolean is_current) {
+	public SchoolYearResponseDto(Long id, Year year, Semester semester, boolean is_current) {
+		this.id = id;
 		this.year = year.toString();
 		this.semester = semester.getName();
 		this.is_current = is_current;

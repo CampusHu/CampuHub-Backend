@@ -60,8 +60,8 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 			.join(user).on(userCourse.user.eq(user))
 			.join(dept).on(user.dept.eq(dept))
 			.where(course.courseName.eq(cond.getCourseName()),
-				(nWeek.week.eq(Week.valueOf(cond.getWeek()))),
-				submitStatusEq(SubmitStatus.valueOf(cond.getStatus())))
+				(nWeek.week.eq(Week.of(cond.getWeek()))),
+				submitStatusEq(SubmitStatus.of(cond.getStatus())))
 			.fetch();
 
 	}

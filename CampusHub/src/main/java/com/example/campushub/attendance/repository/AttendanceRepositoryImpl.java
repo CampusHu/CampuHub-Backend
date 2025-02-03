@@ -1,6 +1,7 @@
 package com.example.campushub.attendance.repository;
 
 import com.example.campushub.attendance.dto.*;
+import com.example.campushub.course.domain.QCourse;
 import com.example.campushub.nweek.domain.Week;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -40,7 +41,7 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
                 .join(attendance.nWeek,nWeek)
                 .join(nWeek.course,course)
                 .where(userCourse.course.courseName.eq(cond.getCourseName()),
-                        nWeek.week.eq(Week.valueOf(cond.getWeek())), nWeek.course.courseName.eq(cond.getCourseName()))
+                        nWeek.week.eq(Week.of(cond.getWeek())), nWeek.course.courseName.eq(cond.getCourseName()))
                 .fetch();
     }
 
@@ -82,16 +83,22 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
     //학생이 출석 조회
     @Override
     public List<AttendanceUserDto> findUserAttendance(AttendanceSearchCondition atten, String userNum) {
+
+        QCourse course1 = new QCourse("course1");
+        QCourse course2 = new QCourse("course2");
+
         return queryFactory.select(new QAttendanceUserDto(
                 nWeek.week,
                 attendance.status
         )).from(attendance)
                 .leftJoin(attendance.userCourse,userCourse)
-                .join(userCourse.user,user)
-                .join(userCourse.course,course)
                 .join(attendance.nWeek,nWeek)
+                .join(userCourse.user,user)
+                .join(userCourse.course,course1)
+                .join(nWeek.course,course2)
                 .where(userCourse.course.courseName.eq(atten.getCourseName()),
-                        userCourse.user.userNum.eq(userNum))
+                        userCourse.user.userNum.eq(userNum),
+                        nWeek.course.courseName.eq(atten.getCourseName()))
                 .orderBy(nWeek.week.desc())
                 .fetch();
     }
