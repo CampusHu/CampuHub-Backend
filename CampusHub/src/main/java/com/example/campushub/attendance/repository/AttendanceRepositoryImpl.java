@@ -1,6 +1,7 @@
 package com.example.campushub.attendance.repository;
 
 import com.example.campushub.attendance.dto.*;
+import com.example.campushub.course.domain.QCourse;
 import com.example.campushub.nweek.domain.Week;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -25,23 +26,29 @@ public class AttendanceRepositoryImpl implements AttendanceRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+
     @Override
     public List<AttendanceResponseDto> findAllByCondition(AttendanceSearchCondition cond) {
+
+        QCourse course1 = new QCourse("course1");  // 첫 번째 course 별칭
+        QCourse course2 = new QCourse("course2");  // 두 번째 course 별칭
+
         return queryFactory.select(new QAttendanceResponseDto(
-                user.userName,
-                user.userNum,
-                attendance.status
-            ))
+                        user.userName,
+                        user.userNum,
+                        attendance.status
+                ))
                 .from(attendance)
                 .leftJoin(attendance.userCourse, userCourse)
-                .join(userCourse.user,user)
-                .join(userCourse.course,course)
-                .join(attendance.nWeek,nWeek)
-                .join(nWeek.course,course)
+                .join(userCourse.user, user)
+                .join(userCourse.course, course1) // 첫 번째 course 테이블
+                .join(attendance.nWeek, nWeek)
+                .join(nWeek.course, course2) // 두 번째 course 테이블
                 .where(userCourse.course.courseName.eq(cond.getCourseName()),
                         nWeek.week.eq(cond.getWeek()), nWeek.course.courseName.eq(cond.getCourseName()))
                 .fetch();
     }
+
 
     //출석통계
     @Override

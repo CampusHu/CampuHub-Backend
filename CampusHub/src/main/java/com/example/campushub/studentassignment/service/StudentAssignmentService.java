@@ -3,17 +3,13 @@ package com.example.campushub.studentassignment.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.campushub.global.error.exception.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.assignment.domain.Assignment;
 import com.example.campushub.assignment.repository.AssignmentRepository;
 import com.example.campushub.course.domain.Course;
-import com.example.campushub.global.error.exception.AlreadySubmittedException;
-import com.example.campushub.global.error.exception.AssignmentNotFoundException;
-import com.example.campushub.global.error.exception.StudentAssignmentNotFoundException;
-import com.example.campushub.global.error.exception.UserCourseNotFoundException;
-import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
@@ -69,7 +65,7 @@ public class StudentAssignmentService {
 			.orElseThrow(UserNotFoundException::new);
 
 		if (cond.getCourseName() == null || cond.getWeek() == null) {
-			throw new IllegalArgumentException("강의명과 주차는 필수 입력값입니다.");
+			throw new CourseNameOrweekNotFoundException();
 		}
 
 		return studentAssignmentRepository.getAllStudentAssignments(cond);

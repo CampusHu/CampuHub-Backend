@@ -1,5 +1,6 @@
 package com.example.campushub.tuition.service;
 
+import com.example.campushub.global.error.exception.PaymentStatusNotFoundException;
 import com.example.campushub.global.error.exception.TuitionNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.tuition.dto.TuitionFindAllResponse;
@@ -54,7 +55,7 @@ public class TuitionService {
         for
         (UserTuition userTuition : userTuitions) {
             if (!userTuition.isWaitingPaymentStatus()) {
-                throw new IllegalArgumentException("ERROR");
+                throw new PaymentStatusNotFoundException();
             }
             userTuition.updatePaymentStatusToSuccess();
         }
@@ -84,7 +85,7 @@ public class TuitionService {
         UserTuition ut = userTuitionRepository.findByUserAndTuitionId(user, tuitionId);
 
         if (!ut.isWaitPaymentStatus())
-            throw new IllegalArgumentException("ERROR");
+            throw new PaymentStatusNotFoundException();
         ut.updatePaymentStatusToWait();
     }
 
