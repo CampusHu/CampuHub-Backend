@@ -11,8 +11,8 @@ public enum Semester {
 	private final String name;
 
 
-	public static Semester of(Long number) {
-		if (number == 1) return first_semester;
+	public static Semester of(String number) {
+		if (number.equals("1학기")) return first_semester;
 		else return second_semester;
 	}
 

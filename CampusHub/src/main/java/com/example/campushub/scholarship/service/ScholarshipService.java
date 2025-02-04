@@ -1,7 +1,7 @@
 package com.example.campushub.scholarship.service;
 
 
-import com.example.campushub.global.error.exception.SchoolyearNotFoundException;
+import com.example.campushub.global.error.exception.SchoolYearNotFoundException;
 import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.scholarship.domain.Scholarship;
 import com.example.campushub.scholarship.dto.GetMyScholarshipDto;
@@ -12,7 +12,6 @@ import com.example.campushub.scholarship.repository.ScholarshipRepository;
 import com.example.campushub.schoolyear.domain.SchoolYear;
 import com.example.campushub.schoolyear.domain.Semester;
 import com.example.campushub.schoolyear.repository.SchoolYearRepository;
-import com.example.campushub.user.domain.Type;
 import com.example.campushub.user.domain.User;
 import com.example.campushub.user.dto.LoginUser;
 import com.example.campushub.user.dto.UserFindOneSimpleDto;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Year;
 import java.util.List;
 
 @Service
@@ -58,9 +57,8 @@ public class ScholarshipService {
                 .orElseThrow(UserNotFoundException::new);
 
         SchoolYear schoolYear = schoolYearRepository.findBySemesterAndYear(
-            Semester.valueOf(createDto.getSemester()), LocalDate.parse(createDto.getYear(),
-                DateTimeFormatter.ofPattern("yyyy")))
-            .orElseThrow(SchoolyearNotFoundException::new);
+            Semester.of(createDto.getSemester()), Year.parse(createDto.getYear()))
+            .orElseThrow(SchoolYearNotFoundException::new);
 
         Scholarship scholarship = createDto.toEntity();
 

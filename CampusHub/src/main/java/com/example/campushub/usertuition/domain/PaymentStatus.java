@@ -13,7 +13,11 @@ public enum PaymentStatus {
 
     private final String name;
 
-    public static PaymentStatus of(String status) {
-        return PaymentStatus.valueOf(status);
+    public static PaymentStatus of(String koreanName) {
+        if (koreanName.equals("미납")) {
+            return NONE;
+        } else if (koreanName.equals("대기")) {
+            return WAITING;
+        } else return SUCCESS;
     }
 }

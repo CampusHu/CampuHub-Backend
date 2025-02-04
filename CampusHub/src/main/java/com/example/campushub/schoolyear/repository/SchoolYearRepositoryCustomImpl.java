@@ -23,6 +23,7 @@ public class SchoolYearRepositoryCustomImpl implements SchoolYearRepositoryCusto
 	@Override
 	public SchoolYearResponseDto getCurrentSchoolYear() {
 		SchoolYearResponseDto fetchOne = queryFactory.select(new QSchoolYearResponseDto(
+			schoolYear.id,
 			schoolYear.year,
 			schoolYear.semester,
 			schoolYear.is_current

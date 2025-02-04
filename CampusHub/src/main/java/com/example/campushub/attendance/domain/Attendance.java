@@ -40,7 +40,7 @@ public class Attendance {
 	}
 
 	public boolean isApplyAttendance() {
-		if(this.status == AttendanceStatus.ATTENDANCE || this.status == AttendanceStatus.EARLYDISMISSAL
+		if(this.status == AttendanceStatus.ATTENDANCE || this.status == AttendanceStatus.EARLY_DISMISSAL
 				|| this.status == AttendanceStatus.ABSENCE || this.status == AttendanceStatus.PERCEPTION)
 			return true;
 		return false;

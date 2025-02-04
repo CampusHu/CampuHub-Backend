@@ -12,4 +12,41 @@ public enum Week {
 	FIFTEENTH("15주차"), SIXTEENTH("16주차");
 
 	private final String name;
+
+	public static Week of(String koreanName) {
+		if (koreanName.equals("1주차")) {
+			return FIRST;
+		} else if (koreanName.equals("2주차")) {
+			return SECOND;
+		} else if (koreanName.equals("3주차")) {
+			return THIRD;
+		} else if (koreanName.equals("4주차")) {
+			return FOURTH;
+		} else if (koreanName.equals("5주차")) {
+			return FIFTH;
+		} else if (koreanName.equals("6주차")) {
+			return SIXTH;
+		} else if (koreanName.equals("7주차")) {
+			return SEVENTH;
+		} else if (koreanName.equals("8주차")) {
+			return EIGHTH;
+		} else if (koreanName.equals("9주차")) {
+			return NINTH;
+		} else if (koreanName.equals("10주차")) {
+			return TENTH;
+		} else if (koreanName.equals("11주차")) {
+			return ELEVENTH;
+		} else if (koreanName.equals("12주차")) {
+			return TWELFTH;
+		} else if (koreanName.equals("13주차")) {
+			return THIRTEENTH;
+		} else if (koreanName.equals("14주차")) {
+			return FOURTEENTH;
+		} else if (koreanName.equals("15주차")) {
+			return FIFTEENTH;
+		} else {
+			return SIXTEENTH;
+		}
+	}
+
 	}

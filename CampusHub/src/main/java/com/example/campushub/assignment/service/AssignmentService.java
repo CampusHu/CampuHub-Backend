@@ -54,7 +54,7 @@ public class AssignmentService {
 		Course course = courseRepository.findByCourseNameAndUser(request.getCourseName(), user)
 			.orElseThrow(CourseNotFoundException::new);
 
-		NWeek nweek = nweekRepository.findByCourseAndWeek(course, Week.valueOf(request.getWeek()))
+		NWeek nweek = nweekRepository.findByCourseAndWeek(course, Week.of(request.getWeek()))
 			.orElseThrow(NWeekNotFoundException::new);
 
 		Assignment assignment = Assignment.builder()
