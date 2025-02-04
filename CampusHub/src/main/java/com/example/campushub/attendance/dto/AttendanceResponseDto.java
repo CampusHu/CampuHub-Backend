@@ -17,6 +17,6 @@ public class AttendanceResponseDto {
     public AttendanceResponseDto(String userName, String userNum, AttendanceStatus status) {
         this.userName = userName;
         this.userNum = userNum;
-        this.status = status.getKoreanName();
+        this.status = (status != null) ? status.getKoreanName() : null;
     }
 }

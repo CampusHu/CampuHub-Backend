@@ -38,7 +38,7 @@ public class UserFindOneDto {
 			this.userName = userName;
 			this.birthday = birthday;
 			this.deptName = deptName;
-			this.grade = grade.getMessage();
+			this.grade = (grade != null) ? grade.getMessage() : null;
 			this.email = email;
 			this.phone = phone;
 			this.address = address;
