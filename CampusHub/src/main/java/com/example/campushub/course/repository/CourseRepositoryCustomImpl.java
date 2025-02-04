@@ -123,7 +123,8 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 				course.courseName,
 				course.courseDay,
 				course.startPeriod,
-				course.endPeriod
+				course.endPeriod,
+                course.room
 		))
 				.from(userCourse)
 				.join(userCourse.course,course)
@@ -139,7 +140,8 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 				course.courseName,
 				course.courseDay,
 				course.startPeriod,
-				course.endPeriod
+				course.endPeriod,
+                course.room
 		))
 				.from(course)
 				.join(course.user,user)
