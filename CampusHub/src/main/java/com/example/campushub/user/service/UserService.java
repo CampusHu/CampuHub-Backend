@@ -24,6 +24,15 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
+	//로그인 교수의 단건 조회
+	public UserFindOneDto getProfByUserNum(LoginUser loginUser) {
+		User user = userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return userRepository.getProfessorByUserNum(user.getUserNum())
+			.orElseThrow(UserNotFoundException::new);
+	}
+
 
 	//로그인 학생의 단건 조회
 	public UserFindOneDto getUserByUserNum(LoginUser loginUser) {
