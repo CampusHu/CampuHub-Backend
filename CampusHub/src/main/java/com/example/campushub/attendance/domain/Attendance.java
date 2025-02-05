@@ -5,6 +5,7 @@ import static jakarta.persistence.FetchType.*;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.usercourse.domain.UserCourse;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,6 +30,7 @@ public class Attendance {
 	@JoinColumn(name = "nweek_id")
 	private NWeek nWeek;
 
+	@Nullable
 	@Enumerated(EnumType.STRING)
 	private AttendanceStatus status;
 

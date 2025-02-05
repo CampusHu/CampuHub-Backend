@@ -61,7 +61,7 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 			.join(dept).on(user.dept.eq(dept))
 			.where(course.courseName.eq(cond.getCourseName()),
 				(nWeek.week.eq(Week.of(cond.getWeek()))),
-				submitStatusEq(SubmitStatus.of(cond.getStatus())))
+				submitStatusEq(cond.getStatus()))
 			.fetch();
 
 	}
@@ -91,8 +91,8 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 
 		return Optional.ofNullable(fetchOne);
 	}
-	private BooleanExpression submitStatusEq(SubmitStatus status) {
-		return status == null ? null : studentAssignment.status.eq(status);
+	private BooleanExpression submitStatusEq(String status) {
+		return status == null ? null : studentAssignment.status.eq(SubmitStatus.of(status));
 	}
 
 }
