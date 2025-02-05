@@ -6,16 +6,12 @@ import com.example.campushub.course.domain.CourseDay;
 import com.example.campushub.course.domain.CourseDivision;
 import com.example.campushub.course.domain.CourseGrade;
 import com.example.campushub.course.dto.*;
+import com.example.campushub.global.error.exception.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.course.repository.CourseRepository;
-import com.example.campushub.global.error.exception.CourseNotFoundException;
-import com.example.campushub.global.error.exception.DuplicateCourseException;
-import com.example.campushub.global.error.exception.DuplicateRoomTimeException;
-import com.example.campushub.global.error.exception.SchoolYearNotFoundException;
-import com.example.campushub.global.error.exception.UserNotFoundException;
 import com.example.campushub.nweek.domain.NWeek;
 import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.nweek.repository.NweekRepository;
