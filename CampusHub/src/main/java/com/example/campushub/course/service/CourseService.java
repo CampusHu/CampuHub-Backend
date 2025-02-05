@@ -8,6 +8,7 @@ import com.example.campushub.course.domain.CourseDay;
 import com.example.campushub.course.domain.CourseDivision;
 import com.example.campushub.course.domain.CourseGrade;
 import com.example.campushub.course.dto.*;
+import com.example.campushub.global.error.exception.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
