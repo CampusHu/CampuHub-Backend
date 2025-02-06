@@ -160,6 +160,18 @@ public class CourseRepositoryCustomImpl implements CourseRepositoryCustom {
 			.fetchFirst() != null; // 데이터가 존재하면 true 반환
 	}
 
+	//요일 시간 중복 조건
+	@Override
+	public boolean existsByDayAndTime(CourseCreateDto createDto, String userNum) {
+		return queryFactory
+			.selectOne()
+			.from(course)
+			.where(course.user.userNum.eq(userNum),
+				isTimeOverlapping(createDto.getStartPeriod(), createDto.getEndPeriod()),
+				course.courseDay.eq(CourseDay.of(createDto.getCourseDay())))
+			.fetchFirst() != null;
+	}
+
 
 	// 시간 범위가 겹치는 조건
 	private BooleanExpression isTimeOverlapping(int startPeriod, int endPeriod) {

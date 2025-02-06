@@ -1,10 +1,14 @@
 package com.example.campushub.departmentnotice.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DepartmentNoticeSearchCondition {
 
     private String filter;  // "title" 또는 "createdBy"

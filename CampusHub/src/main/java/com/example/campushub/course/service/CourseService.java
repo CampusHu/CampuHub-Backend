@@ -92,8 +92,21 @@ public class CourseService {
 			boolean existsCourse = userCourses.stream()
 				.anyMatch(userCourse -> course.getCourseName().equals(userCourse.getCourse().getCourseName()));
 
+			boolean existsDay = userCourses.stream()
+				.anyMatch(userCourse -> course.getCourseDay().equals(userCourse.getCourse().getCourseDay()));
+
+			boolean existsTimeConflict = userCourses.stream()
+				.anyMatch(userCourse -> {
+					Course existingCourse = userCourse.getCourse();
+					return course.getCourseDay().equals(existingCourse.getCourseDay())&&
+						(course.getStartPeriod() < existingCourse.getEndPeriod() && course.getEndPeriod() > existingCourse.getStartPeriod());
+				});
+
 			if (existsCourse) {
 				throw new DuplicateUserCourseException();
+			}
+			if (existsDay && existsTimeConflict) {
+				throw new DuplicateDayTimeException();
 			}
 
 			UserCourse userCourse = UserCourse.builder()
@@ -130,6 +143,11 @@ public class CourseService {
 		//강의실 중복 조건
 		if (courseRepository.existsByRoomAndTime(createDto)) {
 			throw new DuplicateRoomTimeException();
+		}
+
+		//요일 시간 중복 조건
+		if (courseRepository.existsByDayAndTime(createDto, user.getUserNum())) {
+			throw new DuplicateDayTimeException();
 		}
 
 		//학년도 학기 가져오기(학년도 엔티티중 iscurrent가 true인 엔티티 가져오기)
