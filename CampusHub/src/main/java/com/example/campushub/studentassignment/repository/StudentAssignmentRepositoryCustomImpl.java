@@ -22,12 +22,17 @@ import com.example.campushub.nweek.domain.Week;
 import com.example.campushub.studentassignment.domain.QStudentAssignment;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
+import com.example.campushub.studentassignment.dto.QStudAssignScoresResponse;
 import com.example.campushub.studentassignment.dto.QStudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.QStudentAssignmentResponse;
+import com.example.campushub.studentassignment.dto.StudAssignScoreCondition;
+import com.example.campushub.studentassignment.dto.StudAssignScoresResponse;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
 import com.example.campushub.studentassignment.dto.StudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.annotation.Nullable;
@@ -91,8 +96,49 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 
 		return Optional.ofNullable(fetchOne);
 	}
+
+	public List<StudAssignScoresResponse> findStudAssignScoresByCond(StudAssignScoreCondition cond) {
+		return queryFactory.select(new QStudAssignScoresResponse(
+			user.userName,
+			user.userNum,
+			getWeekScore(Week.FIRST),
+			getWeekScore(Week.SECOND),
+			getWeekScore(Week.THIRD),
+			getWeekScore(Week.FOURTH),
+			getWeekScore(Week.FIFTH),
+			getWeekScore(Week.SIXTH),
+			getWeekScore(Week.SEVENTH),
+			getWeekScore(Week.EIGHTH),
+			getWeekScore(Week.NINTH),
+			getWeekScore(Week.TENTH),
+			getWeekScore(Week.ELEVENTH),
+			getWeekScore(Week.TWELFTH),
+			getWeekScore(Week.THIRTEENTH),
+			getWeekScore(Week.FOURTEENTH),
+			getWeekScore(Week.FIFTEENTH),
+			getWeekScore(Week.SIXTEENTH)
+		))
+			.from(studentAssignment)
+			.leftJoin(studentAssignment.userCourse, userCourse)
+			.join(studentAssignment.assignment, assignment)
+			.join(assignment.nWeek, nWeek)
+			.join(userCourse.course, course)
+			.join(userCourse.user, user)
+			.where(course.courseName.eq(cond.getCourseName()),
+				userNumEq(cond.getUserNum()))
+			.fetch();
+	}
+	private BooleanExpression userNumEq(String userNum) {
+		return userNum == null ? null : user.userNum.eq(userNum);
+	}
+
 	private BooleanExpression submitStatusEq(String status) {
 		return status == null ? null : studentAssignment.status.eq(SubmitStatus.of(status));
+	}
+	private Expression<Integer> getWeekScore(Week week) {
+		return new CaseBuilder()
+			.when(nWeek.week.eq(week)).then(studentAssignment.assignmentScore)
+			.otherwise(0);
 	}
 
 }
