@@ -96,7 +96,8 @@ public class StudentAssignmentRepositoryCustomImpl implements StudentAssignmentR
 
 		return Optional.ofNullable(fetchOne);
 	}
-
+	//학생 과제 점수조회
+	@Override
 	public List<StudAssignScoresResponse> findStudAssignScoresByCond(StudAssignScoreCondition cond) {
 		return queryFactory.select(new QStudAssignScoresResponse(
 			user.userName,

@@ -12,6 +12,8 @@ import com.example.campushub.assignment.repository.AssignmentRepository;
 import com.example.campushub.course.domain.Course;
 import com.example.campushub.studentassignment.domain.StudentAssignment;
 import com.example.campushub.studentassignment.domain.SubmitStatus;
+import com.example.campushub.studentassignment.dto.StudAssignScoreCondition;
+import com.example.campushub.studentassignment.dto.StudAssignScoresResponse;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
 import com.example.campushub.studentassignment.dto.StudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
@@ -88,5 +90,13 @@ public class StudentAssignmentService {
 			 .orElseThrow(StudentAssignmentNotFoundException::new);
 
 		 studentAssignment.editScore(score);
+	}
+	//학생 과제 점수 조회
+	public List<StudAssignScoresResponse> getStudAssignScores(LoginUser loginUser, StudAssignScoreCondition cond) {
+		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
+			.orElseThrow(UserNotFoundException::new);
+
+		return studentAssignmentRepository.findStudAssignScoresByCond(cond);
+
 	}
 }
