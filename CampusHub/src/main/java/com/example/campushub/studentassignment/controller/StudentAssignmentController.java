@@ -2,6 +2,8 @@ package com.example.campushub.studentassignment.controller;
 
 import com.example.campushub.global.common.SuccessResponse;
 import com.example.campushub.global.security.Login;
+import com.example.campushub.studentassignment.dto.StudAssignScoreCondition;
+import com.example.campushub.studentassignment.dto.StudAssignScoresResponse;
 import com.example.campushub.studentassignment.dto.StudentAssigmentSearchCondition;
 import com.example.campushub.studentassignment.dto.StudentAssignFindOneDto;
 import com.example.campushub.studentassignment.dto.StudentAssignmentResponse;
@@ -52,6 +54,16 @@ public class StudentAssignmentController {
                 .data(studentAssignmentService.getStudentAssignment(loginUser,assignmentId))
                 .message("학생 과제 단건 조회 성공")
                 .build();
+    }
+    //학생과제 점수 조회
+    @GetMapping("/api/professor/assignment/score/condition")
+    @ResponseStatus(HttpStatus.OK)
+    public SuccessResponse<List<StudAssignScoresResponse>> getStudAssignScores(@Login LoginUser loginUser, StudAssignScoreCondition cond) {
+        return SuccessResponse.<List<StudAssignScoresResponse>>builder()
+            .status(200)
+            .data(studentAssignmentService.getStudAssignScores(loginUser, cond))
+            .message("학생 과제 점수 조회 성공")
+            .build();
     }
 
     @PostMapping("/api/professor/assignment/condition/{assignmentId}/setscore")
