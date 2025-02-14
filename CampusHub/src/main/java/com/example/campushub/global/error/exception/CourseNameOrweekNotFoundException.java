@@ -14,6 +14,6 @@ public class CourseNameOrweekNotFoundException extends ApiException {
 
   @Override
   public int getStatusCode() {
-    return 404;
+    return 400;
   }
 }

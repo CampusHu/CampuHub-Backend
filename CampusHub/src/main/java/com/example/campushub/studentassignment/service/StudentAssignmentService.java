@@ -95,6 +95,9 @@ public class StudentAssignmentService {
 	public List<StudAssignScoresResponse> getStudAssignScores(LoginUser loginUser, StudAssignScoreCondition cond) {
 		userRepository.findByUserNumAndType(loginUser.getUserNum(), loginUser.getType())
 			.orElseThrow(UserNotFoundException::new);
+		if (cond.getCourseName() == null) {
+			throw new CourseNameNullException();
+		}
 
 		return studentAssignmentRepository.findStudAssignScoresByCond(cond);
 
